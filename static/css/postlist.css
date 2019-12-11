@@ -1,0 +1,23 @@
+.meta {
+	color: #666;
+	min-width: 90px;
+	margin-right: 1rem;
+}
+
+.post-item {
+	margin-bottom: 1rem;
+}
+.post-item a {
+	border-bottom: 1px solid #c9cacc
+}
+.post-item a:hover {
+	color: #2bbc8a
+}
+
+
+@media screen and (min-width: 480px) {
+	.post-item{
+		display: flex;
+		margin-bottom: 5px;
+	}
+}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0, user-scalable=no">
+    <meta name="description" itemprop="description">
+    <meta name="author" content="Wone">
+    <meta name="keywords" content="Wone, 编程随笔, programming note, web前端博客, Python, Javascript, Java, 汇编语言, 网页制作, 前端, html5, css, Vue.js, 云服务器, Seo">
+    <meta property="og:title" content="{{article['article_title']}}">
+    <meta property="og:description">
+    <meta property="og:site_name" content="Wone">
+	<title>{{article['article_title']}} | 我的编程随笔</title>
+	<link rel="stylesheet" type="text/css" href="../static/css/base.css">
+    <link rel="stylesheet" type="text/css" href="../static/font/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/details.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/footer.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/content.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/loading.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/comment.css">
+    <link rel="icon" type="image/x-icon" href="../static/img/wone.ico">
+</head>
+</head>
+<body>
+	<div id="header-post">
+        <div id="nav">
+            <ul>
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/archives">Archives</a>
+                </li>
+                <li>
+                    <a href="/about">About</a>
+                </li>
+                <li>
+                    <a href="https://github.com/">Github</a>
+                </li>
+            </ul> 
+        </div>
+        <div id="action">
+            <ul>
+            	<li class="postbtn-tips" style="display: none;"><span>Previous post</span></li>
+            	<li class="postbtn-tips" style="display: none;"><span>Next post</span></li>
+            	<li class="postbtn-tips" style="display: none;"><span>Back to top</span></li>
+            	<li class="postbtn-tips" style="display: none;"><span>Bills</span></li>
+                <li class="postbtn">
+                    <a href="/articledetails?id={{previous}}" data-able={{previous}}><i class="iconfont icon-previous"></i></a>
+                </li>
+                <li class="postbtn">
+                    <a href="/articledetails?id={{next}}" data-able={{next}}><i class="iconfont icon-next"></i></a>
+                </li>
+                <li class="postbtn">
+                    <i class="iconfont icon-up"></i>
+                </li>
+                <li class="postbtn">
+                    <i class="iconfont icon-bills"></i>
+                </li>
+            </ul>
+        </div>
+        <div id="toc" data-show='true'>
+	        <nav id="lableOfContent">
+	            <ul id="lablelist">
+	            </ul>
+	        </nav>
+    	</div>
+    </div>
+  
+    <div class="loadingTip">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div div class="content index width mx-auto px3 my3">
+        <section id="wrapper" class="home">
+            <article class="post">
+                <header>
+                    <h1>{{article['article_title']}}</h1>
+                </header>
+                <div class="meta">
+                    <div class="postdate">
+                        <time>{{article['article_time']}}</time>
+                    </div>
+                    <div class="watch">
+                        <i class="iconfont icon-glance"><span>{{article['article_read']+1}}</span></i>
+                    </div>
+                    <div class="lable">
+                        <i class="iconfont icon-lable"><a href="/archives?tag={{article['article_tag']}}"><span>{{article['article_tag']}}</span></a></i>
+                    </div>
+                </div>
+                <div class="detail" data-id=""></div>
+            </article>
+            <div id="comment_area">
+                <div id="comment">
+                    <div class="commentor">
+                        <input type="text" name="nick" placeholder="昵称" class="commentor_nick">
+                        <input type="text" name="mail" placeholder="邮箱" class="commentor_mail">
+                        <input type="text" name="link" placeholder="网址" class="commentor_link">
+                    </div>
+                    <div class="comment_editor">
+                        <textarea class="commentext" placeholder="说点什么？"></textarea>
+                    </div>
+                    <div class="function">
+                        <span class="emoji">表情</span>
+                         | 
+                        <span class="preview">预览</span>
+                    </div>
+                    <div class="emoji_content" style="display:none;"><i name="grinning" title="grinning">😀</i><i name="smiley" title="smiley">😃</i><i name="smile" title="smile">😄</i><i name="grin" title="grin">😁</i><i name="laughing" title="laughing">😆</i><i name="sweat_smile" title="sweat_smile">😅</i><i name="joy" title="joy">😂</i><i name="blush" title="blush">😊</i><i name="innocent" title="innocent">😇</i><i name="wink" title="wink">😉</i><i name="relieved" title="relieved">😌</i><i name="heart_eyes" title="heart_eyes">😍</i><i name="kissing_heart" title="kissing_heart">😘</i><i name="kissing" title="kissing">😗</i><i name="kissing_smiling_eyes" title="kissing_smiling_eyes">😙</i><i name="kissing_closed_eyes" title="kissing_closed_eyes">😚</i><i name="yum" title="yum">😋</i><i name="stuck_out_tongue_winking_eye" title="stuck_out_tongue_winking_eye">😜</i><i name="stuck_out_tongue_closed_eyes" title="stuck_out_tongue_closed_eyes">😝</i><i name="stuck_out_tongue" title="stuck_out_tongue">😛</i><i name="sunglasses" title="sunglasses">😎</i><i name="smirk" title="smirk">😏</i><i name="unamused" title="unamused">😒</i><i name="disappointed" title="disappointed">😞</i><i name="pensive" title="pensive">😔</i><i name="worried" title="worried">😟</i><i name="confused" title="confused">😕</i><i name="persevere" title="persevere">😣</i><i name="confounded" title="confounded">😖</i><i name="tired_face" title="tired_face">😫</i><i name="weary" title="weary">😩</i><i name="angry" title="angry">😠</i><i name="rage" title="rage">😡</i><i name="no_mouth" title="no_mouth">😶</i><i name="neutral_face" title="neutral_face">😐</i><i name="expressionless" title="expressionless">😑</i><i name="hushed" title="hushed">😯</i><i name="frowning" title="frowning">😦</i><i name="anguished" title="anguished">😧</i><i name="open_mouth" title="open_mouth">😮</i><i name="astonished" title="astonished">😲</i><i name="dizzy_face" title="dizzy_face">😵</i><i name="flushed" title="flushed">😳</i><i name="scream" title="scream">😱</i><i name="fearful" title="fearful">😨</i><i name="cold_sweat" title="cold_sweat">😰</i><i name="cry" title="cry">😢</i><i name="disappointed_relieved" title="disappointed_relieved">😥</i><i name="sob" title="sob">😭</i><i name="sweat" title="sweat">😓</i><i name="sleepy" title="sleepy">😪</i><i name="sleeping" title="sleeping">😴</i><i name="mask" title="mask">😷</i><i name="smiling_imp" title="smiling_imp">😈</i><i name="smiley_cat" title="smiley_cat">😺</i><i name="smile_cat" title="smile_cat">😸</i><i name="joy_cat" title="joy_cat">😹</i><i name="heart_eyes_cat" title="heart_eyes_cat">😻</i><i name="smirk_cat" title="smirk_cat">😼</i><i name="kissing_cat" title="kissing_cat">😽</i><i name="scream_cat" title="scream_cat">🙀</i><i name="crying_cat_face" title="crying_cat_face">😿</i><i name="pouting_cat" title="pouting_cat">😾</i><i name="cat" title="cat">🐱</i><i name="mouse" title="mouse">🐭</i><i name="cow" title="cow">🐮</i><i name="monkey_face" title="monkey_face">🐵</i><i name="hand" title="hand">✋</i><i name="fist" title="fist">✊</i><i name="v" title="v">✌️</i><i name="point_up" title="point_up">👆</i><i name="point_down" title="point_down">👇</i><i name="point_left" title="point_left">👈</i><i name="point_right" title="point_right">👉</i><i name="facepunch" title="facepunch">👊</i><i name="wave" title="wave">👋</i><i name="clap" title="clap">👏</i><i name="open_hands" title="open_hands">👐</i><i name="+1" title="+1">👍</i><i name="-1" title="-1">👎</i><i name="ok_hand" title="ok_hand">👌</i><i name="pray" title="pray">🙏</i><i name="ear" title="ear">👂</i><i name="eyes" title="eyes">👀</i><i name="nose" title="nose">👃</i><i name="lips" title="lips">👄</i><i name="tongue" title="tongue">👅</i><i name="heart" title="heart">❤️</i><i name="cupid" title="cupid">💘</i><i name="sparkling_heart" title="sparkling_heart">💖</i><i name="star" title="star">⭐️</i><i name="sparkles" title="sparkles">✨</i><i name="zap" title="zap">⚡️</i><i name="sunny" title="sunny">☀️</i><i name="cloud" title="cloud">☁️</i><i name="snowflake" title="snowflake">❄️</i><i name="umbrella" title="umbrella">☔️</i><i name="coffee" title="coffee">☕️</i><i name="airplane" title="airplane">✈️</i><i name="anchor" title="anchor">⚓️</i><i name="watch" title="watch">⌚️</i><i name="phone" title="phone">☎️</i><i name="hourglass" title="hourglass">⌛️</i><i name="email" title="email">✉️</i><i name="scissors" title="scissors">✂️</i><i name="black_nib" title="black_nib">✒️</i><i name="pencil2" title="pencil2">✏️</i><i name="x" title="x">❌</i><i name="recycle" title="recycle">♻️</i><i name="white_check_mark" title="white_check_mark">✅</i><i name="negative_squared_cross_mark" title="negative_squared_cross_mark">❎</i><i name="m" title="m">Ⓜ️</i><i name="i" title="i">ℹ️</i><i name="tm" title="tm">™️</i><i name="copyright" title="copyright">©️</i><i name="registered" title="registered">®️</i>
+                    </div>
+                    <div class="control">
+                        <div class="col-20 col" title="Markdown is supported">
+                            <a href="#">
+                                <label class="markdown iconfont icon-markdown"></label>
+                            </a>
+                        </div><div class="col-80 col"><button type="button" class="comment_btn">回复</button></div>
+                    </div>
+
+                </div>
+                <div class="comment_empty" style="display: none;">快来做第一个评论的人吧~</div>
+                <div class="comment_data" style="display: none;"></div>
+            </div>
+                
+        </section>
+    </div>
+    
+    <footer id="footer">
+        <div class="footer-left">Copyright © 2019 Wone <a href="#">琼ICP备19001364号</a></div>
+        <div class="footer-right">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        <a href="/archives">Archives</a>
+                    </li>
+                    <li>
+                        <a href="/about">About</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/">Github</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+    <script type="text/javascript" src="../static/js/myajax.js"></script>
+    <script type="text/javascript" src="../static/js/details.js"></script>
+    <script type="text/javascript" src="../static/js/utils/detailUtils.js"></script>
+    <script type="text/javascript" src="../static/js/mycomment/comment.js"></script>
+    <script type="text/javascript" src="../static/js/seo/seoUtils.js"></script>
+    <script type="text/javascript" src="../static/js/highlight/whighlight.js"></script>
+</body>
+</html>

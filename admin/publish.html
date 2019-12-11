@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>发表您的文章</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0, user-scalable=no">
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="./static/font/iconfont.css">
+	<link rel="stylesheet" type="text/css" href="./static/css/write.css">
+</head>
+<body>
+	<div class="main">
+		<div class="title">
+			<p>发表新文章</p>
+		</div>
+	</div>
+	<hr style="background-color: #e6e6e6;height: 1px;border:none;">
+	<div class="main">
+		<div class="titlefield">
+			<input type="text" placeholder="标题" id="title" value="">
+			<input type="text" placeholder="标签" id="tag" style="width: 100px;" value="">
+			<form enctype="multipart/form-data">
+				<input type="file" id="file" name="filecontent" accept="image/png, image/jpeg, image/jpg, image/gif,video/*" style="display: none;">
+			</form>
+		</div>
+		<div class="styleselect">
+			<div class="stylemenu">
+				<i id='h1' class="iconfont icon-h1"></i>
+			</div>
+			<div class="stylemenu">
+				<i id='h2' class="iconfont icon-h2"></i>
+			</div>
+			<div class="stylemenu language">
+				<i id='code' class="iconfont icon-code"></i>
+				<ul id="language" data-show="false" class="suspended">
+					<li>javascript</li>
+					<li>python</li>
+					<li>code</li>
+				</ul>
+			</div>
+			<div class="stylemenu">
+				<i id='list' class="iconfont icon-list"></i>
+			</div>
+			<div class="stylemenu">
+				<i id='link' class="iconfont icon-link"></i>
+			</div>
+			<div class="stylemenu">
+				<label id="picture" class="iconfont icon-picture" for="file"></label>
+				<!--使用for属性将label标签和表单关联-->
+			</div>
+			<div class="stylemenu">
+				<label id="video" class="iconfont icon-video" for="file"></label>
+			</div>
+			<div class="stylemenu code_status">
+				<i id='codeing' class="iconfont icon-code"></i>
+			</div>
+		</div>
+		<div id="linkedit" data-show='false' class="suspended">
+			<div class="desc">插入链接</div>
+			<textarea id="linkarea"></textarea>
+			<button id="insertL">插入</button>
+		</div>
+	    <div id="editor" contenteditable="true" data-id=""></div>
+
+		<div>
+			<input type="button" id="submit" value="发表" class="submitbutton"/>
+		</div>
+		
+		<div>
+			<input type="button" value="返回主页" class="back" onclick="backtoindex()" />
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="./static/js/myajax.js"></script>
+	<script type="text/javascript" src="./static/js/write.js"></script>
+	<script type="text/javascript" src="./static/js/utils/writeUtils.js"></script>
+	<script type="text/javascript" src="./static/js/myeditor/editor.js"></script>
+	<script type="text/javascript" src="./static/js/myeditor/cmd.js"></script>
+	<script type="text/javascript" src="./static/js/myeditor/range.js"></script>
+</body>
+</html>

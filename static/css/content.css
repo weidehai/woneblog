@@ -1,0 +1,73 @@
+.detail p {
+	margin-top: 14px;
+	margin-bottom: 8px;
+}
+
+.detail h1 {
+	color: #2bbc8a;
+	margin-top: 48px;
+	margin-bottom: 16px;
+	font-size:1.3em;
+}
+.detail h2 {
+	margin-top: 32px;
+	margin-bottom: 8px;
+	color: #eee;
+	font-size: 1rem;
+}
+.detail h2:before {
+	content: "#";
+	color: #2bbc8a;
+	font-size: 1.2rem;
+}
+.detail pre {
+	padding:10px 15px;
+	background-color: #232527;
+	font-size: 13px;
+	line-height: 22px;
+	border-radius: 4px;
+	overflow-x: auto;
+	margin-top: 13px;
+	margin-bottom:8px;
+}
+
+.detail code {
+	color: #2bbc8a;
+	font-size: 14px;
+	display: inline-block;
+	margin: 0 5px;
+}
+
+.detail blockquote {
+	margin-top: 16px;
+	margin-bottom:16px;
+	color: #ccffb6;
+}
+
+.detail ul {
+	margin-bottom: 14px;
+	margin-top: 14px;
+	padding-left: 40px;
+}
+
+.detail ul li {
+	list-style: disc;
+}
+
+.detail a{
+	border-bottom: 1px solid #c9cacc;
+}
+.detail a:hover{
+	color: #2bbc8a;
+}
+
+
+.comment-hl{
+    color: gray;
+}
+.keyword-hl{
+    color: red;
+}
+.string-hl{
+    color: yellow;
+}

@@ -1,0 +1,47 @@
+.watch {
+	margin-left: 0.5rem;
+	margin-right: 0.65rem;
+}
+.Find {
+	margin-left: 0.65rem;
+	margin-right: 0.5rem;
+}
+
+#github:hover {
+	color: #2bbc8a;
+}
+
+.content .h1 {
+	letter-spacing: .01em;
+	font-size:1.5em;
+	font-weight: 700;
+	color: #2bbc8a;
+	margin-top: 3rem;
+	margin-bottom: 1rem;
+	display: block;
+}
+
+.project-item a {
+	border-bottom: 1px solid #c9cacc;
+}
+.project-item a:hover {
+	color: #2bbc8a;
+}
+.project-item {
+	margin-bottom: 5px;
+}
+
+
+
+a:link {color: inherit;} 
+a:visited {color: inherit;} 
+a:hover {color: inherit;} 
+a:active {color: inherit;} 
+
+
+
+
+
+
+
+
