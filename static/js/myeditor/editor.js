@@ -14,6 +14,7 @@ var myeditor = {
 		//控制keydown换行事件
 		writerU.addEvent(e,'keydown',myeditor.editor_keydown)
     	writerU.addEvent(e,'focus',myeditor.hideall)
+    	writerU.addEvent(e,'keyup',myeditor.prevent_empty)
 	},
 	//当编辑框获取焦点时隐藏所有的悬浮窗口
 	hideall: function() {
@@ -50,14 +51,11 @@ var myeditor = {
 		return data;
 	},
 	editor_keydown: function(e) {
-		if (this.innerHTML=='') {
-			this.innerHTML='<p><br></p>'
-		}
-		myrange.sel = document.getSelection()
-		var range = myrange.sel.getRangeAt(0)
 		//检查光标是否在代码区内，若果在则对换行做特殊处理
 		//添加tab制表符功能,用4个空格代替
-		var active_pre = myrange.nodeSelect(range.commonAncestorContainer)
+		myrange.sel = document.getSelection()
+		var range = myrange.sel.getRangeAt(0)
+		var active_pre = myrange.nodeSelect()
 		if (active_pre) {
 			if (e.keyCode==13) {
 				e.preventDefault()
@@ -69,14 +67,12 @@ var myeditor = {
 				e.preventDefault()
 				document.execCommand('inserthtml',false,'    ')
 			}else if(e.ctrlKey && e.keyCode==81) {   //按下ctrl+q退出代码块
-				if (active_pre.nextSibling) {
-					//var last = active_pre.parentNode.lastChild.childNodes.length-1
+				if (active_pre.nextSibling) {  //如果active_pre有下一个兄弟元素就直接跳到下一个兄弟元素
 					var endnode = writerU.get_deep_lastchild(active_pre.parentNode)
-					
-					
 					range.setStart(endnode,endnode.nodeValue.length)
 					range.setEnd(endnode,endnode.nodeValue.length)
 				}else{
+					//如果没有就新增一行
 					var p = document.createElement("p")
 					var br =document.createElement("br")
 					p.appendChild(br)
@@ -87,6 +83,8 @@ var myeditor = {
 					var status = document.getElementsByClassName('code_status')
 					status[0].style.display = 'none'
 				}
+				//退出代码块，active属性设置为false
+
 					
 			}
 		}
@@ -97,6 +95,13 @@ var myeditor = {
 			}
 		}
 		
+	},
+	//防止编辑器被删除为空
+	prevent_empty: function(){
+		//this表示触发这个事件的元素
+		if (this.innerHTML=='') {
+			this.innerHTML='<p><br></p>'
+		}
 	},
 	getlinkdata: function() {
 		linkedit = document.getElementById('linkedit')

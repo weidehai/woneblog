@@ -19,7 +19,21 @@ var myrange = {
 		}catch{}
 		
 	},
-	//åˆ¤æ–­å…‰æ ‡æ˜¯å¦åœ¨ä»£ç å—å†…,è·å–å½“å‰rangæ‰€åœ¨èŠ‚ç‚¹å¹¶ä¸æ–­å¾€ä¸ŠæŸ¥æ‰¾ï¼Œç›´åˆ°divç»“æŸ
+	//¸ø´úÂë¿éÌí¼ÓÁËÒ»¸öactiveÊôĞÔÀ´±íÊ¾µ±Ç°¹â±êÊÇ·ñÔÚ´úÂë¿éÄÚ
+	nodeSelect:function(){
+		var pre = document.getElementsByTagName('pre')
+		var length = pre.length
+		for(var i=0;i<length;i++){
+			if (pre[i].getAttribute("active")) {
+				return pre[i]
+			}
+		}
+		return false
+	}
+	/**
+	//ÅĞ¶Ï¹â±êÊÇ·ñÔÚ´úÂë¿éÄÚ,»ñÈ¡µ±Ç°rangËùÔÚ½Úµã²¢²»¶ÏÍùÉÏ²éÕÒ£¬Ö±µ½div½áÊø
+	ÖØ¹¹´úÂë
+	--------------------------------------------------------------------
 	nodeSelect: function(commonAncestorContainer){
 		if (commonAncestorContainer.parentElement.nodeName == 'PRE'){
 			return commonAncestorContainer.parentElement
@@ -32,5 +46,7 @@ var myrange = {
 			return false
 		}
 	}
+	-------------------------------------------------------------------------
+	**/
 
 }

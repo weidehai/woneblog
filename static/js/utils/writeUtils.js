@@ -18,6 +18,7 @@ var writerU = {
 	},
 	//添加事件监听
 	addEvent: function(el,eventname,handle) {
+		//addEventListener(eventname,handle_function,useCapture),第三个函数为boolen值，true表示使用事件捕获模型，flase表示使用事件冒泡模型，默认false
 		el.addEventListener(eventname,handle)
 	},
 	//控制悬浮窗口的开关,el为正在激活的悬浮窗口,获取所有的悬浮窗口，不为el时全部关闭
@@ -83,6 +84,16 @@ var writerU = {
 			return lastele
 		}
 		return targetElement
+	},
+	//插入代码块使光标焦点在代码块内
+	focus_pre:function(){
+		var is_active = myrange.nodeSelect()
+		if (is_active) {
+			myrange.sel = document.getSelection()
+			var range = myrange.sel.getRangeAt(0)
+			range.setStart(is_active,0)
+			range.setEnd(is_active,0)
+		}
 	}
 }
 function backtoindex(){

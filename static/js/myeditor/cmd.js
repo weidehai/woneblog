@@ -9,12 +9,14 @@ var stylecmd = {
 		document.execCommand('insertUnorderedList',false,null)
 	},
 	//代码块
-	inserthtml: function(e) {
-		var text = `<pre class=${this.innerText}></pre>`
+	inserthtml: function(e) {	
+		var text = `<pre class=${this.innerText} active=true></pre>`
 		document.execCommand('insertHTML',false,text)
 		var status = document.getElementsByClassName('code_status')
 		status[0].style.display = 'block'
-		writerU.controlSwitch(document.getElementById('language'))	
+		writerU.controlSwitch(document.getElementById('language'))
+		writerU.focus_pre()
+		
 	},
 	insertlink: function() {
 		//需要恢复光标保证插入位置正确
@@ -29,8 +31,6 @@ var stylecmd = {
 	insert_keyboard:function(){
 		if (myrange.nowRange.startOffset != myrange.nowRange.endOffset) {
 			//如果两者不相等则说明当前range有内容，则将内容包裹code标签
-			console.log(myrange.nowRange)
-			console.log(myrange.nowRange.commonAncestorContainer.parentNode.nodeName)
 			var code = document.createElement('code') 
 			myrange.nowRange.surroundContents(code)
 			range = document.getSelection().getRangeAt(0)

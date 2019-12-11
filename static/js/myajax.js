@@ -28,7 +28,6 @@ var interactive = {
 					}
 					if (el.getAttribute('class') === 'detail') {
 						el.innerHTML = obj[0]['article_content']
-
 						console.log(el.getElementsByTagName('pre'))
 						for(let ele of el.getElementsByTagName('pre')){
 							if (ele.getAttribute('class')=='javascript') {
