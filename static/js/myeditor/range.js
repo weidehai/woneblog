@@ -1,4 +1,4 @@
-var myrange = {
+ï»¿itvar myrange = {
 	nowRange:'',
 	sel:'',
 	saveRange: function(el,event){
@@ -19,7 +19,7 @@ var myrange = {
 		}catch{}
 		
 	},
-	//¸ø´úÂë¿éÌí¼ÓÁËÒ»¸öactiveÊôĞÔÀ´±íÊ¾µ±Ç°¹â±êÊÇ·ñÔÚ´úÂë¿éÄÚ
+	//ç»™ç„¦ç‚¹preä»£ç å—å¢åŠ äº†activeå±æ€§ï¼Œé€šè¿‡æ­¤å±æ€§åˆ¤æ–­å…‰æ ‡æ˜¯å¦åœ¨ä»£ç å—å†…
 	nodeSelect:function(){
 		var pre = document.getElementsByTagName('pre')
 		var length = pre.length
@@ -31,8 +31,8 @@ var myrange = {
 		return false
 	}
 	/**
-	//ÅĞ¶Ï¹â±êÊÇ·ñÔÚ´úÂë¿éÄÚ,»ñÈ¡µ±Ç°rangËùÔÚ½Úµã²¢²»¶ÏÍùÉÏ²éÕÒ£¬Ö±µ½div½áÊø
-	ÖØ¹¹´úÂë
+	//åˆ¤æ–­å…‰æ ‡æ˜¯å¦åœ¨ä»£ç å—å†…
+	//ä»£ç é‡æ„
 	--------------------------------------------------------------------
 	nodeSelect: function(commonAncestorContainer){
 		if (commonAncestorContainer.parentElement.nodeName == 'PRE'){
