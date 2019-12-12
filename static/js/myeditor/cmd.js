@@ -15,7 +15,7 @@ var stylecmd = {
 		var status = document.getElementsByClassName('code_status')
 		status[0].style.display = 'block'
 		writerU.controlSwitch(document.getElementById('language'))
-		writerU.focus_pre()
+		//writerU.focus_pre()
 		
 	},
 	insertlink: function() {

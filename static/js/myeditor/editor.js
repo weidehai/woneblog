@@ -15,6 +15,7 @@ var myeditor = {
 		writerU.addEvent(e,'keydown',myeditor.editor_keydown)
     	writerU.addEvent(e,'focus',myeditor.hideall)
     	writerU.addEvent(e,'keyup',myeditor.prevent_empty)
+    	//writerU.addEvent(e,'mouseup',myeditor.checkpre)
 	},
 	//当编辑框获取焦点时隐藏所有的悬浮窗口
 	hideall: function() {
@@ -53,8 +54,10 @@ var myeditor = {
 	editor_keydown: function(e) {
 		//检查光标是否在代码区内，若果在则对换行做特殊处理
 		//添加tab制表符功能,用4个空格代替
-		myrange.sel = document.getSelection()
-		var range = myrange.sel.getRangeAt(0)
+		try{
+			myrange.sel = document.getSelection()
+			var range = myrange.sel.getRangeAt(0)
+		}catch{}
 		var active_pre = myrange.nodeSelect()
 		if (active_pre) {
 			if (e.keyCode==13) {
@@ -69,8 +72,13 @@ var myeditor = {
 			}else if(e.ctrlKey && e.keyCode==81) {   //按下ctrl+q退出代码块
 				if (active_pre.nextSibling) {  //如果active_pre有下一个兄弟元素就直接跳到下一个兄弟元素
 					var endnode = writerU.get_deep_lastchild(active_pre.parentNode)
-					range.setStart(endnode,endnode.nodeValue.length)
-					range.setEnd(endnode,endnode.nodeValue.length)
+					try{
+						var offset = endnode.nodeValue.length
+					}catch{
+						offset = 0 
+					}
+					range.setStart(endnode,offset)
+					range.setEnd(endnode,offset)
 				}else{
 					//如果没有就新增一行
 					var p = document.createElement("p")
@@ -84,7 +92,7 @@ var myeditor = {
 					status[0].style.display = 'none'
 				}
 				//退出代码块，active属性设置为false
-
+					active_pre.setAttribute("active",false)
 					
 			}
 		}
@@ -98,6 +106,12 @@ var myeditor = {
 	},
 	//防止编辑器被删除为空
 	prevent_empty: function(){
+		try{
+			myrange.sel = document.getSelection()
+			var range = myrange.sel.getRangeAt(0)
+			console.log(range.commonAncestorContainer)
+			myrange.prestatus(range.commonAncestorContainer)
+		}catch{}
 		//this表示触发这个事件的元素
 		if (this.innerHTML=='') {
 			this.innerHTML='<p><br></p>'

@@ -1,4 +1,4 @@
-﻿itvar myrange = {
+﻿var myrange = {
 	nowRange:'',
 	sel:'',
 	saveRange: function(el,event){
@@ -29,12 +29,18 @@
 			}
 		}
 		return false
-	}
-	/**
-	//判断光标是否在代码块内
-	//代码重构
-	--------------------------------------------------------------------
-	nodeSelect: function(commonAncestorContainer){
+	},
+	//pre代码块的状态
+	prestatus:function(e){
+		var is_active = myrange.nodeSelectByRe(e)
+		console.log(is_active)
+		if (is_active) {
+			is_active.setAttribute('active',true)
+		}
+	},
+	//判断光标是否在代码块内,通过递归元素节点
+	//--------------------------------------------------------------------
+	nodeSelectByRe: function(commonAncestorContainer){
 		if (commonAncestorContainer.parentElement.nodeName == 'PRE'){
 			return commonAncestorContainer.parentElement
 		}else if(commonAncestorContainer.nodeName == 'PRE'){
@@ -46,7 +52,6 @@
 			return false
 		}
 	}
-	-------------------------------------------------------------------------
-	**/
+	//-------------------------------------------------------------------------
 
 }

@@ -84,17 +84,20 @@ var writerU = {
 			return lastele
 		}
 		return targetElement
-	},
+	}
+	/**  貌似没什么用
 	//插入代码块使光标焦点在代码块内
+	----------------------------------------------
 	focus_pre:function(){
 		var is_active = myrange.nodeSelect()
 		if (is_active) {
-			myrange.sel = document.getSelection()
-			var range = myrange.sel.getRangeAt(0)
+			var range = document.createRange()
 			range.setStart(is_active,0)
 			range.setEnd(is_active,0)
 		}
 	}
+	----------------------------------------------
+	**/
 }
 function backtoindex(){
 	window.location.href='/'
