@@ -24,12 +24,12 @@ var writerU = {
 	//控制悬浮窗口的开关,el为正在激活的悬浮窗口,获取所有的悬浮窗口，不为el时全部关闭
 	controlSwitch: function(el,id) {
 		isshow = el.getAttribute('data-show')
-		console.log(isshow)
 		sus = document.getElementsByClassName('suspended')
 		for(var i=0;i<sus.length;i++){
 			if (el == sus[i]) {
 				if (isshow == 'false') {
 					el.style.display = 'block'
+					//有需要输入操作的获取焦点
 					try{
 						text = document.getElementById(id)
 						text.focus()
@@ -38,8 +38,6 @@ var writerU = {
 				}else {
 					//当前窗口关闭编辑框获得焦点
 					el.style.display = 'none'
-					e = document.getElementById('editor')
-					e.focus()
 					myrange.restoreRange()
 					el.setAttribute('data-show','false')
 				}
@@ -84,20 +82,19 @@ var writerU = {
 			return lastele
 		}
 		return targetElement
-	}
-	/**  貌似没什么用
+	},
 	//插入代码块使光标焦点在代码块内
-	----------------------------------------------
+	//----------------------------------------------
 	focus_pre:function(){
 		var is_active = myrange.nodeSelect()
 		if (is_active) {
-			var range = document.createRange()
-			range.setStart(is_active,0)
-			range.setEnd(is_active,0)
+			myrange.restoreRange()
+			myrange.nowRange.setStart(is_active,0)
+			myrange.nowRange.setEnd(is_active,0)
 		}
 	}
-	----------------------------------------------
-	**/
+	//----------------------------------------------
+	
 }
 function backtoindex(){
 	window.location.href='/'

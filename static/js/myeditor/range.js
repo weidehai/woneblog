@@ -4,12 +4,16 @@
 	saveRange: function(el,event){
 		el.addEventListener(event,function(e){
 			try{
-
 				myrange.sel = document.getSelection()
 				myrange.nowRange = myrange.sel.getRangeAt(0)
-				console.log(myrange.nowRange)
-			}catch{}
-			
+			}catch{
+
+			}finally{
+				if (e.type=="blur") {
+					var status = document.getElementsByClassName('code_status')
+					status[0].style.display = 'none'
+				}
+			}
 		})
 	},
 	restoreRange: function(){
@@ -31,11 +35,21 @@
 		return false
 	},
 	//pre代码块的状态
-	prestatus:function(e){
+	update_prestatus:function(e){
+		console.log(e)
 		var is_active = myrange.nodeSelectByRe(e)
-		console.log(is_active)
 		if (is_active) {
 			is_active.setAttribute('active',true)
+			var status = document.getElementsByClassName('code_status')
+			status[0].style.display = 'block'
+		}else{
+			var pre = document.getElementsByTagName("pre")
+			var length = pre.length
+			for(i=0;i<length;i++){
+				pre[i].setAttribute('active',false)
+			}
+			var status = document.getElementsByClassName('code_status')
+			status[0].style.display = 'none'
 		}
 	},
 	//判断光标是否在代码块内,通过递归元素节点

@@ -13,6 +13,7 @@ window.onload = function() {
 	var language = document.getElementById('language')
 	var languagediv = document.getElementsByClassName('language')
 	var code = document.getElementById('code')
+	var code_status = document.getElementsByClassName('code_status')
 	var lang_item = document.getElementById('lang_item')
 	//阻止样式按钮的点击获取焦点事件,点击每个样式按钮时要保存当前range
 	for (var k=0;k<i.length;k++) {
@@ -23,7 +24,12 @@ window.onload = function() {
     myrange.saveRange(picture,'mouseup')
     myrange.saveRange(video,'mouseup')
     myrange.saveRange(e,'blur')
-
+    code_status[0].addEventListener('click',function(){
+    	myrange.sel = document.getSelection()
+		var range = myrange.sel.getRangeAt(0)
+		var el = myrange.nodeSelect()
+		myeditor.exit_code(el,range)
+    })
 	myeditor.init()
 	//为每个样式按钮注册命令
 	writerU.addEvent(h1,'click',stylecmd.formatblockH1)
@@ -45,6 +51,7 @@ window.onload = function() {
 		}
 	}else{
 		writerU.addEvent(languagediv[0],"mouseover",function(){
+			console.log(document.activeElement.id)
 			language.style.display='block'
 			language.setAttribute('data-show',true)
 		})

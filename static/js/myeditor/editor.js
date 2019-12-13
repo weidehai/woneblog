@@ -15,7 +15,7 @@ var myeditor = {
 		writerU.addEvent(e,'keydown',myeditor.editor_keydown)
     	writerU.addEvent(e,'focus',myeditor.hideall)
     	writerU.addEvent(e,'keyup',myeditor.prevent_empty)
-    	//writerU.addEvent(e,'mouseup',myeditor.checkpre)
+		writerU.addEvent(e,"mouseup",myeditor.checkpre)
 	},
 	//当编辑框获取焦点时隐藏所有的悬浮窗口
 	hideall: function() {
@@ -57,8 +57,11 @@ var myeditor = {
 		try{
 			myrange.sel = document.getSelection()
 			var range = myrange.sel.getRangeAt(0)
+			var active_pre_byrecu = myrange.nodeSelectByRe(range.commonAncestorContainer)
 		}catch{}
-		var active_pre = myrange.nodeSelect()
+		//通过data-show属性加上光标位置节点递归方式，双重确认光标位置
+		var active_pre_byattr = myrange.nodeSelect()
+		var active_pre = active_pre_byattr?active_pre_byattr:active_pre_byrecu
 		if (active_pre) {
 			if (e.keyCode==13) {
 				e.preventDefault()
@@ -70,30 +73,8 @@ var myeditor = {
 				e.preventDefault()
 				document.execCommand('inserthtml',false,'    ')
 			}else if(e.ctrlKey && e.keyCode==81) {   //按下ctrl+q退出代码块
-				if (active_pre.nextSibling) {  //如果active_pre有下一个兄弟元素就直接跳到下一个兄弟元素
-					var endnode = writerU.get_deep_lastchild(active_pre.parentNode)
-					try{
-						var offset = endnode.nodeValue.length
-					}catch{
-						offset = 0 
-					}
-					range.setStart(endnode,offset)
-					range.setEnd(endnode,offset)
-				}else{
-					//如果没有就新增一行
-					var p = document.createElement("p")
-					var br =document.createElement("br")
-					p.appendChild(br)
-					var e = document.getElementById('editor')
-					e.appendChild(p)
-					range.setStart(p,0)
-					range.setEnd(p,0)
-					var status = document.getElementsByClassName('code_status')
-					status[0].style.display = 'none'
-				}
-				//退出代码块，active属性设置为false
-					active_pre.setAttribute("active",false)
-					
+				myeditor.exit_code(active_pre,range)
+				
 			}
 		}
 		//当文本为空，即编辑框内容为<p><br></p>时，阻止删除
@@ -104,14 +85,16 @@ var myeditor = {
 		}
 		
 	},
-	//防止编辑器被删除为空
-	prevent_empty: function(){
+	checkpre:function(){
 		try{
 			myrange.sel = document.getSelection()
 			var range = myrange.sel.getRangeAt(0)
-			console.log(range.commonAncestorContainer)
-			myrange.prestatus(range.commonAncestorContainer)
+			myrange.update_prestatus(range.commonAncestorContainer)
 		}catch{}
+	},
+	//防止编辑器被删除为空
+	prevent_empty: function(){
+		myeditor.checkpre()
 		//this表示触发这个事件的元素
 		if (this.innerHTML=='') {
 			this.innerHTML='<p><br></p>'
@@ -125,5 +108,30 @@ var myeditor = {
 		linkedit.setAttribute('data-show','false')
 		linkarea.value = ""
 		return data
+	},
+	exit_code:function(el,range){
+		if (el.nextSibling) {  //如果active_pre有下一个兄弟元素就直接跳到下一个兄弟元素
+			var endnode = writerU.get_deep_lastchild(el.parentNode)
+			try{
+				var offset = endnode.nodeValue.length
+			}catch{
+				offset = 0 
+			}
+			range.setStart(endnode,offset)
+			range.setEnd(endnode,offset)
+		}else{
+			//如果没有就新增一行
+			var p = document.createElement("p")
+			var br =document.createElement("br")
+			p.appendChild(br)
+			var e = document.getElementById('editor')
+			e.appendChild(p)
+			range.setStart(p,0)
+			range.setEnd(p,0)
+		}
+		//退出代码块，active属性设置为false
+		el.setAttribute("active",false)
+		var status = document.getElementsByClassName('code_status')
+		status[0].style.display = 'none'
 	}
 }

@@ -9,14 +9,17 @@ var stylecmd = {
 		document.execCommand('insertUnorderedList',false,null)
 	},
 	//代码块
-	inserthtml: function(e) {	
-		var text = `<pre class=${this.innerText} active=true></pre>`
-		document.execCommand('insertHTML',false,text)
-		var status = document.getElementsByClassName('code_status')
-		status[0].style.display = 'block'
-		writerU.controlSwitch(document.getElementById('language'))
-		//writerU.focus_pre()
-		
+	inserthtml: function(e) {
+		if (document.activeElement.id=="editor") {
+			myrange.sel = document.getSelection()
+			myrange.nowRange = myrange.sel.getRangeAt(0)
+			var text = `<pre class=${this.innerText} active=true></pre>`
+			document.execCommand('insertHTML',false,text)
+			var status = document.getElementsByClassName('code_status')
+			status[0].style.display = 'block'
+			writerU.controlSwitch(document.getElementById('language'))
+			writerU.focus_pre()
+		}
 	},
 	insertlink: function() {
 		//需要恢复光标保证插入位置正确
