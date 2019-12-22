@@ -15,73 +15,51 @@ window.onload = function() {
 	var code = document.getElementById('code')
 	var code_status = document.getElementsByClassName('code_status')
 	var lang_item = document.getElementById('lang_item')
-	//阻止样式按钮的点击获取焦点事件,点击每个样式按钮时要保存当前range
+	var code_keyword = language.getElementsByTagName('li')[language.getElementsByTagName('li').length-1]
+	//阻止样式按钮的点击获取焦点事件
 	for (var k=0;k<i.length;k++) {
-		writerU.preventDefault(i[k],'mousedown')
+		editorU.preventDefault(i[k],'mousedown')
 	}
-	writerU.preventDefault(picture,'mousedown')
-	writerU.preventDefault(video,'mousedown')
-    myrange.saveRange(picture,'mouseup')
-    myrange.saveRange(video,'mouseup')
-    myrange.saveRange(e,'blur')
+	editorU.preventDefault(code_keyword,'mousedown')
     code_status[0].addEventListener('click',function(){
-    	myrange.sel = document.getSelection()
-		var range = myrange.sel.getRangeAt(0)
-		var el = myrange.nodeSelect()
-		myeditor.exit_code(el,range)
+		var el = editorCursor.isCursorInCodeblock_byLabelAttr()
+		Editor.exit_code(el)
     })
-	myeditor.init()
+	Editor.init()
 	//为每个样式按钮注册命令
-	writerU.addEvent(h1,'click',stylecmd.formatblockH1)
-	writerU.addEvent(h2,'click',stylecmd.formatblockH2)
-	writerU.addEvent(list,'click',stylecmd.insertList)
-	writerU.addEvent(linkbt,'click',stylecmd.insertlink)
-	writerU.addEvent(file,'change',writerU.upload)
-	
-	
-	
-	
+	h1.addEventListener('click',stylecmd.formatblockH1)
+	h2.addEventListener('click',stylecmd.formatblockH2)
+	list.addEventListener('click',stylecmd.insertList)
+	linkbt.addEventListener('click',stylecmd.insertlink)
+	file.addEventListener('change',network_operation.upload)
+	code_keyword.addEventListener('click',stylecmd.insert_keyboard)
+	for(let i=0;i<language.getElementsByTagName('li').length-1;i++){
+		editorU.preventDefault(language.getElementsByTagName('li')[i],'mousedown')
+		language.getElementsByTagName('li')[i].addEventListener('click',stylecmd.insertHtml)
+	}
 	if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) { 
-		writerU.addEvent(code,"click",function(){
-			writerU.controlSwitch(language)
+		code.addEventListener("click",function(){
+			editorU.suspendControl(language)
+			e.blur()
 		})
-		for (let i of language.getElementsByTagName('li')){
-			writerU.preventDefault(i,'mousedown')
-			writerU.addEvent(i,'click',stylecmd.inserthtml)
-		}
 	}else{
-		writerU.addEvent(languagediv[0],"mouseover",function(){
-			console.log(document.activeElement.id)
+		languagediv[0].addEventListener("mouseover",function(){
 			language.style.display='block'
 			language.setAttribute('data-show',true)
 		})
-		writerU.addEvent(languagediv[0],"mouseout",function(){
+		languagediv[0].addEventListener("mouseout",function(){
 			language.style.display='none'
 			language.setAttribute('data-show',false)
 		})
-		//语法选择列表
-		var code_keyword = language.getElementsByTagName('li')[language.getElementsByTagName('li').length-1]
-		writerU.preventDefault(code_keyword,'mousedown')
-		myrange.saveRange(code_keyword,'mouseup')
-		writerU.addEvent(code_keyword,'click',stylecmd.insert_keyboard)
-		for(let i=0;i<language.getElementsByTagName('li').length-1;i++){
-			writerU.preventDefault(language.getElementsByTagName('li')[i],'mousedown')
-			writerU.addEvent(language.getElementsByTagName('li')[i],'click',stylecmd.inserthtml)
-		}
 	}
-	
 	//为提交按钮注册点击命令
-	writerU.addEvent(submitbt,'click',interactive.ajaxpost)
-
-
-	//悬浮窗口不能同时存在，一个打开其他的自动关闭
-	writerU.addEvent(link,'click',function() {
+	submitbt.addEventListener('click',interactive.ajaxpost)
+	link.addEventListener('click',function() {
 		var linkedit = document.getElementById('linkedit')
-		writerU.controlSwitch(linkedit,"linkarea")
+		editorU.suspendControl(linkedit,"linkarea")
 	})
-
-	if (writerU.geturl_param()) {
-		var query_str = writerU.geturl_param() + '?article_title?article_tag?article_content'
+	if (editorU.geturl_param()) {
+		var query_str = editorU.geturl_param() + '?article_title?article_tag?article_content'
 		interactive.ajaxmain(e,query_str)
 	}
 }

@@ -25,6 +25,9 @@ var seo = {
 				a_sec.setAttribute('href',"#"+cont[0].childNodes[i].innerText)
 				text_sec_title = document.createTextNode(cont[0].childNodes[i].innerText)
 				li_sec.appendChild(a_sec)
+				if (list.lastElementChild==null) {
+					continue
+				}
 				list.lastElementChild.appendChild(li_sec)
 				a_sec.appendChild(text_sec_title);
 				//鼠标悬停在一级标题上显示二级标题

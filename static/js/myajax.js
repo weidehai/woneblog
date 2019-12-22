@@ -16,44 +16,41 @@ var interactive = {
 		oajax.send(null)
 		oajax.onreadystatechange = function() {
 			if (oajax.readyState == 4) {
-				try {
-					var str = oajax.responseText
-					var obj = eval('(' + str + ')')
-					if (el.getAttribute('id') === 'editor') {
-						el.innerHTML = obj[0]['article_content']
-						var title = document.getElementById('title')
-						var tag = document.getElementById('tag')
-						title.setAttribute('value',obj[0]['article_title'])
-						tag.setAttribute('value',obj[0]['article_tag'])
-					}
-					if (el.getAttribute('class') === 'detail') {
-						el.innerHTML = obj[0]['article_content']
-						console.log(el.getElementsByTagName('pre'))
-						for(let ele of el.getElementsByTagName('pre')){
-							if (ele.getAttribute('class')=='javascript') {
-								hl_init(ele)
-								console.log(ele.innerHTML) 
-							}
-							
-							
+				
+				var str = oajax.responseText
+				var obj = eval('(' + str + ')')
+				if (el.getAttribute('id') === 'editor') {
+					el.innerHTML = obj[0]['article_content']
+					var title = document.getElementById('title')
+					var tag = document.getElementById('tag')
+					title.setAttribute('value',obj[0]['article_title'])
+					tag.setAttribute('value',obj[0]['article_tag'])
+				}
+				if (el.getAttribute('class') === 'detail') {
+					el.innerHTML = obj[0]['article_content']
+					console.log(el.getElementsByTagName('pre'))
+					for(let ele of el.getElementsByTagName('pre')){
+						if (ele.getAttribute('class')=='javascript') {
+							hl_init(ele)
+							console.log(ele.innerHTML) 
 						}
 						
-						seo.createTag()
-						seo.createMeta()
-						detailU.shutload()
-						detailU.show_comment()
-						mycomment.get_commentdata()
+						
 					}
-				}catch(e) {
-					alert('the page you visit is error'+e)
+					seo.createTag()
+					seo.createMeta()
+					detailU.shutload()
+					detailU.show_comment()
+					mycomment.get_commentdata()
 				}
+			
 			
 			}
 		}
 	},
 	ajaxpost: function() {
 		var oajax = interactive.creatajax()
-		var data = myeditor.getcontent()
+		var data = getData.getContent()
 		var postkey = data["postkey"]
 		if (data['update']) {
 			oajax.open('post','/updatepost',true);

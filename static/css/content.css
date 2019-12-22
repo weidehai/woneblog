@@ -32,10 +32,12 @@
 }
 
 .detail code {
-	color: #2bbc8a;
-	font-size: 14px;
-	display: inline-block;
-	margin: 0 5px;
+	color: red;
+	font-size: 12px;
+	padding: 2px 4px;
+	border-radius: 3px;
+	border:1px solid #dddddd;
+	background: #bbffbb;
 }
 
 .detail blockquote {

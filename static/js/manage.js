@@ -1,6 +1,5 @@
 window.onload = function() {
 	get_info()
-	register_write()
 	suspended()
 
 }
@@ -8,15 +7,18 @@ window.onload = function() {
 
 function register_write(){
 	var write = document.getElementById('write')
-	write.onclick=function(){
-		window.location.href = '/publish'
-	}
+	window.location.href = '/publish'
 }
 
 function editor(id) {
 	url = '/publish?getid=' + id
 	window.location.href = url
 }
+
+
+// function preventmove(e){
+// 	e.preventDefault()
+// }
 
 function suspended(){
 	var write = document.getElementById('write')
@@ -29,7 +31,6 @@ function suspended(){
 	write.addEventListener('touchend',mycoordinate.mouseup.bind(mycoordinate),false)
 
 }
-
 function coordinate(element){
 	this.flag = false
 	this.el = element
@@ -43,6 +44,8 @@ function coordinate(element){
 }
 
 coordinate.prototype.mousedown=function(e){
+	e.preventDefault()
+	e.stopPropagation()
 	this.flag = true
 	this.time = new Date().getTime()
 	if (e.touches) {
@@ -55,11 +58,13 @@ coordinate.prototype.mousedown=function(e){
 	this.offsetLeft = this.el.offsetLeft
 	this.offsetTop = this.el.offsetTop
 	this.__newev__ = coordinate.prototype.mousemove.bind(this)
-	document.addEventListener('mousemove',this.__newev__,false)
-	document.addEventListener('touchmove',this.__newev__,false)
+	document.body.addEventListener('mousemove',this.__newev__,false)
+	document.body.addEventListener('touchmove',this.__newev__,{passive:false})
 }
 
 coordinate.prototype.mousemove=function(e){
+	e.preventDefault()
+	e.stopPropagation()
 	if (e.touches) {
 		var touch = e.touches[0]
 	}else{
@@ -72,11 +77,7 @@ coordinate.prototype.mousemove=function(e){
 		var ny = dy+this.offsetTop
 		this.el.style.left = nx+"px"
 		this.el.style.top = ny+"px"
-		document.addEventListener('touchmove',function(ev){
-			ev.preventDefault()
-		},{passive:false,once:true})
 	}
-	
 }
 
 coordinate.prototype.mouseup=function(){
@@ -89,9 +90,10 @@ coordinate.prototype.mouseup=function(){
 	}else{
 		register_write()
 	}
-	document.removeEventListener('mousemove',this.__newev__)
-	document.removeEventListener('touchmove',this.__newev__)
+	document.body.removeEventListener('mousemove',this.__newev__)
+	document.body.removeEventListener('touchmove',this.__newev__)
 }
+
 
 function get_info() {
 	oajax = interactive.creatajax()
