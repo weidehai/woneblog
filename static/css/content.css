@@ -32,12 +32,12 @@
 }
 
 .detail code {
-	color: red;
-	font-size: 12px;
-	padding: 2px 4px;
+	font-family: Helvetica, Arial, sans-serif, 微软雅黑;
+	color: #000000;
+	font-size: 14px;
+	padding: 0 4px;
 	border-radius: 3px;
-	border:1px solid #dddddd;
-	background: #bbffbb;
+	background: #ffffff;
 }
 
 .detail blockquote {

@@ -163,8 +163,8 @@ def verify():
             return 'unlogin'
     else:
         userdata = json.loads(request.get_data())
-        if (userdata["username"]=='weidehai'):
-            if (userdata["password"]=='adminpassword'):
+        if (userdata["username"]=='xxxxxxxx'):
+            if (userdata["password"]=='xxxxxxx'):
                 session['username'] = 'admin'
                 session.permanent = True
                 return 'login success'
