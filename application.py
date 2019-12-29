@@ -25,17 +25,9 @@ def archives():
     if tag_name is None:
         tag_name = 'Archives'
         #Archives页面需要的数据有article_id,article_time,article_title,article_tag
-        data = myarticles.query_field_primarykey('',['article_time','article_title','article_tag','postkey'])
-        data.reverse()
+        data = tools.get_data_by_year(myarticles,['article_time','article_title','postkey'],'')
     else:
-        new_data = []
-        data = myarticles.query_field_primarykey('', ['article_time','article_title','article_tag','postkey'])
-        #如果查询参数tag_name存在,就进行过滤，取出tag_name标签下的内容
-        for i in data:
-            if (i['article_tag'] == tag_name):
-                new_data.append(i)
-        data = new_data
-        data.reverse()
+        data = tools.get_data_by_year(myarticles,['article_time','article_title','article_tag','postkey'],tag_name)
     articletag = myarticles.query_field_primarykey('',['article_tag'])
     tags = tools.resortTag(articletag)
     return render_template('archives.html', articles=data,tags = tags,title = tag_name)
@@ -94,9 +86,8 @@ def updatepost():
     title = pymysql.escape_string(data['title'])
     tag = pymysql.escape_string(data['tag'].capitalize())
     content = pymysql.escape_string(data['content'])
-    time = data["publishtime"]
     postkey = data["postkey"]
-    myarticles.update_data(postkey,article_title=title, article_content=content, article_time=time,article_tag=tag)
+    myarticles.update_data(postkey,article_title=title, article_content=content,article_tag=tag)
     return "200ok"
 @app.route('/savecomment',methods=["POST"])
 def savecomment():
@@ -175,4 +166,3 @@ if __name__ == '__main__':
     myadmin = admin("admin")
     mycomments = comment("comment")
     app.run()
-

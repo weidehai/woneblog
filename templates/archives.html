@@ -51,10 +51,11 @@
 			{% endfor %}
 		</div>
 		<section id="wrapper">
+			{% for data in articles %}
 			<div class="archive">
-				<h3>2019</h3>
+				<h3>{{data['year']}}</h3>
 				<ul class="post-list">
-					{% for item in articles %}
+					{% for item in data['articles'] %}
 					<li class="post-item">
 						<div class="meta">
 							<time>{{item['article_time']}}</time>
@@ -64,6 +65,7 @@
 					{% endfor %}
 				</ul>
 			</div>
+			{% endfor %}
 		</section>
 		
 	</div>

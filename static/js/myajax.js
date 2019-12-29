@@ -16,7 +16,6 @@ var interactive = {
 		oajax.send(null)
 		oajax.onreadystatechange = function() {
 			if (oajax.readyState == 4) {
-				
 				var str = oajax.responseText
 				var obj = eval('(' + str + ')')
 				if (el.getAttribute('id') === 'editor') {
@@ -28,14 +27,10 @@ var interactive = {
 				}
 				if (el.getAttribute('class') === 'detail') {
 					el.innerHTML = obj[0]['article_content']
-					console.log(el.getElementsByTagName('pre'))
 					for(let ele of el.getElementsByTagName('pre')){
 						if (ele.getAttribute('class')=='javascript') {
 							hl_init(ele)
-							console.log(ele.innerHTML) 
 						}
-						
-						
 					}
 					seo.createTag()
 					seo.createMeta()
@@ -54,7 +49,6 @@ var interactive = {
 		var postkey = data["postkey"]
 		if (data['update']) {
 			oajax.open('post','/updatepost',true);
-			
 		}else{
 			oajax.open('post','/savepost',true);
 		}

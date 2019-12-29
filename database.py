@@ -33,6 +33,18 @@ class dataBase():
         cur.close()
         conn.close()
         return data
+    def query_field_by_time(self,qrfield_list,st,et,tag):
+        conn = Pool.connection()
+        cur = conn.cursor()
+        if(tag):
+            sql = 'select %s from %s where article_time>"%s" and article_time<"%s" and article_tag="%s"' % (','.join(qrfield_list), self.tablename, st, et,tag)
+        else:
+            sql = 'select %s from %s where article_time>"%s" and article_time<"%s"' % (','.join(qrfield_list),self.tablename,st,et)
+        cur.execute(sql)
+        data = cur.fetchall()
+        cur.close()
+        conn.close()
+        return data
     #更新表中的某一条记录,并且可以指定更新的字段
     def update_data(self,where,**kwargs):
         conn = Pool.connection()
