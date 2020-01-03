@@ -73,3 +73,14 @@
 .string-hl{
     color: yellow;
 }
+.reg-hl{
+	color: green;
+}
+.builtIn-Method{
+	color: white;
+}
+.builtIn-Obj{
+	color: blue;
+}
+
+

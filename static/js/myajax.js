@@ -29,7 +29,8 @@ var interactive = {
 					el.innerHTML = obj[0]['article_content']
 					for(let ele of el.getElementsByTagName('pre')){
 						if (ele.getAttribute('class')=='javascript') {
-							hl_init(ele)
+							var uhl = new whl(ele)
+							uhl.startMatch()
 						}
 					}
 					seo.createTag()
