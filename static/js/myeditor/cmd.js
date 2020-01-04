@@ -29,8 +29,10 @@ var stylecmd = {
 	insertlink: function() {
 		//需要恢复光标保证插入位置正确
 		editorCursor.restoreRange()
-		data = getData.getLinkData()
-		document.execCommand('createLink',false,data)
+		var data = getData.getLinkData()
+		console.log(data)
+		var link = `<a href=${data[0]}>${data[1]}<a>`
+		document.execCommand('insertHTML',false,link)
 		editorCursor.saveRange()
 		editorCursor.selection.collapseToEnd()
 	},

@@ -123,11 +123,12 @@ textarea {
 	padding-bottom: 5px;
 	width: 80%;
 }
-#linkarea {
+.linkarea {
 	height: 25px;
 	resize: none;
 	margin:10px 17px 0;
 	font-size: 16px;
+	line-height: 25px;
 }
 
 #linkedit button {

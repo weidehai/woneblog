@@ -80,11 +80,17 @@ var getData={
 	//获取要插入的链接
 	getLinkData: function() {
 		linkedit = document.getElementById('linkedit')
-		linkarea = document.getElementById('linkarea')
-		data = linkarea.value 
+		linkhref = document.getElementById('linkhref')
+		linkname = document.getElementById('linkname')
+		var href = linkhref.value
+		var name = linkname.value
+		var data = []
+		data.push(href)
+		data.push(name) 
 		linkedit.style.display = 'none'
 		linkedit.setAttribute('data-show','false')
-		linkarea.value = ""
+		linkhref.value = ""
+		linkname.value = ""
 		return data
 	},
 	//获取文章标题，标签，发表时间，postkey

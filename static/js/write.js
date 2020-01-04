@@ -56,7 +56,7 @@ window.onload = function() {
 	submitbt.addEventListener('click',interactive.ajaxpost)
 	link.addEventListener('click',function() {
 		var linkedit = document.getElementById('linkedit')
-		editorU.suspendControl(linkedit,"linkarea")
+		editorU.suspendControl(linkedit,"linkhref")
 	})
 	if (editorU.geturl_param()) {
 		var query_str = editorU.geturl_param() + '?article_title?article_tag?article_content'
