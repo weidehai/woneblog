@@ -4,12 +4,12 @@ String.prototype.replacePos = function(s1,s2,pos1,pos2){
 
 class whl {
 	constructor(ele){
-		this.word = "[a-zA-Z_]+"
-		this.keyword = "var|function|if|else|true|false|try|catch|break|continue|for|let|this|do|while|null|new|"
+		this.word = "[a-zA-Z0-9_$]+"
+		this.keyword = "var|function|if|else|true|false|try|catch|break|continue|for|let|this|do|while|null|new|class|"
 		this.comment = "\/{2}.*|"
 		this.str = '".*"|' + "'.*'|"
 		this.regular = "\/.*\/|"
-		this.builtInObj = "Array|Date|Math|Number|String|prototype|document|history|navigator|window|"
+		this.builtInObj = "Array|Date|Math|Number|String|prototype|document|history|navigator|window|Function|Object|"
 		this.builtInMethod = "alert|eval|clearInterval|clearTimeout|blur|foucs|confirm|setTimeout"
 		this.keywordArray = this.keyword.split('|')
 		this.builtInObjArray = this.builtInObj.split('|')

@@ -37,9 +37,9 @@ class dataBase():
         conn = Pool.connection()
         cur = conn.cursor()
         if(tag):
-            sql = 'select %s from %s where article_time>"%s" and article_time<"%s" and article_tag="%s"' % (','.join(qrfield_list), self.tablename, st, et,tag)
+            sql = 'select %s from %s where article_time>="%s" and article_time<="%s" and article_tag="%s"' % (','.join(qrfield_list), self.tablename, st, et,tag)
         else:
-            sql = 'select %s from %s where article_time>"%s" and article_time<"%s"' % (','.join(qrfield_list),self.tablename,st,et)
+            sql = 'select %s from %s where article_time>="%s" and article_time<="%s"' % (','.join(qrfield_list),self.tablename,st,et)
         cur.execute(sql)
         data = cur.fetchall()
         cur.close()

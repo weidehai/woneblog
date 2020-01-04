@@ -32,10 +32,10 @@ var interactive = {
 							var uhl = new whl(ele)
 							uhl.startMatch()
 						}
-					}
-					seo.createTag()
+					}					
 					seo.createMeta()
 					detailU.shutload()
+					detailU.createTag()
 					detailU.show_comment()
 					mycomment.get_commentdata()
 				}

@@ -1,4 +1,4 @@
-import time
+import time,copy
 class tools():
     #对标签字段进行整理，剔除重复部分后展示在前端
     def resortTag(tag):
@@ -14,6 +14,7 @@ class tools():
         data_for_year={}
         data=[]
         while STARYEAR<=NOWYEAR:
+            print(STARYEAR<=NOWYEAR)
             st = str(STARYEAR)+'-1-1'
             et = str(STARYEAR)+'-12-31'
             data_for_year['year']=STARYEAR
@@ -21,5 +22,6 @@ class tools():
             articles_for_year.reverse()
             data_for_year['articles']=articles_for_year
             STARYEAR+=1
-            data.append(data_for_year)
-            return data
+            data.append(copy.deepcopy(data_for_year))
+        data.reverse()
+        return data
