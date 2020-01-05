@@ -14,11 +14,13 @@ class tools():
         data_for_year={}
         data=[]
         while STARYEAR<=NOWYEAR:
-            print(STARYEAR<=NOWYEAR)
             st = str(STARYEAR)+'-1-1'
             et = str(STARYEAR)+'-12-31'
             data_for_year['year']=STARYEAR
             articles_for_year = database.query_field_by_time(query_list,st,et,tag)
+            if(articles_for_year==()):
+                STARYEAR += 1
+                continue
             articles_for_year.reverse()
             data_for_year['articles']=articles_for_year
             STARYEAR+=1
