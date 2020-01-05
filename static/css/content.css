@@ -80,7 +80,11 @@
 	color: white;
 }
 .builtIn-Obj{
-	color: blue;
+	color: #0099ff;
+
+}
+.number-hl{
+	color: #cc33ff;
 }
 
 

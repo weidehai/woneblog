@@ -4,17 +4,18 @@ String.prototype.replacePos = function(s1,s2,pos1,pos2){
 
 class whl {
 	constructor(ele){
-		this.word = "[a-zA-Z0-9_$]+"
-		this.keyword = "var|function|if|else|true|false|try|catch|break|continue|for|let|this|do|while|null|new|class|"
+		this.word = "[a-zA-Z0-9_$]+|"
+		this.number = "^[-\+][0-9]+\.[0-9]+|^[-\+][0-9]+|[0-9]+\.[0-9]+|[0-9]+"   //带符号和不带符号的小数和整数
+		this.keyword = "var|function|if|else|true|false|try|catch|break|continue|for|let|this|do|while|null|new|class"
 		this.comment = "\/{2}.*|"
 		this.str = '".*"|' + "'.*'|"
 		this.regular = "\/.*\/|"
-		this.builtInObj = "Array|Date|Math|Number|String|prototype|document|history|navigator|window|Function|Object|"
+		this.builtInObj = "Array|Date|Math|Number|String|prototype|document|history|navigator|window|Function|Object"
 		this.builtInMethod = "alert|eval|clearInterval|clearTimeout|blur|foucs|confirm|setTimeout"
 		this.keywordArray = this.keyword.split('|')
 		this.builtInObjArray = this.builtInObj.split('|')
 		this.builtInMethodArray = this.builtInMethod.split('|')
-		this.reg = new RegExp("(" + this.comment + this.str + this.regular + this.word + ")","g")
+		this.reg = new RegExp("(" + this.comment + this.str + this.regular + this.word + this.number + ")","g")
 		this.ele = ele
 		this.str = ele.innerHTML
 		this.extralen = 0
@@ -52,6 +53,8 @@ class whl {
 			s2 = this.builtIn_Method(s2)
 		}else if (this.keywordArray.indexOf(s2)!=-1) {
 			s2 = this.keyword_tag(s2)
+		}else if (this.isNumber(s2)) {
+			s2 = this.number_tag(s2)
 		}else{
 			return false
 		}
@@ -59,14 +62,20 @@ class whl {
 		console.log(this.newstr)
 		this.extralen = s2.length-olen+this.extralen
 	}
+
+	isNumber(res){
+		var reg = new RegExp("("+this.number+")","g")
+		return reg.test(res)
+	}
 	comment_tag(s){
 		return `<span class='comment-hl'>${s}</span>`
 	}
-
+    number_tag(s){
+    	return `<span class='number-hl'>${s}</span>`	
+    }
  	keyword_tag(s){
 		return `<span class='keyword-hl'>${s}</span>`
 	}	
-
 
 	string_tag(s){
 		return `<span class='string-hl'>${s}</span>`
