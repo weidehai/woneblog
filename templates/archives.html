@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -23,8 +23,8 @@
 		<header id="header">
 			<a href="/">
 				<div id="logo" style="background-image: url(../static/img/avatar.jpg);"></div>
-				<div id="title"><h1>{{title}}</h1></div>
 			</a>
+			<span style="font-size: 1.5rem;font-weight: bold;line-height: 2rem;display: inline-block;" id="title">{{title}}</span>
 			<div id="nav">
 				<ul>
 					<li class="navicon">
@@ -45,8 +45,8 @@
 				</ul>
 			</div>
 		</header>
-		<div id="theme-tag">
-			{% for tag in tags %}
+			{% for tag in tags %}		<div id="theme-tag">
+
 			<a href="/archives?tag={{tag}}">{{tag}}</a>
 			{% endfor %}
 		</div>

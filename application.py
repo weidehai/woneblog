@@ -121,7 +121,7 @@ def publish():
 def upload():
     if(session.get('username')):
         file = request.files["file"]
-        type = file.filename.split('.').pop().  lower()
+        type = file.filename.split('.').pop().lower()
         timename = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
         path = './static/upload/' + timename + '.' + type
         file.save(path)

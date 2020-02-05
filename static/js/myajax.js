@@ -80,7 +80,7 @@ var interactive = {
 				try {
 					fileurl = oajax.responseText
 					var type = fileurl.substr(fileurl.lastIndexOf('.')+1)
-					if (type=='jpg'||type=='png'||type=='gif') {
+					if (type=='jpg'||type=='png'||type=='gif'||type=='jpeg') {
 						var data = `<img src="${fileurl}">`
 					}else{
 						var data = `<video autoplay="autoplay" controls="controls" width="100%" muted="muted" loop="loop" src="${fileurl}"></video>`
