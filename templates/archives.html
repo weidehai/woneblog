@@ -40,16 +40,16 @@
 						<a href="/about">About</a>
 					</li>
 					<li>
-						<a href="https://github.com/">Github</a>
+						<a href="/search">Search</a>
 					</li>
 				</ul>
 			</div>
 		</header>
-			{% for tag in tags %}		<div id="theme-tag">
-
-			<a href="/archives?tag={{tag}}">{{tag}}</a>
-			{% endfor %}
-		</div>
+			<div id="theme-tag">
+				{% for tag in tags %}
+				<a href="/archives?tag={{tag}}">{{tag}}</a>
+				{% endfor %}
+			</div>
 		<section id="wrapper">
 			{% for data in articles %}
 			<div class="archive">
@@ -84,7 +84,7 @@
 						<a href="/about">About</a>
 					</li>
 					<li>
-						<a href="https://github.com/">Github</a>
+						<a href="/search">Search</a>
 					</li>
 				</ul>
 			</nav>

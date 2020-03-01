@@ -4,6 +4,7 @@ var detailU = {
 		time?d=new Date(time):d=new Date()
 		d.getMinutes()<10?myminutes = '0' + d.getMinutes():myminutes = d.getMinutes()
 		var newdate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + myminutes
+		console.log(newdate)
 		return newdate
 	},
 	

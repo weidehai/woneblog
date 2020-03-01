@@ -9,6 +9,24 @@ var interactive = {
 		};
 		return oajax
 	},
+	ajaxsearch:function(kw,offset){
+		var oajax = interactive.creatajax()
+		var surl = '/search'
+		oajax.open('post',surl,true);
+		var data = {
+			"kw":kw,
+			"offset":offset
+		}
+		data = JSON.stringify(data)
+		oajax.send(data)
+		oajax.onreadystatechange=function(){
+			if (oajax.readyState==4) {
+				var str = oajax.responseText
+				var obj = eval('(' + str + ')')
+				this.res = obj
+			}
+		}.bind(this)
+	},
 	ajaxmain: function(el,qstr,mycomment) {
 		var oajax = interactive.creatajax()
 		var myurl = '/getmain?getid=' + qstr
@@ -38,9 +56,7 @@ var interactive = {
 					detailU.createTag()
 					detailU.show_comment()
 					mycomment.get_commentdata()
-				}
-			
-			
+				}	
 			}
 		}
 	},
@@ -65,9 +81,7 @@ var interactive = {
 					}catch(e) {
 						alert('the page you visit is error')
 					}
-				}
-				
-			
+				}	
 			}
 		}
 	},
@@ -75,6 +89,7 @@ var interactive = {
 		var oajax = interactive.creatajax()
 		oajax.open('post','/upload',true);
 		oajax.send(file)
+		console.log("doupload...........")
 		oajax.onreadystatechange = function() {
 			if (oajax.readyState == 4) {
 				try {

@@ -100,6 +100,7 @@ var getData={
 		var t = document.getElementById('tag')
 		var title =tit.value
 		var content = e.innerHTML;
+		var sdata = e.innerText;
 		var tag = t.value
 		var publishtime = editorU.getDate()
 		var postkey,update
@@ -116,6 +117,7 @@ var getData={
 			"tag":tag,
 			"publishtime":publishtime,
 			"postkey":postkey,
+			"sdata":sdata,
 			"update":update
 		}
 		return data;
@@ -124,6 +126,7 @@ var getData={
 
 var network_operation = {
 	upload: function() {
+		console.log("doupload.......")
 		var f = document.getElementById('file').files[0]
 		var formdata = new FormData()
 		//将文件转换为二进制数据然后上传

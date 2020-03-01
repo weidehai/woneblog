@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 <head>
 	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="../static/css/content.css">
     <link rel="stylesheet" type="text/css" href="../static/css/loading.css">
     <link rel="stylesheet" type="text/css" href="../static/css/comment.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/smalltitle.css">
     <link rel="icon" type="image/x-icon" href="../static/img/wone.ico">
 </head>
 </head>
@@ -87,7 +88,7 @@
                         <time>{{article['article_time']}}</time>
                     </div>
                     <div class="watch">
-                        <i class="iconfont icon-glance"><span>{{article['article_read']+1}}</span></i>
+                        <i class="iconfont icon-glance"><span>{{article['article_read']}}</span></i>
                     </div>
                     <div class="lable">
                         <i class="iconfont icon-lable"><a href="/archives?tag={{article['article_tag']}}"><span>{{article['article_tag']}}</span></a></i>
@@ -103,7 +104,7 @@
                         <input type="text" name="link" placeholder="网址" class="commentor_link">
                     </div>
                     <div class="comment_editor">
-                        <textarea class="commentext" placeholder="说点什么？"></textarea>
+                        <textarea class="commentext" placeholder="说点什么？" style="resize: none;"></textarea>
                     </div>
                     <div class="function">
                         <span class="emoji">表情</span>
@@ -143,7 +144,7 @@
                         <a href="/about">About</a>
                     </li>
                     <li>
-                        <a href="https://github.com/">Github</a>
+                        <a href="/search">Search</a>
                     </li>
                 </ul>
             </nav>

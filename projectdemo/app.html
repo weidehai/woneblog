@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>drawfunction</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<script type="text/javascript" src="../static/js/vue.js"></script>
+	<style type="text/css">
+		*{
+			margin:0;
+			padding: 0;
+		}
+		#app{
+			text-align: center;
+			width: 90%;
+			margin:auto;
+		}
+		#drawfunction{
+			margin-top:5px;
+		}
+		.expressiontext{
+			border-radius: 2px;
+			padding: 5px;
+			width: 60%;
+			margin-bottom: 10px;
+			border:1px solid silver;
+		}
+		.redraw{
+			-webkit-appearance: none; /*-weikit-appearance用来阻止ios的默认渲染*/
+			border-radius: 2px;
+			padding: 5px;
+			border:1px solid silver;	
+		}
+		.tip{
+			display: block;
+			margin-bottom: 10px;
+		}
+
+		@media screen and (min-width: 550px) {
+			#app{
+				display: block;
+				text-align: center;
+			}
+			.expressiontext{
+				width: 70%;
+			}
+		}
+
+	</style>
+</head>
+<body>
+	<div id="app">
+		<canvas id="drawfunction"></canvas>
+		<div style="text-align: center;">
+			<span class="tip">请输入一个显函数</span>
+			<input class="expressiontext" type="text" placeholder="请输入函数表达式" v-model="expression">
+			<input class="redraw" type="button" value="redraw" @click="redraw">
+			<input class="redraw" type="button" value="ctdraw" @click="ctdraw">
+			<span class="tip">请输入一个极坐标方程</span>
+			<input class="expressiontext" type="text" placeholder="请输入函数表达式" v-model="polarexpression">
+
+			<input class="redraw" type="button" value="redraw" @click="restart">
+			<input class="redraw" type="button" value="ctdraw" @click="start">
+		</div>
+	</div>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:"#app",
+			data:{
+				ctx:null,
+				originx:0,
+				originy:0,
+				xlimit:0,
+				ylimit:0,
+				expression:'',
+				canvaswidth:document.getElementById("app").offsetWidth,
+				canvasheight:Math.floor((document.documentElement.clientHeight-155)/10) * 10,
+				polarexpression:"p=Math.sqrt(4/(1-Math.sin(q)*1.2*Math.abs(Math.cos(q))))",
+				polaranimationid:null,
+				negativeanimationid:null,
+				positiveanimationid:null
+			},
+			methods:{
+				radiantoangle:function(radian){
+					return 2*Math.PI/360*radian;
+				},
+				drawcoordinate:function(){
+					this.drawx();
+					this.drawy();
+					this.start();
+				},
+				polar:function(q,xcod,ycod,limit,x){
+					if(q<=limit){
+						this.ctx.beginPath();
+						this.ctx.moveTo(xcod,ycod);
+						eval(this.polarexpression);
+						xcod=this.originx + (p*Math.cos(q)*50);
+						ycod=this.originy - (p*Math.sin(q)*50);
+						// console.log(p*Math.cos(q),p*Math.sin(q));
+						this.ctx.lineTo(xcod,ycod);
+						this.ctx.stroke();
+						q = this.radiantoangle(x);
+						x+=1
+					}
+					this.polaranimationid = requestAnimationFrame(()=>{
+						this.polar(q,xcod,ycod,limit,x);
+					})
+				},
+				start:function(){
+					var x=0;
+					var p=0;
+					var xcod,ycod;
+					var q = this.radiantoangle(x);
+					var limit=2*Math.PI
+					eval(this.polarexpression)
+					xcod=this.originx + (p*Math.cos(q)*50);
+					ycod=this.originy - (p*Math.sin(q)*50);
+					// console.log(p*Math.cos(q),p*Math.sin(q));
+					this.ctx.strokeStyle="red";
+					this.ctx.lineWidth=1;
+					this.polar(q,xcod,ycod,limit,x);
+				},
+				restart(){
+					window.cancelAnimationFrame(this.polaranimationid)
+					this.ctx.clearRect(0,0,this.canvaswidth,this.canvasheight)
+					this.drawx();
+					this.drawy();
+					this.start();
+				},
+				redraw:function(){
+					window.cancelAnimationFrame(this.negativeanimationid)
+					window.cancelAnimationFrame(this.positiveanimationid)
+					this.ctx.clearRect(0,0,this.canvaswidth,this.canvasheight)
+					this.drawx();
+					this.drawy();
+					this.drawfunction();		
+				},
+				ctdraw:function(){
+					this.drawfunction();	
+				},
+				drawnegative:function(x,y,realx,realy){
+					if(realx>=10.5 && realx <= this.xlimit-10 && !isNaN(y)){
+						this.ctx.beginPath();
+						this.ctx.moveTo(realx,realy);
+						eval(this.expression)
+						// console.log(x,y)
+						realx=(this.originx+x*50);
+						realy=(this.originy-y*50);
+						this.ctx.lineTo(realx,realy);
+						x+=0.01;
+						x=Math.round(x*100)/100
+						this.ctx.stroke();
+					}
+					this.negativeanimationid = requestAnimationFrame(()=>{
+						this.drawnegative(x,y,realx,realy);
+					});
+				},
+				drawpositive:function(x,y,realx,realy){
+					if(realx>10.5 && realx < this.xlimit-10 && !isNaN(y)){
+						this.ctx.beginPath();
+						this.ctx.moveTo(realx,realy);
+						eval(this.expression)
+						realx=(this.originx+x*50);
+						realy=(this.originy-y*50);	
+						this.ctx.lineTo(realx,realy);
+						x=(x*100-1)/100;
+						x=Math.round(x*100)/100    //浮点数精度的处理
+						this.ctx.stroke();
+					}
+					this.positiveanimationid = requestAnimationFrame(()=>{
+						this.drawpositive(x,y,realx,realy);
+					});
+				},
+				drawfunction:function(){
+					var x=0;
+					var y=0;
+					eval(this.expression);
+					console.log(x,y)
+					var realx=this.originx+x*50;
+					var realy=this.originy-y*50;
+					// console.log(realx,realy)
+					this.ctx.strokeStyle="red";
+					this.ctx.lineWidth=1;
+					this.drawnegative(x,y,realx,realy);
+					x=-0;
+					y=0;
+					eval(this.expression);
+					realx=this.originx+x*50;
+					realy=this.originy-y*50;
+					this.drawpositive(x,y,realx,realy);
+				},
+				drawline:function(x1,x2,y1,y2,color){
+					this.ctx.strokeStyle=color;
+					this.ctx.beginPath();
+					this.ctx.moveTo(x1,y1);
+					this.ctx.lineTo(x2,y2);
+					this.ctx.stroke();
+				},
+				drawy:function(){
+					var xAxis = 0.5;
+					var increment=10;
+					this.ylimit = Math.floor(this.canvasheight/increment)*10
+					var axis = Math.floor(this.canvaswidth/increment)*5
+					
+					for(;xAxis<=axis;xAxis+=10){
+						this.drawline(xAxis,xAxis,0,this.ylimit,"silver");
+					}
+					this.originx=xAxis
+					this.drawline(xAxis,xAxis,0,this.ylimit,"blue");
+					xAxis+=10
+					for(;xAxis<=2*axis;xAxis+=10){
+						this.drawline(xAxis,xAxis,0,this.ylimit,"silver");
+					}
+					xAxis-=1.5;
+					this.drawline(xAxis,xAxis,0,this.ylimit,"silver");
+
+				},
+				drawx:function(){
+					var yAxis = 0.5;
+					var increment=10;
+					this.xlimit = Math.floor(this.canvaswidth/increment)*10
+					var axis = Math.floor(this.canvasheight/increment)*5
+					for(;yAxis<axis;yAxis+=10){
+						this.drawline(0,this.xlimit,yAxis,yAxis,"silver");
+					}
+					this.originy=yAxis
+					this.drawline(0,this.xlimit,yAxis,yAxis,"blue");
+					yAxis+=10					
+					for(;yAxis<=2*axis;yAxis+=10){
+						this.drawline(0,this.xlimit,yAxis,yAxis,"silver")
+					}
+					yAxis-=1.5
+					this.drawline(0,this.xlimit,yAxis,yAxis,"silver");
+
+				},
+
+
+			},
+			mounted:function(){
+				var c = document.getElementById("drawfunction");
+				this.ctx = c.getContext("2d");
+				c.width = this.canvaswidth;
+				c.height = this.canvasheight;
+				console.log(this.canvasheight)
+				this.drawcoordinate();
+			},
+			watch:{
+			}
+
+		})
+	</script>
+</body>
+</html>

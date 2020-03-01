@@ -38,6 +38,9 @@
 	padding: 0 4px;
 	border-radius: 3px;
 	background: #ffffff;
+	display: inline-block;
+	line-height: 18px;
+	margin:0 2px;
 }
 
 .detail blockquote {
