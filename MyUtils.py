@@ -27,3 +27,16 @@ class tools():
             data.append(copy.deepcopy(data_for_year))
         data.reverse()
         return data
+    def cleanspace(data):
+        data = data.split("\\\\n")
+        for i in range(len(data)):
+            data[i] = data[i].replace('\\n',"")
+        data = "\\\\n".join(data)
+        return ("".join(data.split()))
+    def contenthandle(str,kw):
+        index = str.find(kw)
+        if (index != -1):
+            c = str[index:index+200]
+        else:
+            c = str[:200]
+        return c

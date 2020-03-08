@@ -3,6 +3,27 @@ from PoolDB import Pool
 
 
 class dataBase():
+    def query_sreach(self,kw,offset):
+        conn = Pool.connection()
+        cur = conn.cursor()
+        sql = 'select count(*) from %s where match(article_tag, article_title, textforsearch) against("+%s" in boolean mode)' % (
+        self.tablename, kw)
+        cur.execute(sql)
+        total = cur.fetchall()[0]["count(*)"]
+        print (total)
+        if(total > 10):
+            sql = 'select article_read,article_tag,article_time,article_title,postkey,textforsearch from %s where match(article_tag, article_title, textforsearch) against("+%s" in boolean mode) limit %s,10' % (self.tablename, kw,offset)
+        else:
+            sql = 'select article_read,article_tag,article_time,article_title,postkey,textforsearch from %s where match(article_tag, article_title, textforsearch) against("+%s" in boolean mode)' % (
+        self.tablename, kw)
+        print (sql)
+        cur.execute(sql)
+        data = cur.fetchall()
+        for index in range(len(data)):
+            data[index]["textforsearch"] = tools.contenthandle(data[index]['textforsearch'],kw)
+        cur.close()
+        conn.close()
+        return {"data":data,"total":total}
     def query_limit(self,limit,qrfield_list):
         conn = Pool.connection()
         cur = conn.cursor()
