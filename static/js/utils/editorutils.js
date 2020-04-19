@@ -103,22 +103,22 @@ var getData={
 		var sdata = e.innerText;
 		var tag = t.value
 		var publishtime = editorU.getDate()
-		var postkey,update
-		if (editorU.geturl_param()) {
-			postkey = editorU.geturl_param()
-			update=true
-		}else{
-			postkey =Math.random().toString().substring(2,5)+Date.now()
-			update=false
-		}
 		var data = {
 			"title":title,
 			"content":content,
 			"tag":tag,
-			"publishtime":publishtime,
-			"postkey":postkey,
 			"sdata":sdata,
-			"update":update
+		}
+		if (editorU.geturl_param()) {
+			postkey = editorU.geturl_param()
+			data["updatetime"] = publishtime
+			data["update"] = true
+			data["postkey"] = postkey
+		}else{
+			postkey =Math.random().toString().substring(2,5)+Date.now()
+			data["publishtime"] = publishtime
+			data["update"] = false
+			data["postkey"] = postkey
 		}
 		return data;
 	}

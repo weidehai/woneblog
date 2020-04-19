@@ -7,7 +7,10 @@ window.onload = function() {
 		}else {
 			ul[0].setAttribute('class','responsive')
 		}
-		
+	})
+	var r = document.getElementsByClassName('recently')[0]
+	r.addEventListener('click',function(){
+		interactive.getrecently()
 	})
 }
 

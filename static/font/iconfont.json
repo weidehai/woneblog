@@ -6,53 +6,18 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "141947",
-      "name": "remove-red-eye",
-      "font_class": "glance",
-      "unicode": "e857",
-      "unicode_decimal": 59479
+      "icon_id": "6898694",
+      "name": "最近常用",
+      "font_class": "recently",
+      "unicode": "e681",
+      "unicode_decimal": 59009
     },
     {
-      "icon_id": "167472",
-      "name": "video",
-      "font_class": "video",
-      "unicode": "e636",
-      "unicode_decimal": 58934
-    },
-    {
-      "icon_id": "608207",
-      "name": "标签",
-      "font_class": "lable",
-      "unicode": "e657",
-      "unicode_decimal": 58967
-    },
-    {
-      "icon_id": "721573",
-      "name": "向右",
-      "font_class": "next",
-      "unicode": "e605",
-      "unicode_decimal": 58885
-    },
-    {
-      "icon_id": "839839",
-      "name": "列表",
-      "font_class": "list",
-      "unicode": "e65f",
-      "unicode_decimal": 58975
-    },
-    {
-      "icon_id": "903842",
-      "name": "阅读",
-      "font_class": "read",
-      "unicode": "e679",
-      "unicode_decimal": 59001
-    },
-    {
-      "icon_id": "1463955",
-      "name": "列表",
-      "font_class": "navlist",
-      "unicode": "e623",
-      "unicode_decimal": 58915
+      "icon_id": "7735042",
+      "name": "写文章",
+      "font_class": "write",
+      "unicode": "e603",
+      "unicode_decimal": 58883
     },
     {
       "icon_id": "3775397",
@@ -62,18 +27,18 @@
       "unicode_decimal": 58888
     },
     {
-      "icon_id": "4185402",
-      "name": "代码",
-      "font_class": "code",
-      "unicode": "e7a3",
-      "unicode_decimal": 59299
+      "icon_id": "8939200",
+      "name": "markdown",
+      "font_class": "markdown",
+      "unicode": "e602",
+      "unicode_decimal": 58882
     },
     {
-      "icon_id": "5744647",
-      "name": "向右",
-      "font_class": "previous",
-      "unicode": "e600",
-      "unicode_decimal": 58880
+      "icon_id": "167472",
+      "name": "video",
+      "font_class": "video",
+      "unicode": "e636",
+      "unicode_decimal": 58934
     },
     {
       "icon_id": "6056169",
@@ -81,6 +46,27 @@
       "font_class": "picture",
       "unicode": "e674",
       "unicode_decimal": 58996
+    },
+    {
+      "icon_id": "1463955",
+      "name": "列表",
+      "font_class": "navlist",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "7038779",
+      "name": "链接",
+      "font_class": "link",
+      "unicode": "e6d6",
+      "unicode_decimal": 59094
+    },
+    {
+      "icon_id": "4185402",
+      "name": "代码",
+      "font_class": "code",
+      "unicode": "e7a3",
+      "unicode_decimal": 59299
     },
     {
       "icon_id": "6470816",
@@ -97,25 +83,18 @@
       "unicode_decimal": 58971
     },
     {
-      "icon_id": "7038779",
-      "name": "链接",
-      "font_class": "link",
-      "unicode": "e6d6",
-      "unicode_decimal": 59094
+      "icon_id": "721573",
+      "name": "向右",
+      "font_class": "next",
+      "unicode": "e605",
+      "unicode_decimal": 58885
     },
     {
-      "icon_id": "7735042",
-      "name": "写文章",
-      "font_class": "write",
-      "unicode": "e603",
-      "unicode_decimal": 58883
-    },
-    {
-      "icon_id": "7736101",
-      "name": "github",
-      "font_class": "github",
-      "unicode": "e8ef",
-      "unicode_decimal": 59631
+      "icon_id": "5744647",
+      "name": "向右",
+      "font_class": "previous",
+      "unicode": "e600",
+      "unicode_decimal": 58880
     },
     {
       "icon_id": "7991069",
@@ -125,11 +104,39 @@
       "unicode_decimal": 58881
     },
     {
-      "icon_id": "8939200",
-      "name": "markdown",
-      "font_class": "markdown",
-      "unicode": "e602",
-      "unicode_decimal": 58882
+      "icon_id": "608207",
+      "name": "标签",
+      "font_class": "lable",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
+      "icon_id": "839839",
+      "name": "列表",
+      "font_class": "list",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
+      "icon_id": "903842",
+      "name": "阅读",
+      "font_class": "read",
+      "unicode": "e679",
+      "unicode_decimal": 59001
+    },
+    {
+      "icon_id": "7736101",
+      "name": "github",
+      "font_class": "github",
+      "unicode": "e8ef",
+      "unicode_decimal": 59631
+    },
+    {
+      "icon_id": "141947",
+      "name": "remove-red-eye",
+      "font_class": "glance",
+      "unicode": "e857",
+      "unicode_decimal": 59479
     }
   ]
 }

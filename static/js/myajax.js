@@ -60,6 +60,44 @@ var interactive = {
 			}
 		}
 	},
+	getrecently: function(el,qstr,mycomment) {
+		var oajax = interactive.creatajax()
+		var myurl = '/getrecently'
+		oajax.open('get',myurl,true);
+		oajax.send(null)
+		oajax.onreadystatechange = function() {
+			if (oajax.readyState == 4) {
+					var str = oajax.responseText
+					var obj = eval('(' + str + ')')
+					var ul = document.createElement('ul')
+					var p = document.getElementById('writing')
+					var u = document.getElementsByClassName('post-list')
+					ul.className='post-list'
+					for (item of obj){
+						var li = document.createElement('li')
+						var div = document.createElement('div')
+						var time = document.createElement('time')
+						var span = document.createElement('span')
+						var a = document.createElement('a')
+						li.className='post-item'
+						div.className = 'meta'
+						a.href = `/articledetails?id=${item['postkey']}`
+						ul.appendChild(li)
+						li.appendChild(div)
+						li.appendChild(span)
+						div.appendChild(time)
+						d = new Date(item["article_time"])
+						time.append(d.getFullYear() + '-' + (d.getMonth()+1).toString().padStart(2,'0') + '-' + d.getDate().toString().padStart(2,'0'))
+						a.append(item["article_title"])
+						span.appendChild(a) 	
+					}
+					p.replaceChild(ul,u[0])
+					
+
+
+				}	
+			}
+	},
 	ajaxpost: function() {
 		var oajax = interactive.creatajax()
 		var data = getData.getContent()

@@ -59,7 +59,7 @@
 		<template id="sview">
 			<div id="sview_wrapper">
 				<div class="resitem" v-for='item in getres["data"]'>
-					<a class="title" v-bind:href="'/articledetails?id=' + item['postkey']">${item['article_title']}</a>
+					<a class="title" v-bind:href="'/articledetails?id=' + item['postkey']" target="_blank">${item['article_title']}</a>
 					<div class="meta">
                     	<div class="postdate">
                         	<time>${dateconvert(item['article_time'])}</time>

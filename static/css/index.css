@@ -18,9 +18,21 @@
 	color: #2bbc8a;
 	margin-top: 3rem;
 	margin-bottom: 1rem;
-	display: block;
+	display: inline-block;
 }
-
+.recently{
+	padding-left:10px;
+	cursor: pointer;
+}
+.recently:hover{
+	color: #2bbc8a;
+}
+.recently:hover:after{
+	color: darkgray;
+	font-size: 0.8em;
+	margin-left: 5px;
+	content: attr(tips);
+}
 .project-item a {
 	border-bottom: 1px solid #c9cacc;
 }
@@ -31,7 +43,28 @@
 	margin-bottom: 5px;
 }
 
+#wk{
+	width: 200px;
+	height: 180px;
+	background-image: url('../img/wk.png');
+	animation: wkzou 1s steps(8) infinite;
+	position: fixed;
+	right: 0px;
+	bottom: 0px;
+	z-index: -2;
+}
 
+@keyframes wkzou{
+	to{
+		background-position: -1600px 0;
+	}
+}
+
+@media screen and (max-width: 1200px){
+	#wk{
+		display: none;
+	}
+}
 
 a:link {color: inherit;} 
 a:visited {color: inherit;} 

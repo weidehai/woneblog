@@ -24,10 +24,13 @@ class dataBase():
         cur.close()
         conn.close()
         return {"data":data,"total":total}
-    def query_limit(self,limit,qrfield_list):
+    def query_limit(self,limit,qrfield_list,order_list):
         conn = Pool.connection()
         cur = conn.cursor()
-        sql = 'select %s from %s order by article_id desc limit %s' % (','.join(qrfield_list), self.tablename, limit)
+        order = []
+        for i in order_list:
+            order.append('%s desc' % i)
+        sql = 'select %s from %s order by %s limit %s' % (','.join(qrfield_list), self.tablename, ','.join(order), limit)
         cur.execute(sql)
         data = cur.fetchall()
         cur.close()

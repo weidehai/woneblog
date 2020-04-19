@@ -6,7 +6,6 @@ from MyUtils import tools
 from flask_caching import Cache
 import os,pymysql,time
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = b'\xb2t\x9e\xb0\xab\x17g\xc1\x82\xe7\xaep\xe8\xbe+0\xf2\x0e\xaa\xc6\x8e9\xeds'
 config={
@@ -22,7 +21,7 @@ cache.init_app(app)
 def index():
     #首页需要的数据有article_id,article_time,article_title
     #首页只展示9篇文章标题
-    data = myarticles.query_limit(9,['article_time','article_title','postkey'])
+    data = myarticles.query_limit(9,['article_time','article_title','postkey'], ['article_id'])
     visitednum = myadmin.query_field_primarykey(1,['visited'])[0]["visited"]
     if(not session.get('userlevel')):
         myadmin.update_data(1,visited = str(visitednum+1))
@@ -32,6 +31,11 @@ def index():
         return render_template('index.html',articles = data,visited = visitednum+1)
     else:
         return render_template('index.html', articles=data, visited=visitednum)
+@app.route('/getrecently')
+def getrecently():
+    data = myarticles.query_limit(9, ['article_time', 'article_title', 'postkey'], ['update_time','article_id'])
+    print(data)
+    return jsonify(data)
 @app.route('/archives')
 def archives():
     tag_name = request.args.get('tag')

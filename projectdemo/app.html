@@ -138,7 +138,10 @@
 					this.drawfunction();	
 				},
 				drawnegative:function(x,y,realx,realy){
-					if(realx>=10.5 && realx <= this.xlimit-10 && !isNaN(y)){
+					if(realx>=10.5 && realx <= this.xlimit-10){
+						if(isNaN(y)){
+							y=0
+						}
 						this.ctx.beginPath();
 						this.ctx.moveTo(realx,realy);
 						eval(this.expression)
@@ -155,7 +158,10 @@
 					});
 				},
 				drawpositive:function(x,y,realx,realy){
-					if(realx>10.5 && realx < this.xlimit-10 && !isNaN(y)){
+					if(realx>10.5 && realx < this.xlimit-10){
+						if(isNaN(y)){
+							y=0
+						}
 						this.ctx.beginPath();
 						this.ctx.moveTo(realx,realy);
 						eval(this.expression)
@@ -174,6 +180,9 @@
 					var x=0;
 					var y=0;
 					eval(this.expression);
+					if(isNaN(y)){
+						y=0
+					}
 					console.log(x,y)
 					var realx=this.originx+x*50;
 					var realy=this.originy-y*50;
