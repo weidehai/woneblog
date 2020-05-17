@@ -20,14 +20,14 @@
 	margin-bottom: 1rem;
 	display: inline-block;
 }
-.recently{
+.recently,.tap{
 	padding-left:10px;
 	cursor: pointer;
 }
-.recently:hover{
+.recently:hover,.tap:hover{
 	color: #2bbc8a;
 }
-.recently:hover:after{
+.recently:hover:after,.tap:hover:after{
 	color: darkgray;
 	font-size: 0.8em;
 	margin-left: 5px;
@@ -63,6 +63,12 @@
 @media screen and (max-width: 1200px){
 	#wk{
 		display: none;
+	}
+}
+
+@media screen and (max-width: 1024px){
+	.recently:hover:after,.tap:hover:after{
+		content: ""
 	}
 }
 

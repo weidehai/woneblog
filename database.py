@@ -154,3 +154,8 @@ class admin(dataBase):
     def __init__(self, tablename):
         self.tablename = tablename
         self.primarykey = 'admin_id'
+
+class timeline(dataBase):
+    def __init__(self, tablename):
+        self.tablename = tablename
+        self.primarykey = 'id'

@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "5130069",
+      "name": "手指",
+      "font_class": "tap",
+      "unicode": "e6e4",
+      "unicode_decimal": 59108
+    },
+    {
       "icon_id": "6898694",
       "name": "最近常用",
       "font_class": "recently",

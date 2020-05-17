@@ -1,7 +1,7 @@
 ﻿#coding=utf-8
 from flask import Flask,request,jsonify,json,session,redirect,render_template,send_from_directory,Response
 from datetime import timedelta
-from database import articles,comment,admin
+from database import articles,comment,admin,timeline
 from MyUtils import tools
 from flask_caching import Cache
 import os,pymysql,time
@@ -69,7 +69,7 @@ def articledetails():
         print("get from database.....")
         # detail页面需要的数据有article_id,article_time,article_title,article_tag,article_read,并且只取当前id的那一条数据
         # 设置的缓存时间是5分钟，也就是五分钟内打开同一篇文章只增加一次阅读量
-        data = myarticles.query_field_primarykey(id, ['article_id','article_time', 'article_title', 'article_tag', 'article_read'])[0]
+        data = myarticles.query_field_primarykey(id, ['article_id','article_time', 'article_title', 'article_tag', 'article_read','update_time'])[0]
         print (data)
         previous = myarticles.getprevious(data['article_id'])['postkey'] if myarticles.getprevious(data['article_id']) else 0
         next = myarticles.getnext(data['article_id'])['postkey'] if myarticles.getnext(data['article_id']) else 0
@@ -113,6 +113,22 @@ def getcomment():
     postid = request.args.get('postid')
     postkey = myarticles.query_field_primarykey(postid, ['postkey'])[0]["postkey"]
     return (jsonify(mycomments.query_comment(postkey,'*')))
+@app.route('/timelines')
+def timelines():
+    return render_template('timeline.html')
+@app.route('/savetimelineitem',methods=["POST"])
+def savetimelineitem():
+    data = json.loads(request.get_data())
+    print(data)
+    time = data['time']
+    content = pymysql.escape_string(data['content'])
+    mytimeline.save_data(time=time, content=content)
+    return '200ok'
+@app.route('/gettimelines')
+def gettimeline():
+    data = mytimeline.query_field_primarykey('',['time','content'])
+    print(data)
+    return (jsonify(data))
 @app.route('/savepost',methods=["POST"])
 def savepost():
     if (session.get('userlevel') != 777): return "illegal access!!!!!!!!!!"
@@ -218,4 +234,5 @@ if __name__ == '__main__':
     myarticles = articles("articles")
     myadmin = admin("admin")
     mycomments = comment("comment")
+    mytimeline = timeline("timeline")
     app.run()

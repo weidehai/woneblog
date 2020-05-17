@@ -94,6 +94,13 @@
                         <i class="iconfont icon-lable"><a href="/archives?tag={{article['article_tag']}}"><span>{{article['article_tag']}}</span></a></i>
                     </div>
                 </div>
+                <div style="color: green">
+                    {% if article['update_time'] %}
+                        本文最后更新于{{article['update_time']}}
+                    {% else %}
+                        本文最后更新于{{article['article_time']}}
+                    {% endif %}
+                </div>
                 <div class="detail" data-id=""></div>
             </article>
             <div id="comment_area">
@@ -130,7 +137,7 @@
     </div>
     
     <footer id="footer">
-        <div class="footer-left">Copyright © 2019 Wone <a href="#">琼ICP备19001364号</a></div>
+        <div class="footer-left">Copyright © 2020 Wone <a href="#">琼ICP备19001364号</a></div>
         <div class="footer-right">
             <nav>
                 <ul>

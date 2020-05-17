@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../static/layui-v2.5.6/layui/css/layui.css">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html{
+            background-color: #1d1f21;
+        }
+        .wrapper{
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            padding-top: 30px;
+            min-width: 600px;
+        }
+        /*触底留白区域*/
+        .wrapper::after{
+            content: "";
+            height: 30px;
+            display: block;
+        }
+        .operation{
+            margin-top: -10px;
+        }
+        .operation .layui-icon{
+            padding-right: 8px;
+            cursor: pointer;
+        }
+        .operation .layui-icon:hover{
+            color: #00FF00;
+        }
+        .layui-fixbar li{
+            font-size: 25px !important;
+            line-height: 30px;
+            width: 30px;
+            height: 30px;
+        }
+        #loading{
+            display: none;
+        }
+        .layui-timeline-title{
+            color: #33FF99 !important;
+            font-size: 14px !important;
+        }
+        #tail{
+
+        }
+        .test{
+            color: #33FFCC;
+        }
+        .layui-icon-loading{
+            animation: animation_loading 1s infinite;
+            animation-timing-function: linear;
+            display: inline-block;
+            margin-left: 10px;
+            color: #00F7DE;
+        }
+        @media screen and (max-width: 650px){
+            .wrapper{
+                min-width: 90%;
+
+            }
+        }
+        @keyframes animation_loading {
+
+            to{
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper" >
+        <ul class="layui-timeline">
+            <li class="layui-timeline-item" id="tail">
+                <i class="layui-icon layui-timeline-axis" style="background-color: #2E2D3C">&#xe63f;</i>
+                <div class="layui-timeline-content layui-text">
+                    <h3 class="layui-timeline-title" style="display: inline-block;float: left">下拉加载更多</h3>
+                    <i class="layui-icon layui-icon-loading" id="loading"></i>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <script type="text/javascript" src="../static/layui-v2.5.6/layui/layui.js"></script>
+    <script>
+        layui.use('util', function(){
+            let util = layui.util;
+            //执行
+            util.fixbar({
+                bar1: '&#xe654',
+                click: function(type){
+                    console.log(type);
+                    if(type === 'bar1'){
+                        addTimeline();
+                    }
+                },
+
+            });
+        });
+        let all_data_geted=false;
+        let ready_to_fresh=false;
+        
+
+        function addTimeline() {
+            render({
+                time:"在这里输入时间",
+                content: "在这里输入内容"
+            },true)
+        }
+        function postTimeline(time,content){
+            let xhr = new XMLHttpRequest(),data=null;
+            data={
+                time,
+                content
+            }
+            xhr.open('post','/savetimelineitem',true);
+            xhr.onreadystatechange=function(res){
+                if (xhr.readyState===4 && xhr.status===200) {
+                    console.log('success')
+                }
+            }
+            xhr.send(JSON.stringify(data))
+        }
+        function getTimelines(){
+            let xhr = new XMLHttpRequest(),data=null;
+            xhr.open('get','/gettimelines',true);
+            xhr.onreadystatechange=function(res){
+                if (xhr.readyState===4 && xhr.status===200) {
+                    data=JSON.parse(xhr.responseText);
+                    console.log(data)
+                    renderOneScreen(data);
+                }
+            }
+            xhr.send()
+        }
+        function renderOneScreen(data) {
+            let len=data.length,index=0;
+            const VIEW_PORT_HEIGHT = window.innerHeight;
+            let previous_content_height = document.getElementsByClassName('wrapper')[0].scrollHeight;
+            if (len===0){
+                all_data_geted=true;
+                document.getElementById('tail').getElementsByTagName('h3')[0].innerText="没有更多了";
+                return
+            }
+            for (;index<len;index++){
+                let item = data.shift();
+                render(item);
+                if((document.getElementsByClassName('wrapper')[0].scrollHeight-previous_content_height)>=VIEW_PORT_HEIGHT){
+                    break;
+                }
+            }
+            ready_to_fresh=true;
+        }
+        function scrollToBottom(e){
+            let scroll_top;
+            let content_height = document.getElementsByClassName('wrapper')[0].scrollHeight;
+            if (e.type==='touchstart'){
+                scroll_top = window.pageYOffset;
+            }else {
+                scroll_top = document.documentElement.scrollTop;
+            }
+            if (all_data_geted){
+                window.onmousewheel=null;
+                return
+            }
+            if (content_height-Math.ceil(scroll_top)<=window.innerHeight){
+                console.log('ss');
+                if (ready_to_fresh){
+                    document.getElementById('loading').style.display="inline-block";
+                    setTimeout(function () {
+                        document.getElementById('loading').style.display="none";
+                        renderOneScreen();
+                    },1000);
+                    ready_to_fresh=false;
+                }
+            }
+        }
+        function render(data_obj,focus=false) {
+            let tail = document.getElementById('tail');
+            let ul = document.querySelector('ul');
+            let li = document.createElement("li");
+            li.setAttribute("class",'layui-timeline-item');
+            let i1 = document.createElement("i");
+            i1.setAttribute("class","layui-icon layui-timeline-axis layui-icon-circle");
+            i1.style.backgroundColor='#2E2D3C';
+            let div1 = document.createElement('div');
+            div1.setAttribute('class','layui-timeline-content layui-text');
+            let h3 = document.createElement("h3");
+            h3.setAttribute('class','layui-timeline-title');
+            let div2 = document.createElement('div');
+            div2.setAttribute('class',"operation");
+            let i2=document.createElement('i');
+            let i3=document.createElement('i');
+            let i5=document.createElement('i');
+            i2.setAttribute('class','layui-icon layui-icon-edit');
+            i3.setAttribute('class','layui-icon layui-icon-delete');
+            i5.setAttribute('class','layui-icon layui-icon-release');
+            i5.style.display='none';
+            let p = document.createElement('p');
+            p.setAttribute('class','test');
+            i2.addEventListener('click',function () {
+                p.contentEditable=true;
+                h3.contentEditable=true;
+            });
+            p.addEventListener('focus',function () {
+                i5.style.display='inline'
+            });
+            h3.addEventListener('focus',function () {
+                i5.style.display='inline'
+            });
+            i5.addEventListener('click',function (e) {
+                p.contentEditable=false;
+                h3.contentEditable=false;
+                time = e.target.parentElement.parentElement.querySelector('h3').innerText;
+                content = e.target.parentElement.parentElement.querySelector('p').innerText;
+                postTimeline(time,content);
+            });
+            li.appendChild(i1);
+            li.appendChild(div1);
+            div1.appendChild(h3);
+            h3.innerText=data_obj.time;
+            div1.appendChild(div2);
+            div1.appendChild(p);
+            p.innerHTML = data_obj.content;
+            div2.appendChild(i2);
+            div2.appendChild(i3);
+            div2.appendChild(i5);
+            ul.insertBefore(li,tail);
+            if (focus){
+                p.contentEditable=true;
+                h3.contentEditable=true;
+                h3.focus()
+            }
+        }
+        window.onload=function () {
+            getTimelines()
+            window.onmousewheel=scrollToBottom;
+            window.ontouchstart=scrollToBottom;
+        };
+    </script>
+</body>
+</html>
