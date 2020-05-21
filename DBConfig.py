@@ -1,6 +1,6 @@
 DB_HOST = 'localhost'
 DB_USERNAME = 'root'
-DB_PASSWORD = 'xxxxxxxxxxxxxx'
+DB_PASSWORD = 'weidehai123'
 DB_DBNAME = 'myblog'
 DB_PORT = 3306
 

@@ -52,7 +52,7 @@
             font-size: 14px !important;
         }
         #tail{
-
+            display: none;
         }
         .test{
             color: #33FFCC;
@@ -98,18 +98,27 @@
             //执行
             util.fixbar({
                 bar1: '&#xe654',
+                bar2: "&#xe68e",
                 click: function(type){
-                    console.log(type);
-                    if(type === 'bar1'){
-                        addTimeline();
+                    switch(type){
+                        case 'bar1':
+                            addTimeline();
+                            break;
+                        case "bar2":
+                            window.location.href="https://www.haiblog.cn";
+                            break;
                     }
                 },
 
             });
         });
+
+
+
+
         let all_data_geted=false;
         let ready_to_fresh=false;
-        
+        let start=0,timeline_data=[];
 
         function addTimeline() {
             render({
@@ -133,33 +142,49 @@
         }
         function getTimelines(){
             let xhr = new XMLHttpRequest(),data=null;
-            xhr.open('get','/gettimelines',true);
+            xhr.open('get',`/getapart?start=${start}`,true);
             xhr.onreadystatechange=function(res){
                 if (xhr.readyState===4 && xhr.status===200) {
-                    data=JSON.parse(xhr.responseText);
-                    console.log(data)
-                    renderOneScreen(data);
+                    document.getElementById('loading').style.display="none";
+                    timeline_data = timeline_data.concat(JSON.parse(xhr.responseText));
+                    console.log(timeline_data)
+                    renderOneScreen();
                 }
             }
             xhr.send()
         }
-        function renderOneScreen(data) {
-            let len=data.length,index=0;
-            const VIEW_PORT_HEIGHT = window.innerHeight;
+        function delTimeline(id) {
+            console.log(id)
+            let xhr = new XMLHttpRequest(),data=null;
+            xhr.open('get',`/deltimeline?id=${id}`,true);
+            xhr.onreadystatechange=function(res){
+                if (xhr.readyState===4 && xhr.status===200) {
+                    data=xhr.responseText;
+                    console.log(data)
+                }
+            }
+            xhr.send()
+        }
+        function renderOneScreen() {
+            let len=timeline_data.length,index=0,item;
             let previous_content_height = document.getElementsByClassName('wrapper')[0].scrollHeight;
+            let tail = document.getElementById('tail');
+            const VIEW_PORT_HEIGHT = window.innerHeight;
             if (len===0){
                 all_data_geted=true;
-                document.getElementById('tail').getElementsByTagName('h3')[0].innerText="没有更多了";
-                return
+                
             }
             for (;index<len;index++){
-                let item = data.shift();
+                item = timeline_data.shift();
                 render(item);
                 if((document.getElementsByClassName('wrapper')[0].scrollHeight-previous_content_height)>=VIEW_PORT_HEIGHT){
                     break;
                 }
             }
             ready_to_fresh=true;
+            if (start===0) {
+                tail.style.display='block';
+            }
         }
         function scrollToBottom(e){
             let scroll_top;
@@ -169,18 +194,20 @@
             }else {
                 scroll_top = document.documentElement.scrollTop;
             }
-            if (all_data_geted){
-                window.onmousewheel=null;
-                return
-            }
+
             if (content_height-Math.ceil(scroll_top)<=window.innerHeight){
                 console.log('ss');
+
                 if (ready_to_fresh){
                     document.getElementById('loading').style.display="inline-block";
-                    setTimeout(function () {
+                    if (all_data_geted){
+                        window.onmousewheel=null;
+                        document.getElementById('tail').getElementsByTagName('h3')[0].innerText="没有更多了";
                         document.getElementById('loading').style.display="none";
-                        renderOneScreen();
-                    },1000);
+                        return
+                    }
+                    start+=10;
+                    getTimelines()
                     ready_to_fresh=false;
                 }
             }
@@ -204,6 +231,9 @@
             let i5=document.createElement('i');
             i2.setAttribute('class','layui-icon layui-icon-edit');
             i3.setAttribute('class','layui-icon layui-icon-delete');
+            i3.addEventListener('click',function(){
+                delTimeline(data_obj.id)
+            })
             i5.setAttribute('class','layui-icon layui-icon-release');
             i5.style.display='none';
             let p = document.createElement('p');
@@ -231,7 +261,7 @@
             h3.innerText=data_obj.time;
             div1.appendChild(div2);
             div1.appendChild(p);
-            p.innerHTML = data_obj.content;
+            p.innerText = data_obj.content;
             div2.appendChild(i2);
             div2.appendChild(i3);
             div2.appendChild(i5);

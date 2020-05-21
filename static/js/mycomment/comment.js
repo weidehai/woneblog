@@ -135,7 +135,7 @@ function mycomment_sys(){
 	}
 	this.get_commentdata = function(){
 		var postid = document.getElementsByClassName('detail')[0].getAttribute('data-id')
-		var commentqueryurl = '/getcomment?postid='+postid
+		var commentqueryurl = '/getcomment?id='+postid
 		this.ajax.open('get',commentqueryurl,true)
 		this.ajax.send()
 		this.ajax.onreadystatechange=function(){

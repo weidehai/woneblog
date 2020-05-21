@@ -1,0 +1,18 @@
+from flask import render_template
+
+
+class About:
+    def __init__(self, app):
+        self.app = app
+        self.__addAbout__()
+        self.__addTimeline__()
+
+    def __addAbout__(self):
+        @self.app.route('/about')
+        def about():
+            return render_template('about.html')
+
+    def __addTimeline__(self):
+        @self.app.route('/timelines')
+        def time_lines():
+            return render_template('timeline.html')

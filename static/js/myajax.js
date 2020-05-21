@@ -29,7 +29,7 @@ var interactive = {
 	},
 	ajaxmain: function(el,qstr,mycomment) {
 		var oajax = interactive.creatajax()
-		var myurl = '/getmain?getid=' + qstr
+		var myurl = '/getmain?id=' + qstr
 		oajax.open('get',myurl,true);
 		oajax.send(null)
 		oajax.onreadystatechange = function() {
@@ -81,7 +81,7 @@ var interactive = {
 						var a = document.createElement('a')
 						li.className='post-item'
 						div.className = 'meta'
-						a.href = `/articledetails?id=${item['postkey']}`
+						a.href = `/articledetails?id=${item['post_key']}`
 						ul.appendChild(li)
 						li.appendChild(div)
 						li.appendChild(span)
