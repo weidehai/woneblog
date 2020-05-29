@@ -91,6 +91,7 @@
         </ul>
     </div>
 
+    <script type="text/javascript" src="../static/js/myajax.js"></script>
     <script type="text/javascript" src="../static/layui-v2.5.6/layui/layui.js"></script>
     <script>
         layui.use('util', function(){
@@ -115,7 +116,6 @@
 
 
 
-
         let all_data_geted=false;
         let ready_to_fresh=false;
         let start=0,timeline_data=[];
@@ -127,43 +127,27 @@
             },true)
         }
         function postTimeline(time,content){
-            let xhr = new XMLHttpRequest(),data=null;
             data={
                 time,
-                content
+                content,
+                table: "timeline"
             }
-            xhr.open('post','/savetimelineitem',true);
-            xhr.onreadystatechange=function(res){
-                if (xhr.readyState===4 && xhr.status===200) {
-                    console.log('success')
-                }
-            }
-            xhr.send(JSON.stringify(data))
+            Interactive.XHRSave(data,function(){
+                console.log('success')
+            })
         }
         function getTimelines(){
-            let xhr = new XMLHttpRequest(),data=null;
-            xhr.open('get',`/getapart?start=${start}`,true);
-            xhr.onreadystatechange=function(res){
-                if (xhr.readyState===4 && xhr.status===200) {
-                    document.getElementById('loading').style.display="none";
-                    timeline_data = timeline_data.concat(JSON.parse(xhr.responseText));
-                    console.log(timeline_data)
-                    renderOneScreen();
-                }
-            }
-            xhr.send()
+            Interactive.XHRApart("timeline","timeline_id,time,content","time",0,function(result){
+                document.getElementById('loading').style.display="none";
+                timeline_data = timeline_data.concat(result);
+                console.log(timeline_data)
+                renderOneScreen();
+            })
         }
         function delTimeline(id) {
-            console.log(id)
-            let xhr = new XMLHttpRequest(),data=null;
-            xhr.open('get',`/deltimeline?id=${id}`,true);
-            xhr.onreadystatechange=function(res){
-                if (xhr.readyState===4 && xhr.status===200) {
-                    data=xhr.responseText;
-                    console.log(data)
-                }
-            }
-            xhr.send()
+            Interactive.XHRDel("timeline",id,function(result){
+                console.log(result)
+            })
         }
         function renderOneScreen() {
             let len=timeline_data.length,index=0,item;
@@ -232,7 +216,7 @@
             i2.setAttribute('class','layui-icon layui-icon-edit');
             i3.setAttribute('class','layui-icon layui-icon-delete');
             i3.addEventListener('click',function(){
-                delTimeline(data_obj.id)
+                delTimeline(data_obj['timeline_id'])
             })
             i5.setAttribute('class','layui-icon layui-icon-release');
             i5.style.display='none';

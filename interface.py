@@ -1,15 +1,12 @@
 from flask import request, jsonify, session, json
-from database import Articles, Comment, TimeLine
-from MyUtils import Tools
+from database import my_articles,my_comments,my_timeline
 import time
 import pymysql
 
-my_articles = Articles("articles")
-my_comments = Comment("comment")
-my_timeline = TimeLine("timeline")
 tables = {
     "articles": my_articles,
-    "Comment": my_comments
+    "comment": my_comments,
+    "timeline": my_timeline
 }
 
 
@@ -21,10 +18,13 @@ class Interface:
         self.__addSave__()
         self.__addUpdate__()
         self.__addGetApart__()
+        self.__addGetOne__()
 
     def __addDelById__(self):
         @self.app.route('/delbyid')
         def del_by_id():
+            if session.get('user_level') != 777:
+                return "illegal access!!!!!!!!!!"
             table = tables.get(request.args.get('table'))
             if table:
                 table.del_where(request.args.get('id'))
@@ -35,43 +35,53 @@ class Interface:
     def __addGetApart__(self):
         @self.app.route('/getapart')
         def get_apart():
-            start = request.args.get('start')
-            data = my_timeline.query_limit("%s,10" % start, ['id', 'time', 'content'], '')
+            start = request.args.get('offset')
+            table = tables.get(request.args.get('table'))
+            data = table.query_limit("%s,10" % start, request.args.get('fields').split(','),
+                                     request.args.get('order').split(','))
             print(data)
+            return jsonify(data)
+
+    def __addGetOne__(self):
+        @self.app.route('/getone')
+        def get_one():
+            table = tables.get(request.args.get('table'))
+            where = request.args.get('where')
+            data = table.query_field_primary_key(where, request.args.get('fields').split(','))
             return jsonify(data)
 
     def __addSave__(self):
         @self.app.route('/save', methods=["POST"])
         def save():
+            if session.get('user_level') != 777:
+                return "illegal access!!!!!!!!!!"
             data = json.loads(request.get_data())
-            # 为了防止从前端传来的数据在存入mysql时发生语法错误，使用pymysql.escape_string()处理转义一下字符串
-            # user = pymysql.escape_string(data["comment_user"])
-            # mail = pymysql.escape_string(data["mail"])
-            # link = pymysql.escape_string(data['link'])
-            # text = pymysql.escape_string(data['comment_text'])
-            # postkey = myarticles.query_field_primarykey(data["postid"], ['postkey'])[0]["postkey"]
-            # mycomments.save_data(comment_user=user, comment_mail=mail, comment_link=link, comment_text=text,
-            #                      comment_time=data["comment_time"],
-            #                      comment_avatar=data["comment_avatar"], comment_system=data["comment_system"],
-            #                      comment_browser=data["comment_browser"],
-            #                      comment_postid=postkey, replyfor=data["replyfor"], commentkey=data["commentkey"],
-            #                      replybelong=data["replybelong"], aternick=data['aternick'])
-            # return '200ok'
+            for key, value in data.items():
+                try:
+                    data[key] = pymysql.escape_string(value)
+                except AttributeError:
+                    pass
+            table = data['table']
+            del data['table']
+            tables[table].save_data(**data)
+            return 'post success'
 
     def __addUpdate__(self):
-        @self.app.route('/updatepost', methods=["POST"])
+        @self.app.route('/update', methods=["POST"])
         def update_post():
             if session.get('user_level') != 777:
                 return "illegal access!!!!!!!!!!"
             data = json.loads(request.get_data())
-            # 为了防止从前端传来的数据在存入mysql时发生语法错误，使用pymysql.escape_string()处理转义一下字符串
-            title = pymysql.escape_string(data['title'])
-            tag = pymysql.escape_string(data['tag'].capitalize())
-            content = pymysql.escape_string(data['content'])
-            use_for_dos = Tools.clean_space(pymysql.escape_string(data['sdata']))
-            post_key = data["post_key"]
-            my_articles.update_data(post_key, article_title=title, article_content=content, textforsearch=use_for_dos, article_tag=tag)
-            return "200ok"
+            for key, value in data.items():
+                try:
+                    data[key] = pymysql.escape_string(value)
+                except AttributeError:
+                    pass
+            table = data['table']
+            print(data)
+            del data['table']
+            tables[table].update_data(data["post_key"], **data)
+            return 'post success'
 
     def __addUpload__(self):
         @self.app.route('/upload', methods=["POST"])
@@ -85,48 +95,6 @@ class Interface:
                 return '.' + path
             else:
                 return 'illegal upload'
-
-
-
-# @app.route('/savetimelineitem',methods=["POST"])
-# def savetimelineitem():
-#     data = json.loads(request.get_data())
-#     print(data)
-#     time = data['time']
-#     content = pymysql.escape_string(data['content'])
-#     mytimeline.save_data(time=time, content=content)
-#     return '200ok'
-
-
-# @app.route('/savepost',methods=["POST"])
-# def savepost():
-#     if (session.get('userlevel') != 777): return "illegal access!!!!!!!!!!"
-#     data = json.loads(request.get_data())
-#     print(data)
-#     #为了防止从前端传来的数据在存入mysql时发生语法错误，使用pymysql.escape_string()处理转义一下字符串
-#     title = pymysql.escape_string(data['title'])
-#     tag = pymysql.escape_string(data['tag'].capitalize())
-#     content = pymysql.escape_string(data['content'])
-#     time = data["publishtime"]
-#     postkey = data["postkey"]
-#     readnum = 0
-#     usefordos = tools.cleanspace(pymysql.escape_string(data['sdata']))
-#     myarticles.save_data(article_title=title, article_content=content, article_time=time,article_tag=tag, article_read=str(readnum),postkey=postkey,textforsearch=usefordos)
-#     return "200ok"
-#
-# @app.route('/savecomment',methods=["POST"])
-# def savecomment():
-#     data = json.loads(request.get_data())
-#     #为了防止从前端传来的数据在存入mysql时发生语法错误，使用pymysql.escape_string()处理转义一下字符串
-#     user = pymysql.escape_string(data["comment_user"])
-#     mail = pymysql.escape_string(data["mail"])
-#     link = pymysql.escape_string(data['link'])
-#     text = pymysql.escape_string(data['comment_text'])
-#     postkey = myarticles.query_field_primarykey(data["postid"],['postkey'])[0]["postkey"]
-#     mycomments.save_data(comment_user=user,comment_mail=mail,comment_link=link,comment_text=text,comment_time=data["comment_time"],
-#                          comment_avatar=data["comment_avatar"],comment_system=data["comment_system"],comment_browser=data["comment_browser"],
-#                          comment_postid=postkey,replyfor=data["replyfor"],commentkey=data["commentkey"],replybelong=data["replybelong"],aternick=data['aternick'])
-#     return '200ok'
 
 
 

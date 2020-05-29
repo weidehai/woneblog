@@ -1,5 +1,5 @@
 ﻿#coding=utf-8
-import redisconfig
+from config import redisconfig
 import os
 from flask import Flask, render_template, send_from_directory
 from flask_caching import Cache
@@ -31,11 +31,7 @@ def robots():
     return send_from_directory(root, 'robots.txt')
 
 
-
-
 if __name__ == '__main__':
-
-
     index = Index(app)
     search = Search(app)
     articles_detail = ArticlesDetail(app, cache)

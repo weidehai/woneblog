@@ -15,9 +15,7 @@
     <link rel="stylesheet" type="text/css" href="../static/css/details.css">
     <link rel="stylesheet" type="text/css" href="../static/css/footer.css">
     <link rel="stylesheet" type="text/css" href="../static/css/content.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/loading.css">
     <link rel="stylesheet" type="text/css" href="../static/css/comment.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/smalltitle.css">
     <link rel="icon" type="image/x-icon" href="../static/img/wone.ico">
 </head>
 </head>
@@ -66,19 +64,8 @@
 	        </nav>
     	</div>
     </div>
-  
-    <div class="loadingTip">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-    <div div class="content index width mx-auto px3 my3">
-        <section id="wrapper" class="home">
+    <div div class="content index width mx-auto px3 my3 article_detail">
+        <section id="wrapper">
             <article class="post">
                 <header>
                     <h1>{{article['article_title']}}</h1>
@@ -101,7 +88,7 @@
                         本文最后更新于{{article['article_time']}}
                     {% endif %}
                 </div>
-                <div class="detail" data-id=""></div>
+                <div class="detail" data-id="{{article['post_key']}}">{{article['article_content'] | safe}}</div>
             </article>
             <div id="comment_area">
                 <div id="comment">
@@ -129,7 +116,13 @@
                     </div>
 
                 </div>
-                <div class="comment_empty" style="display: none;">快来做第一个评论的人吧~</div>
+                <div class="loading_wrapper">
+                    <div class="loadingTip">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
                 <div class="comment_data" style="display: none;"></div>
             </div>
                 
@@ -159,9 +152,10 @@
     </footer>
     <script type="text/javascript" src="../static/js/myajax.js"></script>
     <script type="text/javascript" src="../static/js/details.js"></script>
-    <script type="text/javascript" src="../static/js/utils/detailutils.js"></script>
+    <script type="text/javascript" src="../static/js/utils/systeminfo.js"></script>
     <script type="text/javascript" src="../static/js/mycomment/comment.js"></script>
-    <script type="text/javascript" src="../static/js/seo/seoUtils.js"></script>
+    <script type="text/javascript" src="../static/js/utils/time.js"></script>
     <script type="text/javascript" src="../static/js/highlight/whighlight.js"></script>
+    <script type="text/javascript" src="../static/js/flush/laflush.js"></script>
 </body>
 </html>

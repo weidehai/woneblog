@@ -69,17 +69,17 @@ login.prototype.getinput = function(){
 	this.verify()
 }
 login.prototype.verify = function(){
-	myajax = interactive.creatajax()
-	myajax.open('post','/verify',true);
+	let xhr = new XMLHttpRequest()
+	xhr.open('post','/verify',true);
 	userdata = {
 		'username':this.username,
 		'password':this.password
 	}
 	userdata = JSON.stringify(userdata)
-	myajax.send(userdata)
-	myajax.onreadystatechange = function(){
-		if (myajax.readyState == 4) {
-			r = myajax.responseText
+	xhr.send(userdata)
+	xhr.onreadystatechange = function(){
+		if (xhr.readyState == 4) {
+			r = xhr.responseText
 			if (r=='login failed') {
 				var tip = document.getElementsByClassName('tip')
 				tip[0].style.display='block'

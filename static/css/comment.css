@@ -1,5 +1,4 @@
 #comment_area{
-	display: none;
 	font-size: 16px;
 }
 
@@ -147,7 +146,7 @@
 	color: #999;
 
 }
-.comment_empty{
+.empty{
 	padding: 1.25em 0;
 	color: #999;
 	text-align: center;

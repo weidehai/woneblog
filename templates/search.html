@@ -17,10 +17,8 @@
 	<link rel="stylesheet" type="text/css" href="../static/css/search.css">
 	<link rel="stylesheet" type="text/css" href="../static/css/postlist.css">
 	<link rel="stylesheet" type="text/css" href="../static/css/content.css">
-	<link rel="stylesheet" type="text/css" href="../static/css/smalltitle.css">
 	<link rel="icon" type="image/x-icon" href="../static/img/wone.ico">
 	<script type="text/javascript" src="../static/js/vue.js"></script>
-	<script type="text/javascript" src="../static/js/myajax.js"></script>
 </head>
 <body>
 	<div class="content index width mx-auto px3 my4">
@@ -59,10 +57,10 @@
 		<template id="sview">
 			<div id="sview_wrapper">
 				<div class="resitem" v-for='item in getres["data"]'>
-					<a class="title" v-bind:href="'/articledetails?id=' + item['postkey']" target="_blank">${item['article_title']}</a>
+					<a class="title" v-bind:href="'/articledetails?id=' + item['post_key']" target="_blank">${item['article_title']}</a>
 					<div class="meta">
                     	<div class="postdate">
-                        	<time>${dateconvert(item['article_time'])}</time>
+                        	<time>${item['article_time']}</time>
                     	</div>
 	                    <div class="watch">
 	                        <i class="iconfont icon-glance"><span>${item['article_read']}</span></i>
@@ -71,7 +69,7 @@
 	                        <i class="iconfont icon-lable"><a href="'/archives?tag=' + item['article_tag']"><span>${item['article_tag']}</span></a></i>
 	                    </div>
                 	</div>
-					<section v-html="item['textforsearch']" class="preview"></section>	
+					<section v-html="item['text_for_search']" class="preview"></section>	
 				</div>
 			</div>
 		</template>
@@ -119,12 +117,22 @@
 			},
 			methods:{
 				dosearch:function(){
-					interactive.ajaxsearch.bind(this,this.keywords,this.offset)()
-				},
-			},
-			watch:{
-				res(val){
-					console.log(val)
+					let xhr = XMLHttpRequest?new XMLHttpRequest():new ActiveXobject("Microsoft.XMLHTTP")
+					var surl = '/search'
+					xhr.open('post',surl,true);
+					var data = {
+						"kw":this.keywords,
+						"offset":this.offset
+					}
+					data = JSON.stringify(data)
+					xhr.send(data)
+					xhr.onreadystatechange=function(){
+						if (xhr.readyState==4) {
+							var str = xhr.responseText
+							var obj = eval('(' + str + ')')
+							this.res = obj
+						}
+					}.bind(this)
 				}
 			},
 			mounted:function(){
@@ -152,11 +160,7 @@
 						}
 					},
 					methods:{
-						dateconvert:function(time){
-							var d=new Date(time)
-							var newdate = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate()
-							return newdate
-						}
+						
 					},
 					delimiters:["${","}"]
 				}
