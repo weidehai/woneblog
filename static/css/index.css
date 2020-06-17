@@ -1,0 +1,98 @@
+.watch {
+	margin-left: 0.5rem;
+	margin-right: 0.65rem;
+}
+.Find {
+	margin-left: 0.65rem;
+	margin-right: 0.5rem;
+}
+
+#github:hover {
+	color: #2bbc8a;
+}
+.content .h1 {
+	letter-spacing: .01em;
+	font-size:1.5em;
+	font-weight: 700;
+	color: #2bbc8a;
+	margin-top: 3rem;
+	margin-bottom: 1rem;
+	display: inline-block;
+}
+.recently,.tap{
+	padding-left:10px;
+	cursor: pointer;
+}
+.recently:hover,.tap:hover{
+	color: #2bbc8a;
+}
+.recently:hover:after,.tap:hover:after{
+	color: darkgray;
+	font-size: 0.8em;
+	margin-left: 5px;
+	content: attr(tips);
+}
+
+.recently_loading{
+	animation: recently_loading 1s infinite linear;
+	animation-direction: alternate;
+}
+
+
+@keyframes recently_loading{
+	100%{
+		color: red;
+	}
+}
+
+.project-item a {
+	border-bottom: 1px solid #c9cacc;
+}
+.project-item a:hover {
+	color: #2bbc8a;
+}
+.project-item {
+	margin-bottom: 5px;
+}
+
+#wk{
+	width: 200px;
+	height: 180px;
+	background-image: url('../img/wk.png');
+	animation: wkzou 1s steps(8) infinite;
+	position: fixed;
+	right: 0px;
+	bottom: 0px;
+	z-index: -2;
+}
+
+@keyframes wkzou{
+	to{
+		background-position: -1600px 0;
+	}
+}
+
+@media screen and (max-width: 1200px){
+	#wk{
+		display: none;
+	}
+}
+
+@media screen and (max-width: 1024px){
+	.recently:hover:after,.tap:hover:after{
+		content: ""
+	}
+}
+
+a:link {color: inherit;} 
+a:visited {color: inherit;} 
+a:hover {color: inherit;} 
+a:active {color: inherit;} 
+
+
+
+
+
+
+
+

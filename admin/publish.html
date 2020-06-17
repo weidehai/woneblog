@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>发表您的文章</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0, user-scalable=no">
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="./static/font/iconfont.css">
+	<link rel="stylesheet" type="text/css" href="./static/css/write.css">
+</head>
+<body>
+	<div class="main">
+		<div class="title">
+			<p>发表新文章</p>
+		</div>
+	</div>
+	<hr style="background-color: #e6e6e6;height: 1px;border:none;">
+	<div class="main">
+		<div class="titlefield">
+			<input type="text" placeholder="标题" id="title" value="" disabled="disabled">
+			<select id="tags" disabled="disabled">
+				<option>Javascript</option>
+				<option>Seo</option>
+				<option>Ubuntu</option>
+				<option>Python</option>
+				<option>数据结构</option>
+				<option>计算机组成原理</option>
+				<option>计算机网络</option>
+				<option>Dos脚本</option>
+				<option>爬虫</option>
+				<option>Algorithm</option>
+			</select>
+			<form enctype="multipart/form-data">
+				<input type="file" id="file" name="filecontent" accept="image/png, image/jpeg, image/jpg, image/gif" style="display: none;">
+			</form>
+		</div>
+		<div class="styleselect">
+			<div class="stylemenu">
+				<i id='h1' class="iconfont icon-h1"></i>
+			</div>
+			<div class="stylemenu">
+				<i id='h2' class="iconfont icon-h2"></i>
+			</div>
+			<div class="stylemenu">
+				<i id='code' class="iconfont icon-code"></i>
+			</div>
+			<div class="stylemenu">
+				<i id='list' class="iconfont icon-list"></i>
+			</div>
+			<div class="stylemenu">
+				<i id='link' class="iconfont icon-link"></i>
+			</div>
+			<div class="stylemenu">
+				<label id="picture" class="iconfont icon-picture" for="file"></label>
+				<!--使用for属性将label标签和表单关联-->
+			</div>
+			<div class="stylemenu">
+				<label id="video" class="iconfont icon-video"></label>
+			</div>
+			<div class="stylemenu code_status status">
+				<i id='codeing' class="iconfont icon-code"></i>
+			</div>
+			<div class="stylemenu status" id="loading">
+				<i class="iconfont icon-load"></i>
+			</div>
+		</div>
+		<div id="linkedit" data-show='false' class="suspended">
+			<div class="desc">插入链接</div>
+			<textarea id="linkhref" class="linkarea" placeholder="please enter href"></textarea>
+			<textarea class="linkarea" id="linkname" placeholder="name of href"></textarea>
+			<button id="insertL">插入</button>
+		</div>
+	    <div id="editor" contenteditable="false" data-id=""></div>
+
+		<div>
+			<input type="button" id="submit" value="发表" class="submitbutton"/>
+		</div>
+		
+		<div>
+			<a href="/"><input type="button" value="返回主页" class="back"/></a>
+		</div>
+	</div>
+	<script type="text/javascript" src="./static/js/myajax.js"></script>
+	<script type="text/javascript" src="../static/js/utils/time.js"></script>
+	<script type="text/javascript" src="./static/js/myeditor/editor.js"></script>
+	<script type="text/javascript" src="./static/js/myeditor/cmd.js"></script>
+	<script type="text/javascript" src="./static/js/myeditor/editorcursor.js"></script>
+	<script type="text/javascript" src="./static/js/myeditor/editorkeycontrol.js"></script>
+</body>
+</html>
+
+
+

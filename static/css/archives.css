@@ -1,0 +1,24 @@
+a:link {color: inherit;} 
+a:visited {color: inherit;} 
+a:hover {color: inherit;} 
+a:active {color: inherit;} 
+
+
+#theme-tag a {
+	font-size: 12px;
+	margin-right: 10px;
+	line-height: 23px;
+
+}
+
+#theme-tag a:hover {
+	color: #2bbc8a;
+
+}
+
+
+.archive h3 {
+	margin-top: .9rem;
+	margin-bottom: .5rem;
+	color: #eee;
+}

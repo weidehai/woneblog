@@ -1,0 +1,87 @@
+#wrapper{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	border: 1px #FFB6C1 solid;
+	background-color: rgb(67,57,94);
+	border-radius: 4px;
+	width: 450px;
+	transform: translate(-50%,-50%);
+	padding: 20px;
+}
+
+.name{
+	padding:15px;
+	text-align: center;
+	border-bottom: 1px solid;
+	font-size: 16px;
+}
+
+.login{
+	padding:30px 15px;
+	text-align: center;
+	position: relative;
+}
+
+.login label{
+	display: inline-block;
+	width: 50px;
+	margin-right: 10px;
+	text-align: left;
+	
+}
+
+.username{
+	margin-bottom: 50px;
+}
+
+.tip{
+	position: absolute;
+	width: 100%;
+	color: red;
+	margin-top: 10px;
+	display: none;
+}
+
+input{
+	border:none;
+	background-color: rgb(73,63,100);
+	outline: none;
+	padding:8px;
+	width: 200px;
+}
+
+button{
+	margin-top: 50px;
+	padding:10px;
+	background-color: rgb(58,150,215);
+	border: none;
+	color: inherit;
+	border-radius: 4px;
+	width: 260px;
+}
+ button:active{
+ 	opacity: 0.5;
+ }
+
+ @media screen and (max-width: 900px) {
+	#wrapper{
+		width: 85%;
+	}
+	.login{
+		margin-top: 30px;
+		padding: 0;
+	}
+}
+@media screen and (max-width: 500px) {
+	.login label{
+		width: 20%;
+		margin: 0;
+	}
+	input{
+		width: 70%;
+	}
+	button{
+		width: 90%;
+	}
+}

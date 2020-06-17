@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="description" itemprop="description" content="编程随笔,一个编程技术博客.想到哪,学到哪,写到哪.">
+	<meta name="author" content="Wone">
+	<meta name="keywords" content="Wone, 编程随笔, programming note, web前端博客, Python, Javascript, Java, 汇编语言, 网页制作, 前端, html5, css, Vue.js, 云服务器, Seo">
+	<meta property="og:description" content="编程随笔,一个编程技术博客.想到哪,学到哪,写到哪.">
+	<meta property="og:site_name" content="Wone">
+	<title>About Me | 我的编程随笔</title>
+	<link rel="stylesheet" type="text/css" href="../static/css/base.css">
+	<link rel="stylesheet" type="text/css" href="../static/font/iconfont.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/header.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/about.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/content.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/footer.css">
+	<link rel="icon" type="image/x-icon" href="../static/img/wone.ico">
+</head>
+<body>
+	<div class="content index width mx-auto px3 my4">
+		<header id="header">
+			<a href="/">
+				<div id="logo" style="background-image: url(../static/img/avatar.jpg);"></div>
+				<span style="font-size: 1.5rem;font-weight: bold;line-height: 2rem;display: inline-block;" id="title">About Me</span>
+			</a>
+			<div id="nav">
+				<ul>
+					<li class="navicon">
+						<i class="iconfont icon-navlist i-2x"></i>
+					</li>
+					<li>
+						<a href="/">Home</a>
+					</li>
+					<li>
+						<a href="/archives">Archives</a>
+					</li>
+					<li>
+						<a href="/about">About</a>
+					</li>
+					<li>
+						<a href="/search">Search</a>
+					</li>
+				</ul>
+			</div>
+		</header>
+		<article>
+			<div class="detail">
+				<img src="../static/img/about.png" width="100%">
+				<h1>Wone的博客小站</h1>
+				<blockquote>猛兽总是独行，牛羊才成群结队<br>——周树人</blockquote>
+				<h1>联系方式</h1>
+				<ul>
+					<li>Email:243395655@qq.com</li>
+				</ul>
+				<h1>个人信息</h1>
+				<ul>
+					<li>Wone</li>
+					<li>职业：学生</li>
+					<li>城市：海南</li>
+				</ul>
+				<h1>期许</h1>
+				<p>但行好事 莫问前程</p>
+				<h1>FAQ</h1>
+				<h2>博客是基于什么做的?</h2>
+				<p>前端：css3 + html5 + 原生javascript</p>
+				<p>后端：python下的flask框架写的web后端</p>
+				<p>数据库：mysql+redis缓存</p>
+				<h1>友情链接</h1>
+				<ul>
+					<li><a href="#">空缺中..........</a></li>
+					<li><a href="#">空缺中..........</a></li>
+					<li><a href="#">空缺中..........</a></li>
+				</ul>
+				<a href="/timelines"><h1>时间线</h1></a>
+			</div>
+		</article>
+	</div>
+	<footer id="footer">
+		<div class="footer-left">Copyright © 2020 Wone <a href="http://www.beian.miit.gov.cn" target="_blank">琼ICP备19001364号</a></div>
+		<div class="footer-right">
+			<nav>
+				<ul>
+					<li>
+						<a href="/">Home</a>
+					</li>
+					<li>
+						<a href="/archives">Archives</a>
+					</li>
+					<li>
+						<a href="/about">About</a>
+					</li>
+					<li>
+						<a href="/search">Search</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</footer>
+	<script type="text/javascript">
+		window.onload = function () {
+			var i = document.getElementsByClassName('navicon')[0].getElementsByTagName('i')
+			i[0].addEventListener('click',function() {
+				var nav = document.getElementById('nav')
+				var ul = document.getElementsByTagName('ul')
+				if (ul[0].getAttribute('class')) {
+					ul[0].setAttribute('class','')
+				}else {
+					ul[0].setAttribute('class','responsive')
+				}
+			})
+		}
+	</script>
+</body>
+</html>

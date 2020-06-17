@@ -1,0 +1,81 @@
+#logo {
+	height: 3.125rem;
+	width: 3.125rem;
+	border-radius: 50%;
+	background-repeat: no-repeat;
+	background-size: 3.125rem 3.125rem;
+	filter: grayscale(100%);
+	float: left;
+	margin-right: 1.25rem;
+}
+
+#logo:hover {
+	filter: grayscale(0%);
+}
+
+#header {
+	margin-bottom: 3rem;
+}
+
+#nav {
+	font-size: .8rem;
+	color: #2bbc8a;
+	letter-spacing:.01em;
+}
+
+
+#nav ul {
+	line-height: 15px;
+}
+
+#nav ul li{
+	display: inline-block;
+	margin-right: 1rem;
+	border-right: 1px dotted #2bbc8a;
+	padding-right:1rem;
+}
+
+#nav ul .navicon {
+	display: none;
+}
+
+#nav ul .navicon i {
+	cursor: pointer;
+}
+
+.i-2x {
+	font-size: 2.5em;
+}
+
+
+@media screen and (max-width: 480px) {
+	#title {
+		padding-bottom: 9px;
+		padding-top: 9px;
+	}
+	#nav ul li:not(:first-child) {
+		border: none;
+		padding-top: 1rem;
+		padding-left: 70px;
+		font-size: 1rem;
+	}
+
+	#nav ul li {
+		display: none;
+	}
+	#nav .responsive li {
+		display: block;
+	}
+
+
+	#nav ul .navicon {
+		display: inline-block;
+		position: absolute;
+		top: 40px;
+		right: 1rem;
+		border: none;
+		margin-right: 0px;
+		padding-right: 0px;
+	}
+
+}

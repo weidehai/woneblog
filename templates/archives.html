@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="description" itemprop="description" content="编程随笔,一个编程技术博客.想到哪,学到哪,写到哪.">
+	<meta name="author" content="Wone">
+	<meta name="keywords" content="Wone, 编程随笔, programming note, web前端博客, Python, Javascript, Java, 汇编语言, 网页制作, 前端, html5, css, Vue.js, 云服务器, Seo">
+	<meta property="og:title" content="{{title}}">
+	<meta property="og:description" content="编程随笔,一个编程技术博客.想到哪,学到哪,写到哪.">
+	<meta property="og:site_name" content="Wone">
+	<title>{{title}} | 我的编程随笔</title>
+	<link rel="stylesheet" type="text/css" href="../static/css/base.css">
+	<link rel="stylesheet" type="text/css" href="../static/font/iconfont.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/header.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/footer.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/archives.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/postlist.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/loading.css">
+    <link rel="icon" type="image/x-icon" href="../static/img/wone.ico">
+</head>
+<body>
+	<div class="content index width mx-auto px3 my4">
+		<header id="header">
+			<a href="/">
+				<div id="logo" style="background-image: url(../static/img/avatar.jpg);"></div>
+			</a>
+			<span style="font-size: 1.5rem;font-weight: bold;line-height: 2rem;display: inline-block;" id="title">Archives</span>
+			<div id="nav">
+				<ul>
+					<li class="navicon">
+						<i class="iconfont icon-navlist i-2x"></i>
+					</li>
+					<li>
+						<a href="/">Home</a>
+					</li>
+					<li>
+						<a href="/archives">Archives</a>
+					</li>
+					<li>
+						<a href="/about">About</a>
+					</li>
+					<li>
+						<a href="/search">Search</a>
+					</li>
+				</ul>
+			</div>
+		</header>
+			<div id="theme-tag">
+				{% for tag in tags %}
+				<a href='/archives?article_tag="{{tag["tag_name"]}}"'><span>{{tag["tag_name"]}}</span>
+				{% endfor %}
+			</div>
+			
+		<section id="wrapper">
+			<!-- {% for data in articles %}
+			<div class="archive">
+				<h3>{{data['year']}}</h3>
+				<ul class="post-list">
+					{% for item in data['articles'] %}
+					<li class="post-item">
+						<div class="meta">
+							<time>{{item['article_time']}}</time>
+						</div>
+						<span><a href="/articledetails?id={{item['post_key']}}">{{item['article_title']}}</a></span>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+			{% endfor %} -->
+		</section>
+		<div class="loading_wrapper">
+            <div class="loadingTip">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+	</div>
+	<footer id="footer">
+		<div class="footer-left">Copyright © 2020 Wone <a href="http://www.beian.miit.gov.cn" target="_blank">琼ICP备19001364号</a></div>
+		<div class="footer-right">
+			<nav>
+				<ul>
+					<li>
+						<a href="/">Home</a>
+					</li>
+					<li>
+						<a href="/archives">Archives</a>
+					</li>
+					<li>
+						<a href="/about">About</a>
+					</li>
+					<li>
+						<a href="/search">Search</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</footer>
+	<script type="text/javascript" src="../static/js/flush/laflush.js"></script>
+	<script type="text/javascript">
+		let offset = 0
+		let year = 2020
+		let where = window.location.search.substr(1) || "all" 
+		window.onload = function () {
+			eventListen()
+			getData("articles","article_time, article_title, post_key",where,render)
+			laflush.eventlistener()
+			laflush.flush = function(){
+				getData("articles","article_time, article_title, post_key",where,render)
+			}			
+		}
+		function getData(table,fields,where,cb){
+			if (year<2019) {
+				//laflush.removelistener()
+				return
+			}
+			let loading_wrapper = document.getElementsByClassName("loading_wrapper")[0]
+			let xhr = new XMLHttpRequest()
+			let myurl = `/getdatabyyear?table=${table}&fields=${fields}&year=${year}&where=${where}&offset=${offset}`
+			loading_wrapper.style.display = "block"
+			xhr.open("get",myurl,true)
+			xhr.onreadystatechange=function(){
+				if (xhr.readyState===4) {
+					var str = xhr.responseText
+					var obj = eval('(' + str + ')')
+					loading_wrapper.style.display = 'none'
+					if (obj.length !== 0) {
+						cb(obj)
+					}
+					offset = offset + 10
+					if (obj.length<10) {
+						year = year - 1
+						offset = 0
+					}
+					console.log(offset,year)
+					if (document.documentElement.scrollHeight<=document.documentElement.clientHeight) {
+						getData("articles","article_time, article_title, post_key",where,render)
+					}
+				}
+			}
+			xhr.send()
+		}
+		function render(result){
+			let wrapper = document.getElementById("wrapper")
+			let archive = document.getElementById(year)
+			console.log(year,archive)
+			if (!archive) {
+				archive = document.createElement('div')
+				archive.className = 'archive'
+				archive.id = year
+				let ul = document.createElement('ul')
+				ul.className = 'post-list'
+				let h3 = document.createElement('h3')
+				h3.innerText = year
+				archive.appendChild(h3)
+				archive.appendChild(ul)
+				wrapper.appendChild(archive)
+			}
+			let post_list = archive.getElementsByClassName("post-list")[0]
+			for (let item of result){
+				let li = document.createElement('li')
+				li.className='post-item'
+				let div = document.createElement('div')
+				let time = document.createElement('time')
+				div.className='meta'
+				time.innerText = item['article_time']
+				div.appendChild(time)
+				let span = document.createElement('span')
+				let a = document.createElement('a')
+				span.className = 'ellipsis'
+				a.href = `/articledetails?id=${item['post_key']}`
+				a.innerText = item['article_title']
+				span.appendChild(a)
+				li.appendChild(div)
+				li.appendChild(span)
+				post_list.appendChild(li)
+			}
+			laflush.content_height=document.documentElement.scrollHeight
+			laflush.ready_to_flush = true
+
+		}
+
+		function eventListen(){
+			//var theme_tag = document.getElementById('theme-tag')
+			// var a = theme_tag.getElementsByTagName('a')
+			// var sizebox = ['12px','16px','22px']
+			// for (i=0;i<a.length;i++) {
+			// 	var index = Math.floor(Math.random()*3)
+			// 	var fontsize = sizebox[index]
+			// 	a[i].style.fontSize = fontsize
+			// }
+			// //事件委托
+			// theme_tag.addEventListener('click',function(e){
+			// 	getData("articles","article_time, article_title, post_key",`article_tag="${e.target.innerText}"`,render)
+			// })
+			var i = document.getElementsByClassName('navicon')[0].getElementsByTagName('i')
+			i[0].addEventListener('click',function() {
+				var nav = document.getElementById('nav')
+				var ul = document.getElementsByTagName('ul')
+				if (ul[0].getAttribute('class')) {
+					ul[0].setAttribute('class','')
+				}else {
+					ul[0].setAttribute('class','responsive')
+				}
+			})
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+.loading_wrapper{
+	display: none;
+	justify-content: center;
+}
+.loadingTip {
+	position: relative;
+}
+.loadingTip div {
+	background-color: #c9cacc;
+	width: 7px;
+	height: 7px;
+	border-radius: 100%;
+	display: inline-block;
+	animation-fill-mode: both;
+	-webkit-animation-fill-mode: both;
+}
+.loadingTip > div:nth-child(1) {
+	animation: loading 1s 0s infinite linear;
+	-webkit-animation: loading 1s 0s infinite linear;
+}
+.loadingTip > div:nth-child(2) {
+	
+	animation: loading 1s 0.12s infinite linear;
+	-webkit-animation: loading 1s 0.12s infinite linear;
+}
+.loadingTip > div:nth-child(3) {
+	animation: loading 1s 0.24s infinite linear;
+	-webkit-animation: loading 1s 0.24s infinite linear;
+}
+@-webkit-keyframes loading {
+	50% {
+		-webkit-transform: scale(0.5);
+		transform: scale(0.5);
+	}
+	100% {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+	}
+}
+
+
+.myloading_1{
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%) rotate(75deg);
+	width: 12px;
+	height: 12px;
+}
+
+.myloading_1::before,.myloading_1::after{
+	content: "";
+	position: fixed;
+	width: 12px;
+	height: 12px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	border-radius: 5px;
+	animation: myloading_1 1.5s linear infinite;
+}
+
+.myloading_1::before{
+	box-shadow: 12px 12px red,-12px -12px yellow;
+}
+
+.myloading_1::after{
+	box-shadow: 12px 12px green,-12px -12px pink;
+	transform: translate(-50%,-50%) rotate(90deg);	
+}
+
+@keyframes myloading_1{
+	50%{
+		height: 35px;
+	}
+}

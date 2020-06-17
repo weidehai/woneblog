@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>404 Page not found | 我的编程随笔</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="description" itemprop="description" content="编程随笔,一个编程技术博客.想到哪,学到哪,写到哪.">
+	<meta name="author" content="Wone">
+	<meta name="keywords" content="Wone, 编程随笔, programming note, web前端博客, Python, Javascript, Java, 汇编语言, 网页制作, 前端, html5, css, Vue.js, 云服务器, Seo">
+	<meta property="og:title" content="404error">
+	<meta property="og:description" content="编程随笔,一个编程技术博客.想到哪,学到哪,写到哪.">
+	<meta property="og:site_name" content="Wone">
+	<link rel="stylesheet" type="text/css" href="../static/css/base.css">
+	<link rel="stylesheet" type="text/css" href="../static/font/iconfont.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/header.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/footer.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/404.css">
+	<link rel="icon" type="image/x-icon" href="../static/img/wone.ico">
+
+</head>
+<body>
+	<div class="content index width mx-auto px3 my4">
+		<header id="header">
+			<a href="/">
+				<div id="logo" style="background-image: url(../static/img/avatar.jpg);"></div>
+				<span style="font-size: 1.5rem;font-weight: bold;line-height: 2rem;display: inline-block;" id="title">404 Page</span>
+			</a>
+			<div id="nav">
+				<ul>
+					<li class="navicon">
+						<i class="iconfont icon-navlist i-2x"></i>
+					</li>
+					<li>
+						<a href="/">Home</a>
+					</li>
+					<li>
+						<a href="/archives">Archives</a>
+					</li>
+					<li>
+						<a href="/about">About</a>
+					</li>
+					<li>
+						<a href="/search">Search</a>
+					</li>
+				</ul>
+			</div>
+		</header>
+		<section id="wrapper" class="home">
+            <article class="post">
+                <p>> LINK IS DEAD.</p>
+                <p>> It's so trrible that the server return a 404 page.</p>
+                <p>> you possible visit a not exist page.</p>
+                <p>> You can come back from the navigation bar.</p>
+                <p>> That all,wish you have a good day.</p>
+            </article>
+        </section>
+	</div>
+	<footer id="footer">
+		<div class="footer-left">Copyright © 2020 Wone <a href="http://www.beian.miit.gov.cn" target="_blank">琼ICP备19001364号</a></div>
+		<div class="footer-right">
+			<nav>
+				<ul>
+					<li>
+						<a href="/">Home</a>
+					</li>
+					<li>
+						<a href="/archives">Archives</a>
+					</li>
+					<li>
+						<a href="/about">About</a>
+					</li>
+					<li>
+						<a href="/search">Search</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</footer>
+	<script type="text/javascript">
+		window.onload = function () {
+			var i = document.getElementsByClassName('navicon')[0].getElementsByTagName('i')
+			i[0].addEventListener('click',function() {
+				var nav = document.getElementById('nav')
+				var ul = document.getElementsByTagName('ul')
+				if (ul[0].getAttribute('class')) {
+					ul[0].setAttribute('class','')
+				}else {
+					ul[0].setAttribute('class','responsive')
+				}
+			})
+		}
+	</script>
+</body>
+</html>
