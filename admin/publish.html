@@ -7,14 +7,14 @@
 	<link rel="stylesheet" type="text/css" href="./static/font/iconfont.css">
 	<link rel="stylesheet" type="text/css" href="./static/css/write.css">
 </head>
-<body>
+<body style="display: flex;flex-direction: column;min-height: 100vh;">
 	<div class="main">
 		<div class="title">
 			<p>发表新文章</p>
 		</div>
 	</div>
 	<hr style="background-color: #e6e6e6;height: 1px;border:none;">
-	<div class="main">
+	<div class="main" style="flex:1;display: flex;flex-direction: column;">
 		<div class="titlefield">
 			<input type="text" placeholder="标题" id="title" value="" disabled="disabled">
 			<select id="tags" disabled="disabled">
@@ -69,13 +69,10 @@
 			<textarea class="linkarea" id="linkname" placeholder="name of href"></textarea>
 			<button id="insertL">插入</button>
 		</div>
-	    <div id="editor" contenteditable="false" data-id=""></div>
+	    <div id="editor" contenteditable="false" data-id="" style="flex:1;"></div>
 
-		<div>
+		<div style="margin-bottom: 12px;">
 			<input type="button" id="submit" value="发表" class="submitbutton"/>
-		</div>
-		
-		<div>
 			<a href="/"><input type="button" value="返回主页" class="back"/></a>
 		</div>
 	</div>

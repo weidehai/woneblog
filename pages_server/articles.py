@@ -18,7 +18,7 @@ class ArticlesDetail:
             has_cache_data = self.cache.get(article_id)
             # 如果缓存中取不到id这个记录,就到数据库中取
             # 这里的缓存是共享的
-            if not (has_cache_data and request.cookies.get('id')):
+            if not (has_cache_data and request.cookies.get(article_id)):
                 print("get from database.....")
                 # detail页面需要的数据有article_id,article_time,article_title,article_tag,article_read,并且只取当前id的那一条数据
                 # 设置的缓存时间是5分钟，也就是五分钟内打开同一篇文章只增加一次阅读量
@@ -33,7 +33,7 @@ class ArticlesDetail:
                                                             'update_time'])[0]
                 print(data)
                 if data['article_read'] == 0:
-                    my_admin.customize_sql("update blog set article_total=article_total+1 where id=1", "commit")
+                    my_admin.customize_sql("update admin set article_total=article_total+1 where admin_id=1", "commit")
                 previous_article = my_articles.get_previous(data['article_id'])
                 next_article = my_articles.get_next(data['article_id'])
                 my_articles.update_data(article_id, article_read=str(data['article_read'] + 1))

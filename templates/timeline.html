@@ -227,10 +227,12 @@
                 i2.addEventListener('click',function () {
                     p.contentEditable=true;
                     h3.contentEditable=true;
+                    //h3.focus();
                     modify=true;
                 });
                 i3.addEventListener('click',function(){
                     delTimeline(data_obj['timeline_id'])
+                    ul.removeChild(li)
                 })
                 h3.addEventListener('focus',function () {
                     i5.style.display='inline'
