@@ -87,7 +87,7 @@
             </li>
         </ul>
     </div>
-
+    
     <script type="text/javascript" src="../static/layui-v2.5.6/layui/layui.js"></script>
     <script type="text/javascript" src="../static/js/myajax.js"></script>
     <script type="text/javascript" src="../static/js/flush/laflush.js"></script>
@@ -113,7 +113,6 @@
                 },
             });
         });
-
 
 
         let all_data_geted=false;
@@ -228,15 +227,13 @@
                     p.contentEditable=true;
                     h3.contentEditable=true;
                     //h3.focus();
+                    i5.style.display='inline'
                     modify=true;
                 });
                 i3.addEventListener('click',function(){
                     delTimeline(data_obj['timeline_id'])
                     ul.removeChild(li)
                 })
-                h3.addEventListener('focus',function () {
-                    i5.style.display='inline'
-                });
                 i5.addEventListener('click',function (e) {
                     p.contentEditable=false;
                     h3.contentEditable=false;
@@ -257,9 +254,6 @@
             }
             let p = document.createElement('p');
             p.setAttribute('class','test');
-            p.addEventListener('focus',function () {
-                i5.style.display='inline'
-            });
             li.appendChild(i1);
             li.appendChild(div1);
             h3.innerText=data_obj.time;

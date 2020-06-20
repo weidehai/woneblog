@@ -68,7 +68,7 @@ var Interactive = {
 			}
 		}
 	},
-	XHRUpload: function(file,cb,progress=false) {
+	XHRUpload: function(file,cb,progress=false,upload_success=false) {
 		var xhr = Interactive.creatXHR()
 		xhr.open('post','/upload',true);
 		console.log("do upload...........")
@@ -80,10 +80,15 @@ var Interactive = {
 		}
 		if (progress) {
 			xhr.upload.onprogress = function(e){
+				progress(e)
 				console.log(e.loaded,e.total)
-			}	
+			}
 		}
-		
+		if (upload_success) {
+			xhr.upload.onload = function(e){
+				upload_success(e)
+			}
+		}
 		xhr.send(file)
 	},
 	XHRUnload:function(file){

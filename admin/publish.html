@@ -6,8 +6,16 @@
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="./static/font/iconfont.css">
 	<link rel="stylesheet" type="text/css" href="./static/css/write.css">
+	<link rel="stylesheet" type="text/css" href="./static/css/loading.css">
 </head>
 <body style="display: flex;flex-direction: column;min-height: 100vh;">
+	<div class="suspension">
+		<div class="myloading_1"></div>
+		<div class="uploading_wrapper">
+			<span>文件上传中...</span><span class="percent"></span>
+			<div class="uploading"></div>	
+		</div>
+	</div>
 	<div class="main">
 		<div class="title">
 			<p>发表新文章</p>
@@ -56,11 +64,8 @@
 			<div class="stylemenu">
 				<label id="video" class="iconfont icon-video"></label>
 			</div>
-			<div class="stylemenu code_status status">
+			<div class="stylemenu code_status">
 				<i id='codeing' class="iconfont icon-code"></i>
-			</div>
-			<div class="stylemenu status" id="loading">
-				<i class="iconfont icon-load"></i>
 			</div>
 		</div>
 		<div id="linkedit" data-show='false' class="suspended">

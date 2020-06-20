@@ -61,7 +61,6 @@ var Editor = {
 
 	},
 	eventListen:function(){
-		var picture = document.getElementById('picture')
 		var h2 = document.getElementById('h2')
 		var h1 = document.getElementById('h1')
 		var list = document.getElementById('list')
@@ -71,7 +70,8 @@ var Editor = {
 		var submitbt = document.getElementById('submit')
 		var code = document.getElementById('code')
 		var code_status = document.getElementsByClassName('code_status')
-		var loading = document.getElementById('loading')
+		var suspension = document.getElementsByClassName('suspension')[0]
+		var loading = suspension.getElementsByClassName('myloading_1')[0]
 		var title = document.getElementById('title')
 		var tags = document.getElementById('tags')
 		var linkedit = document.getElementById('linkedit')
@@ -90,7 +90,8 @@ var Editor = {
 					window.location.href = `/articledetails?id=${post_key}`
 				})
 			})
-			loading.className += " load_status"
+			suspension.style.display = 'block'
+			loading.style.display = 'block'
 			Interactive.XHRQuery('articles','article_title,article_tag,article_content',where,(result)=>{
 				Editor.editor.setAttribute("contenteditable","true")
 				title.disabled = ""
@@ -103,7 +104,8 @@ var Editor = {
 						tags.options[i].selected = true
 					}
 				}
-				loading.className = "stylemenu status"
+				suspension.style.display = 'none'
+				//loading.className = "stylemenu status"
 			})
 		}else{
 			submitbt.addEventListener('click',function(){
@@ -205,6 +207,10 @@ var Editor = {
 		return targetElement
 	},
 	upload: function(e) {
+		var suspension = document.getElementsByClassName('suspension')[0]
+		var uploading_wrapper = suspension.getElementsByClassName('uploading_wrapper')[0]
+		var uploading = uploading_wrapper.getElementsByClassName("uploading")[0]
+		var percent = uploading_wrapper.getElementsByClassName('percent')[0]
 		var f = e.target.files[0]
 		var formdata = new FormData()
 		//将文件转换为二进制数据然后上传
@@ -214,7 +220,16 @@ var Editor = {
 			stylecmd.insertfile(result)
 			Editor.filelist.push(result.substring(2))
 			console.log(Editor.filelist)  
-		},true)
+		},function(e){
+			var total_lenght = uploading_wrapper.clientWidth
+			console.log(total_lenght)
+			suspension.style.display="block"
+			ratio = e.loaded/e.total
+			percent.innerText = (ratio * 100).toFixed(2) + "%"
+			uploading.style.width = ratio * total_lenght + 'px'
+		},function(){
+			suspension.style.display="none"
+		})
 	},
 	exit_code:function(el){
 		if (el.nextSibling) {  //如果active_pre有下一个兄弟元素就直接跳到下一个兄弟元素
