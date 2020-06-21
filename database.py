@@ -130,6 +130,7 @@ class Commit:
 
 class DataBase:
     operation = {"query":Operation.execute_query,"commit":Operation.execute_commit}
+
     def query_quantity(self):
         return Query.query_quantity(self.table_name)
 
@@ -172,6 +173,7 @@ class DataBase:
 
     @staticmethod
     def customize_sql(sql, method):
+        print(sql)
         return DataBase.operation[method](sql)
 
 

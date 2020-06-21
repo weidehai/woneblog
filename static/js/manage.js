@@ -154,7 +154,16 @@ function render(result){
 			dialog = window.confirm(`您确定要删除 ${result[i]['article_title']} 这篇文章？`)
 			if (dialog) {
 				Interactive.XHRDel('articles',result[i]['post_key'],()=>{
-					main.removeChild(bt2.parentElement.parentElement)
+					let xhr = Interactive.creatXHR()
+					xhr.open("GET",`/updatearticlenum?tag_name=${result[i]['article_tag']}&operation=sub`,true)
+					xhr.onreadystatechange = function(){
+						if (xhr.readyState===4) {
+							if (xhr.responseText==="success") {
+								main.removeChild(bt2.parentElement.parentElement)			
+							}
+						}
+					}
+					xhr.send(null)
 				})
 			}
 		})

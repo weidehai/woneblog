@@ -2,8 +2,6 @@ window.onload = function() {
 	eventListen()
 }
 
-
-
 function eventListen(){
 	var i = document.getElementsByClassName('navicon')[0].getElementsByTagName('i')
 	var r = document.getElementsByClassName('recently')[0]
@@ -73,6 +71,7 @@ function render(obj){
 	}
 	p.replaceChild(ul,u[0])
 }
+
 function getrecently(cb) {
 	let xhr = Interactive.creatXHR()
 	var myurl = '/getrecently'

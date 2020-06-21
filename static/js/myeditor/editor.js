@@ -113,8 +113,18 @@ var Editor = {
 				let post_key = data["post_key"]
 				Editor.submited = true
 				Interactive.XHRSave(data,function(result){
-					window.location.href = `/articledetails?id=${post_key}`
+					let xhr = Interactive.creatXHR()
+					xhr.open("GET",`/updatearticlenum?tag_name=${data['article_tag']}&operation=add`,true)
+					xhr.onreadystatechange = function(){
+						if (xhr.readyState===4) {
+							if (xhr.responseText==="success") {
+								window.location.href = `/articledetails?id=${post_key}`			
+							}
+						}
+					}
+					xhr.send(null)
 				})
+
 			})
 			title.disabled = ""
 			tags.disabled = ""

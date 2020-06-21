@@ -72,16 +72,22 @@
 			<section id="projects">
 				<span class="h1"><a href="http://project.haiblog.cn" target="_blank">Projects</a></span><i class="iconfont icon-tap tap" tips="project_demo"></i>
 				<ul class="project-list">
+					{% for item in projects %}
 					<li class="project-item">
-						<a href="./drawfunction">Canvas画函数图像项目演示</a>
+						<div class="meta">
+							<time>{{item["project_time"]}}</time>
+						</div>
+						<a href="http://project.haiblog.cn{{item['project_url']}}">{{item["project_title"]}}</a>
 					</li>
-					<li class="project-item">
+					{% endfor %}
+					<!-- <li class="project-item">
 						<a href="https://github.com/weidehai/myblog_dev/tree/myblog_hl_dev">个人博客代码高亮js插件</a>
 					</li>
 					<li class="project-item">
 						<a href="https://github.com/weidehai/myblog_dev/tree/master">Flask框架搭建个人博客</a>
 						: 使用css3+html5+原生js+flask写的博客
-					</li>
+					</li> -->
+					
 				</ul>
 			</section>
 		</section>

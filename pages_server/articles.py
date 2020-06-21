@@ -32,8 +32,6 @@ class ArticlesDetail:
                                                             'post_key',
                                                             'update_time'])[0]
                 print(data)
-                if data['article_read'] == 0:
-                    my_admin.customize_sql("update admin set article_total=article_total+1 where admin_id=1", "commit")
                 previous_article = my_articles.get_previous(data['article_id'])
                 next_article = my_articles.get_next(data['article_id'])
                 my_articles.update_data(article_id, article_read=str(data['article_read'] + 1))
