@@ -33,18 +33,6 @@
 	content: attr(tips);
 }
 
-.recently_loading{
-	animation: recently_loading 1s infinite linear;
-	animation-direction: alternate;
-}
-
-
-@keyframes recently_loading{
-	100%{
-		color: red;
-	}
-}
-
 .project-item a {
 	border-bottom: 1px solid #c9cacc;
 }

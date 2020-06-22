@@ -75,3 +75,17 @@
 		height: 35px;
 	}
 }
+
+
+
+.color_switch_loading{
+	animation: color_switch_loading 1s infinite linear;
+	animation-direction: alternate;
+}
+
+
+@keyframes color_switch_loading{
+	100%{
+		color: red;
+	}
+}

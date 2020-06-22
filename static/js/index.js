@@ -20,7 +20,7 @@ function eventListen(){
 			return
 		}
 		requesting = true
-		r.className += " recently_loading"
+		r.className += " color_switch_loading"
 		if (r.getAttribute("recently")==="false") {
 			getrecently((obj)=>{
 				render(obj)

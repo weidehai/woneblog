@@ -8,6 +8,8 @@
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="../static/layui-v2.5.6/layui/css/layui.css">
     <link rel="stylesheet" type="text/css" href="../static/font/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/loading.css">
+    <link rel="icon" type="image/x-icon" href="../static/img/wone.ico">
     <style>
         *{
             margin: 0;
@@ -196,7 +198,7 @@
                 console.log(result)
             })
         }
-        function postTimeline(time,content){
+        function postTimeline(time,content,cb){
             data={
                 time,
                 content,
@@ -204,9 +206,10 @@
             }
             Interactive.XHRSave(data,function(){
                 console.log('success')
+                cb()
             })
         }
-        function modifyTimeline(time,content,key){
+        function modifyTimeline(time,content,key,cb){
             data={
                 time,
                 content,
@@ -215,6 +218,7 @@
             }
             Interactive.XHRUpdate(data,function(){
                 console.log('success')
+                cb()
             })
         }
         function render(data_obj,focus=false) {
@@ -259,6 +263,7 @@
                 let i2=document.createElement('i');
                 let i3=document.createElement('i');
                 let i5=document.createElement('i');
+                i5.setAttribute('class','layui-icon layui-icon-release');
                 i2.setAttribute('class','layui-icon layui-icon-edit');
                 i3.setAttribute('class','layui-icon layui-icon-delete');
                 i2.addEventListener('click',function () {
@@ -273,20 +278,29 @@
                     ul.removeChild(li)
                 })
                 i5.addEventListener('click',function (e) {
+                    let classname = i5.className
+                    i5.className += " color_switch_loading"
                     p.contentEditable=false;
                     h3.contentEditable=false;
                     time = e.target.parentElement.parentElement.querySelector('h3').innerText;
                     content = e.target.parentElement.parentElement.querySelector('p').innerText;
                     if (modify) {
-                        modifyTimeline(time,content,data_obj['timeline_id'])
+                        modifyTimeline(time,content,data_obj['timeline_id'],()=>{
+                            i5.style.display = 'none'
+                            i5.className = classname
+                        })
                     }else{
-                        postTimeline(time,content);
+                        postTimeline(time,content,()=>{
+                            //i5.style.display = 'none'
+                            //i5.className = classname
+                            window.location.reload()
+                        });
                     }
                 });
                 div2.appendChild(i2);
                 div2.appendChild(i3);
                 div2.appendChild(i5);
-                i5.setAttribute('class','layui-icon layui-icon-release');
+                
                 i5.style.display='none';
                 div1.appendChild(div2);
                 if (focus){
