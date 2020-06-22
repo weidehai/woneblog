@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="../static/layui-v2.5.6/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../static/font/iconfont.css">
     <style>
         *{
             margin: 0;
@@ -28,9 +29,9 @@
             height: 30px;
             display: block;
         }
-        .operation{
+        /*.operation{
             margin-top: -10px;
-        }
+        }*/
         .operation .layui-icon{
             padding-right: 8px;
             cursor: pointer;
@@ -47,12 +48,14 @@
         .layui-timeline-title{
             color: #33FF99 !important;
             font-size: 14px !important;
+            margin-right: 15px;
         }
         .layui-timeline-item:last-child::before{
             display: none !important
         }
-        .test{
+        .content{
             color: #33FFCC;
+            overflow: hidden;
         }
         .layui-icon-loading{
             animation: animation_loading 1s infinite;
@@ -61,6 +64,12 @@
             margin-left: 10px;
             color: #00F7DE;
             float: left;
+        }
+        .icon-fold{
+            cursor: pointer;
+        }
+        .icon-fold:hover{
+            color: #00FF00;
         }
         @media screen and (max-width: 650px){
             .wrapper{
@@ -119,6 +128,8 @@
         let ready_to_fresh=false;
         let modify = false;
         let offset=0,timeline_data=[],content_height=0,client_height=document.documentElement.clientHeight;
+        let document_fragment = document.createDocumentFragment()
+        let ul, tail
         function addTimeline() {
             render({
                 time:"在这里输入时间",
@@ -138,6 +149,8 @@
                 for (let item of timeline_data){
                     render(item)
                 }
+                ul.insertBefore(document_fragment,tail);
+                document_fragment = document.createDocumentFragment();
                 if (result.length<10) {
                     all_data_geted = true
                     loading_hidden("没有更多了")
@@ -164,6 +177,8 @@
                 for (let item of timeline_data){
                     render(item)
                 }
+                ul.insertBefore(document_fragment,tail);
+                document_fragment = document.createDocumentFragment();
                 laflush.content_height = document.documentElement.scrollHeight
                 if (result.length<10) {
                     all_data_geted = true
@@ -203,8 +218,6 @@
             })
         }
         function render(data_obj,focus=false) {
-            let tail = document.getElementById('tail');
-            let ul = document.querySelector('ul');
             let li = document.createElement("li");
             li.setAttribute("class",'layui-timeline-item');
             let i1 = document.createElement("i");
@@ -213,8 +226,33 @@
             let div1 = document.createElement('div');
             div1.setAttribute('class','layui-timeline-content layui-text');
             let h3 = document.createElement("h3");
+            let fold_i = document.createElement('i')
+            let div_head = document.createElement('div')
+            let p = document.createElement('p');
+            p.setAttribute('class','content');
+            //p.style.transition = 'all 2s'
+            div_head.style.marginBottom = '5px'
+            div_head.style.height = '18px'
+            div_head.style.lineHeight = '18px'
+            h3.style.display = 'inline-block'
+            fold_i.setAttribute("class","iconfont icon-fold")
+            fold_i.addEventListener('click',()=>{
+                if (p.style.height==='0px') {
+                    p.style.height = 'auto'
+                    fold_i.style.color = "inherit"
+                }else{
+                    p.style.height = 0;
+                    fold_i.style.color = "#00FF00"
+                }
+            })
             h3.setAttribute('class','layui-timeline-title');
-            div1.appendChild(h3);
+            div_head.appendChild(h3);
+            div_head.appendChild(fold_i);
+            div1.appendChild(div_head);
+            li.appendChild(i1);
+            li.appendChild(div1);
+            h3.innerText=data_obj.time;
+            p.innerText = data_obj.content
             if(admin){
                 let div2 = document.createElement('div');
                 div2.setAttribute('class',"operation");
@@ -251,23 +289,24 @@
                 i5.setAttribute('class','layui-icon layui-icon-release');
                 i5.style.display='none';
                 div1.appendChild(div2);
+                if (focus){
+                    i5.style.display='inline'
+                }
             }
-            let p = document.createElement('p');
-            p.setAttribute('class','test');
-            li.appendChild(i1);
-            li.appendChild(div1);
-            h3.innerText=data_obj.time;
             div1.appendChild(p);
-            p.innerText = data_obj.content
-            ul.insertBefore(li,tail);
-            if (focus){
+            if (focus) {
+                ul.insertBefore(li,tail);
                 p.contentEditable=true;
                 h3.contentEditable=true;
                 h3.focus()
+            }else{
+                document_fragment.appendChild(li)    
             }
         }
         window.onload=function () {
             firstGet()
+            ul = document.querySelector('ul');
+            tail = document.getElementById('tail');
         };
     </script>
 </body>

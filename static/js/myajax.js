@@ -31,7 +31,7 @@ var Interactive = {
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4) {
 				var str = xhr.responseText
-				console.log(str)
+				//console.log(str)
 				var obj = eval('(' + str + ')')
 				cb(obj)
 			}

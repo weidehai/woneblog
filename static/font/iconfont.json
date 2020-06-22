@@ -6,11 +6,11 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "5746739",
-      "name": "加载",
-      "font_class": "load",
-      "unicode": "e618",
-      "unicode_decimal": 58904
+      "icon_id": "11402542",
+      "name": "折叠1",
+      "font_class": "fold",
+      "unicode": "e94c",
+      "unicode_decimal": 59724
     },
     {
       "icon_id": "1440911",
