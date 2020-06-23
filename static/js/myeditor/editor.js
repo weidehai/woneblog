@@ -63,6 +63,8 @@ var Editor = {
 	eventListen:function(){
 		var h2 = document.getElementById('h2')
 		var h1 = document.getElementById('h1')
+		var quote = document.getElementById('quote')
+		var clear = document.getElementById('clear')
 		var list = document.getElementById('list')
 		var link = document.getElementById('link')
 		var linkbt = document.getElementById('insertL')
@@ -133,6 +135,8 @@ var Editor = {
 		}
 		h1.addEventListener('click',stylecmd.formatblockH1)
 		h2.addEventListener('click',stylecmd.formatblockH2)
+		quote.addEventListener('click',stylecmd.formatblockquote)
+		clear.addEventListener('click',stylecmd.clearformat)
 		list.addEventListener('click',stylecmd.insertList)
 		linkbt.addEventListener('click',stylecmd.insertlink)
 		file.addEventListener('change',Editor.upload)

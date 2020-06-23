@@ -1,5 +1,6 @@
-from flask import request, render_template, Response, jsonify, session
-from database import my_articles, my_comments, my_admin
+from flask import request, render_template, Response, jsonify
+from database import my_articles, my_comments
+from observer import updateob
 
 
 class ArticlesDetail:
@@ -10,6 +11,7 @@ class ArticlesDetail:
         self.__addGetMain__()
         self.__addGetComment__()
         self.__addDelComment__()
+        updateob.add(self.articleUpdateObserver)
 
     def __addArticleDetails__(self):
         @self.app.route('/articledetails')
@@ -79,5 +81,13 @@ class ArticlesDetail:
             post_key = request.args.get('id')
             offset = request.args.get('offset')
             return jsonify(my_comments.query_comment(post_key, offset))
+
+    def articleUpdateObserver(self, article_id):
+        print("update cache")
+        self.cache.delete(article_id)
+
+
+
+
 
 

@@ -1,5 +1,6 @@
 from flask import request, jsonify, session, json
 from database import my_articles,my_comments,my_timeline
+from observer import updateob
 import time
 import pymysql
 import os
@@ -88,6 +89,8 @@ class Interface:
             del data['table']
             del data["post_key"]
             tables[table].update_data(where, **data)
+            for item in updateob.observerlist:
+                item(where)
             return 'post success'
 
     def __addUpload__(self):

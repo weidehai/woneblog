@@ -7,6 +7,12 @@ var stylecmd = {
 		document.execCommand('formatblock',false,'H2')
 		editorCursor.saveRange()
 	},
+	clearformat: function(){
+		document.execCommand("formatblock",false,'p')
+	},
+	formatblockquote:function(){
+		document.execCommand('formatblock',false,'BLOCKQUOTE')
+	},
 	insertList: function() {
 		document.execCommand('insertUnorderedList',false,null)
 		editorCursor.saveRange()

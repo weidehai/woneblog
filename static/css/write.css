@@ -185,6 +185,13 @@ textarea {
 	margin:0;
 }
 
+blockquote{
+	padding: 5px;
+	border-left:2px green solid;
+	background-color: #eee;
+	color: orange;
+}
+
 pre {
 	margin:0;
 	padding: 8px;

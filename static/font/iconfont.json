@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "3722924",
+      "name": "引用",
+      "font_class": "quote",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "15172708",
+      "name": "清除样式",
+      "font_class": "clear",
+      "unicode": "e718",
+      "unicode_decimal": 59160
+    },
+    {
       "icon_id": "11402542",
       "name": "折叠1",
       "font_class": "fold",
