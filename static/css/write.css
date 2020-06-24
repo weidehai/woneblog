@@ -116,7 +116,6 @@ body {
 	display: inline-block;
 }
 
-
 select {
 	margin-bottom:20px;
 	width: 100px;
@@ -277,6 +276,7 @@ img {
 		display: inline-block;
 	}
 
+	/*不显示滚动条，需要兼容其他浏览器*/
 	.stylemenu_wrapper::-webkit-scrollbar{
 		display: none;
 	} 

@@ -6,7 +6,7 @@
 			editorCursor.selection = document.getSelection()
 			editorCursor.nowRange = editorCursor.selection.getRangeAt(0)
 			console.log(editorCursor.nowRange)
-			console.log(editorCursor.selection)
+			//console.log(editorCursor.selection)
 		}catch{}
 	},
 	restoreRange: function(){

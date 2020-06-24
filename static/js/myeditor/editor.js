@@ -26,7 +26,12 @@ var Editor = {
     	Editor.editor.addEventListener('keyup',editorKeyControl.editorKeyup)
 		Editor.editor.addEventListener("mouseup",Editor.updatePreStatus)
 		Editor.editor.addEventListener("mousedown",editorCursor.saveRange)
-		Editor.editor.addEventListener('blur',editorCursor.saveRange)
+		Editor.editor.addEventListener("input",editorCursor.saveRange)
+		Editor.editor.addEventListener('blur',()=>{
+			var status = document.getElementsByClassName('code_status')
+			status[0].style.display = 'none'
+			editorCursor.saveRange
+		})
 		Editor.disableFocus()
 		Editor.eventListen()
 	},
@@ -215,7 +220,7 @@ var Editor = {
 	get_deep_lastchild:function(targetElement){
 		lastele = targetElement.lastChild
 		if (lastele) {
-			lastele = editorU.get_deep_lastchild(lastele)
+			lastele = Editor.get_deep_lastchild(lastele)
 			return lastele
 		}
 		return targetElement
@@ -249,7 +254,7 @@ var Editor = {
 	},
 	exit_code:function(el){
 		if (el.nextSibling) {  //如果active_pre有下一个兄弟元素就直接跳到下一个兄弟元素
-			var endnode = editorU.get_deep_lastchild(el.parentNode)
+			var endnode = Editor.get_deep_lastchild(el.parentNode)
 			try{
 				var offset = endnode.nodeValue.length
 			}catch{
