@@ -90,7 +90,10 @@ class Interface:
             del data["post_key"]
             tables[table].update_data(where, **data)
             for item in updateob.observerlist:
-                item(where)
+                try:
+                    item(where)
+                except:
+                    pass
             return 'post success'
 
     def __addUpload__(self):

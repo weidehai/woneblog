@@ -105,11 +105,17 @@ body {
 	transform: translate(-50%,-50%);
 	width: 40%;	
 	max-width: 350px;
+	display: none;
 }
 .uploading {
 	height: 5px;
 	background-color: green;
 }
+
+.stylemenu_wrapper{
+	display: inline-block;
+}
+
 
 select {
 	margin-bottom:20px;
@@ -260,4 +266,18 @@ img {
 		width: 90%;
 		margin: auto;
 	}
+}
+
+@media screen and (max-width: 450px) {
+	.stylemenu_wrapper{
+		width: 240px;
+		overflow: hidden;
+		overflow-x: scroll;
+		white-space: nowrap;
+		display: inline-block;
+	}
+
+	.stylemenu_wrapper::-webkit-scrollbar{
+		display: none;
+	} 
 }

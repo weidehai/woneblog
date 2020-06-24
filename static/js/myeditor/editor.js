@@ -237,12 +237,14 @@ var Editor = {
 		},function(e){
 			var total_lenght = uploading_wrapper.clientWidth
 			console.log(total_lenght)
+			uploading_wrapper.style.display = 'block'
 			suspension.style.display="block"
 			ratio = e.loaded/e.total
 			percent.innerText = (ratio * 100).toFixed(2) + "%"
 			uploading.style.width = ratio * total_lenght + 'px'
 		},function(){
 			suspension.style.display="none"
+			uploading_wrapper.style.display = 'none'
 		})
 	},
 	exit_code:function(el){

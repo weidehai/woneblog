@@ -11,8 +11,10 @@ window.onload = function() {
 }
 
 function first_get(){
+	manager_loading.style.display = 'block'
 	Interactive.XHRApart('articles','article_title,article_time,article_tag,post_key','article_time',offset,10,(result)=>{
 		render(result)
+		manager_loading.style.display = 'none'
 		if (result.length < 10) {
 			end = true
 			return
@@ -80,7 +82,6 @@ function pagebtn_init(){
 		current_page++
 		console.log(current_page,page_num)
 		offset = offset + num
-		manager_loading.style.display = 'block'
 		get_info()
 		page_active.style.backgroundColor = '#409eff'
 		pagebtn[current_page-1].style.backgroundColor = "gray"
@@ -91,7 +92,6 @@ function pagebtn_init(){
 	function previous_page() {
 		current_page--
 		offset = offset - num
-		manager_loading.style.display = 'block'
 		get_info()
 		page_active.style.backgroundColor = '#409eff'
 		pagebtn[current_page-1].style.backgroundColor = "gray"
@@ -142,7 +142,6 @@ function render(result){
 		let text3 = document.createTextNode(result[i]['article_time'])
 		let text4 = document.createTextNode('编辑')
 		let text5 = document.createTextNode('删除')
-
 		li1.setAttribute('style','width:52%;')
 		li2.setAttribute('style','width:16%;')
 		li3.setAttribute('style','width:16%;')
@@ -181,12 +180,14 @@ function render(result){
 		//这里可以使用document.createDocumentFragment()来创建一个文档片段。先将节点放在文档片段中在统一渲染，避免直接插入dom造成多次渲染
 		main.appendChild(ul)
 	}
-	manager_loading.style.display = "none"
+	
 }
 function get_info() {
+	manager_loading.style.display = 'block'
 	Interactive.XHRApart('articles','article_title,article_time,article_tag,post_key','article_time',offset,num,(result)=>{
 		document.querySelector('main').innerHTML = ""
 		render(result)
+		manager_loading.style.display = "none"
 		//console.log(result.length,offset,num)
 		if (result.length<num) {
 			end = true
@@ -194,9 +195,4 @@ function get_info() {
 		}
 
 	})
-}
-
-
-function eventListen(){
-	
 }

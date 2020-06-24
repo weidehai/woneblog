@@ -125,6 +125,7 @@ a:active {color: inherit;}
 	display: flex;
 	flex-direction: column;
 	flex: 1;
+	overflow: hidden;
 }
 .post{
 	flex: 1;
