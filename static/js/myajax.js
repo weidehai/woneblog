@@ -91,7 +91,7 @@ var Interactive = {
 		}
 		xhr.send(file)
 	},
-	XHRUnload:function(file){
+	XHRDelFile:function(file){
 		var xhr = Interactive.creatXHR()
 		xhr.open('post','/deletefile',true);
 		xhr.setRequestHeader("Content-type","application/json;charset=utf-8");

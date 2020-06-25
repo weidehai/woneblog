@@ -93,6 +93,8 @@ var Editor = {
 				let data = Editor.getContent()
 				let post_key = data["post_key"]
 				Editor.submited = true
+				console.log(data.article_content)
+				Editor.diff_file(data.article_content)
 				Interactive.XHRUpdate(data,function(result){
 					window.location.href = `/articledetails?id=${post_key}`
 				})
@@ -104,6 +106,7 @@ var Editor = {
 				title.disabled = ""
 				tags.disabled = ""
 				Editor.editor.innerHTML = result[0]['article_content']
+				Editor.get_filelist(result[0]['article_content'])
 				title.setAttribute('value',result[0]['article_title'])
 				Editor.article_tag = result[0]['article_tag']
 				for (let i=tags.options.length-1;i>0;i--){
@@ -119,6 +122,7 @@ var Editor = {
 				let data = Editor.getContent()
 				let post_key = data["post_key"]
 				Editor.submited = true
+				Editor.diff_file(data.article_content)
 				Interactive.XHRSave(data,function(result){
 					let xhr = Interactive.creatXHR()
 					xhr.open("GET",`/updatearticlenum?tag_name=${data['article_tag']}&operation=add`,true)
@@ -236,9 +240,9 @@ var Editor = {
 		formdata.append('file',f)
 		e.target.value = null
 		Interactive.XHRUpload(formdata,function(result){
-			stylecmd.insertfile(result)
 			Editor.filelist.push(result.substring(2))
-			console.log(Editor.filelist)  
+			stylecmd.insertfile(result)
+			console.log(Editor.filelist)
 		},function(e){
 			var total_lenght = uploading_wrapper.clientWidth
 			console.log(total_lenght)
@@ -251,6 +255,27 @@ var Editor = {
 			suspension.style.display="none"
 			uploading_wrapper.style.display = 'none'
 		})
+	},
+	get_filelist:function(content){
+		let find_file = /(\.+?(\\|\/)static(\\|\/)upload(\\|\/)\S+)">/g
+		for(let file of content.matchAll(find_file)){
+			console.log(file[1])
+			Editor.filelist.push(file[1])
+		}
+		console.log(Editor.filelist)
+		console.log(content.matchAll(find_file))
+		console.log(find_file.test(content))
+	},
+	diff_file:function(content){
+		for(let index in Editor.filelist){
+			console.log(content.search(Editor.filelist[index]))
+			if (content.search(Editor.filelist[index]) !== -1) {
+				Editor.filelist.splice(index,1)
+			}
+		}
+		if (Editor.filelist.length !== 0) {
+			Interactive.XHRDelFile(JSON.stringify({filelist:Editor.filelist}))
+		}
 	},
 	exit_code:function(el){
 		if (el.nextSibling) {  //如果active_pre有下一个兄弟元素就直接跳到下一个兄弟元素
