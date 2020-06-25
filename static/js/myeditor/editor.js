@@ -267,9 +267,10 @@ var Editor = {
 		console.log(find_file.test(content))
 	},
 	diff_file:function(content){
+		console.log(content)
 		for(let index in Editor.filelist){
-			console.log(content.search(Editor.filelist[index]))
-			if (content.search(Editor.filelist[index]) !== -1) {
+			console.log(content.indexOf(Editor.filelist[index]))
+			if (content.indexOf(Editor.filelist[index]) !== -1) {
 				Editor.filelist.splice(index,1)
 			}
 		}
