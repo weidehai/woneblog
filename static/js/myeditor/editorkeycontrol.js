@@ -5,7 +5,7 @@ var editorKeyControl = {
 		e.stopPropagation()
 
 		//检查光标是否在代码区内，如果在则对换行做特殊处理
-		var active_pre = editorCursor.isCursorInCodeblock_byNowRange()
+		var active_pre = Editor.code.isCursorInCodeblock_byNowRange()
 		//var active_pre_byattr = editorCursor.nodeSelect()
 		//var active_pre = active_pre_byattr?active_pre_byattr:active_pre_byrecu
 		if (active_pre) {
@@ -35,6 +35,6 @@ var editorKeyControl = {
 	editorKeyup:function(){
 		var prevent_editor_deltoempty = Editor.prevent_editor_deltoempty.bind(this)
 		prevent_editor_deltoempty()
-		Editor.updatePreStatus()
+		Editor.code.updatePreStatus()
 	}
 }

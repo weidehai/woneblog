@@ -114,6 +114,7 @@ body {
 
 .stylemenu_wrapper{
 	display: inline-block;
+	user-select: none;
 }
 
 select {
@@ -197,6 +198,18 @@ blockquote{
 	color: orange;
 }
 
+table{
+	border-collapse: collapse;
+	margin:auto;
+}
+
+table td{
+	border:1px solid #CDDC39;
+	min-width: 20px;
+	padding: 5px;
+	word-break: break-all;
+}
+
 pre {
 	margin:0;
 	padding: 8px;
@@ -266,6 +279,23 @@ img {
 		margin: auto;
 	}
 }
+
+@media screen and (max-width: 1090px) {
+	.stylemenu_wrapper{
+		width: 500px;
+		overflow: hidden;
+		overflow-x: scroll;
+		white-space: nowrap;
+		display: inline-block;
+	}
+
+	/*不显示滚动条，需要兼容其他浏览器*/
+	.stylemenu_wrapper::-webkit-scrollbar{
+		display: none;
+	} 
+}
+
+
 
 @media screen and (max-width: 450px) {
 	.stylemenu_wrapper{

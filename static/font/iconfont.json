@@ -6,6 +6,69 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "13776518",
+      "name": "后插入行",
+      "font_class": "inset_table_row_behind",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "13777045",
+      "name": "后插入列",
+      "font_class": "insert_table_col_behind",
+      "unicode": "e61f",
+      "unicode_decimal": 58911
+    },
+    {
+      "icon_id": "104665",
+      "name": "左对齐",
+      "font_class": "justify_left",
+      "unicode": "e7a5",
+      "unicode_decimal": 59301
+    },
+    {
+      "icon_id": "6674685",
+      "name": "删除行",
+      "font_class": "remove_table_row",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "9686243",
+      "name": "删除列",
+      "font_class": "remove_table_col",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "11664263",
+      "name": "居中对齐",
+      "font_class": "justify_center",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "12723877",
+      "name": "表格",
+      "font_class": "table",
+      "unicode": "e695",
+      "unicode_decimal": 59029
+    },
+    {
+      "icon_id": "13777055",
+      "name": "前插入列",
+      "font_class": "insert_table_col_front",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "13777059",
+      "name": "前插入行",
+      "font_class": "insert_table_row_front",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
       "icon_id": "3722924",
       "name": "引用",
       "font_class": "quote",

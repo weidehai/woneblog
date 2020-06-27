@@ -177,6 +177,8 @@ class DataBase:
         return DataBase.operation[method](sql)
 
 
+
+
 class Table(DataBase):
     def __init__(self, table_name, primary_key):
         self.table_name = table_name

@@ -126,4 +126,3 @@ class Interface:
                 return "delete success"
             else:
                 return 'illegal operation'
-
