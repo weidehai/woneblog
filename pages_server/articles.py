@@ -35,6 +35,7 @@ class ArticlesDetail:
                                                             'update_time'])[0]
                 print(data)
                 previous_article = my_articles.get_previous(data['article_id'])
+                print(previous_article)
                 next_article = my_articles.get_next(data['article_id'])
                 my_articles.update_data(article_id, article_read=str(data['article_read'] + 1))
                 data['article_read'] = data['article_read']+1
@@ -55,8 +56,8 @@ class ArticlesDetail:
                 print("get from cache.....")
                 return render_template('articledetails.html',
                                        article=has_cache_data['data'],
-                                       previous=has_cache_data['previous'],
-                                       next=has_cache_data['next'])
+                                       previous=has_cache_data['previous'] and has_cache_data['previous'][0]['post_key'] or 0,
+                                       next=has_cache_data['next'] and has_cache_data['next'][0]['post_key'] or 0)
 
     def __addDelComment__(self):
         @self.app.route('/commentdel')

@@ -284,7 +284,7 @@ Editor.file = {
 	},
 	get_filelist:function(content){
 		let find_file = /(\.(\\|\/)static(\\|\/)upload(\\|\/)\S+?)(?=">)/g
-		Editor.file.filelist = content.match(find_file)
+		Editor.file.filelist = content.match(find_file) || []
 		// try{
 		// 	for(let file of content.match(find_file)){
 		// 		console.log(file)
