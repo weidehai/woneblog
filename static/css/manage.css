@@ -11,7 +11,7 @@
 }
 
 
-li {
+.wrapper li {
 	float: left;
 	list-style: none;
 	white-space: nowrap;
@@ -30,9 +30,10 @@ li {
 	clear: both;
 }
 
-ul {
+.wrapper ul {
 	padding:0px;
 }
+
 
 button {
 	border: none;
@@ -49,21 +50,79 @@ button:hover {
 	color: black;
 }
 
-#write{
+#suspende_menu{
 	/*消除移动端点击黑色背景*/
 	-webkit-tap-highlight-color:transparent;
 	position: fixed;
-	left:2rem;
-	top: 90%;
+	left:10px;
+	top: 10px;
 	cursor: pointer;
 	user-select: none;
+	height: 32px;
+	overflow: hidden;
 }
+
+#suspende_menu ul{
+	list-style: none;
+}
+
+#suspende_menu li{
+	padding:5px 5px 5px 5px;
+	background-color: #00bcd4;
+}
+
+.vhcenter{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+}
+
+#menu_2, #menu_3{
+	display: none;
+	width: 95%;
+	text-align:center;
+	justify-content: center;
+}
+
+#menu_2 select{
+	border:1px black solid;
+	padding: 5px;
+	max-width: 500px;
+	flex: 1;
+}
+
+#menu_2 select option{
+	font-size: 17px;
+}
+
+#menu_3 input{
+	padding: 5px;
+	max-width: 500px;
+	border-radius:2px;
+	border:1px solid #8bc34a;
+	height: 25px;
+}
+
+
+
+#suspende_menu li:hover{
+	background-color: #0094d4;
+}
+#suspende_menu li:first-child{
+	border-radius:3px 3px 0 0;
+}
+#suspende_menu li:last-child{
+	border-radius:0 0 3px 3px;
+}
+
+
 
 #page{
 	display: none;
 	justify-content: center;
 	margin-bottom:15px;
-	 -webkit-tap-highlight-color:transparent;
+	-webkit-tap-highlight-color:transparent;
 }
 
 #page div{
@@ -83,12 +142,12 @@ button:hover {
 	background-color: gray;
 }
 
-.icon-write{
+.icon-navlist{
 	font-size: 30px !important;
 	margin-right: 5px;
 }
 
-#write span{
+#suspende_menu span{
 	font-size: 20px;
 	display: inline-block;
 	vertical-align: middle;

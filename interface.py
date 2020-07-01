@@ -59,7 +59,8 @@ class Interface:
     def __addSave__(self):
         @self.app.route('/save', methods=["POST"])
         def save():
-            if session.get('user_level') != 777:
+            save_type = request.args.get("type")
+            if session.get('user_level') != 777 and save_type == "post":
                 return "illegal access!!!!!!!!!!"
             data = json.loads(request.get_data())
             for key, value in data.items():

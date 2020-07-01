@@ -10,21 +10,42 @@
     <link rel="icon" type="image/x-icon" href="../static/img/wone.ico">
 </head>
 <body>
-	<div class="wrapper">
-		<ul>
-			<li style="width: 52%">标题</li>
-			<li style="width: 16%">分类</li>
-			<li style="width: 16%">时间</li>
-			<li style="width: 16%">操作</li>
+	<div id="menu_1">
+		<div class="wrapper">
+			<ul>
+				<li style="width: 52%">标题</li>
+				<li style="width: 16%">分类</li>
+				<li style="width: 16%">时间</li>
+				<li style="width: 16%">操作</li>
+			</ul>
+			<main></main>
+		</div>
+		<div id="page" total="{{article_num}}">
+			<div id="previous_page"><i class="iconfont icon-previous"></i></div>
+			<div id="next_page"><i class="iconfont icon-next"></i></div>
+		</div>
+	</div>
+	<div id="menu_2" class="vhcenter">
+		<select>
+			{% for tag in tags %}
+			<option>{{tag["tag_name"]}}</option>
+			{% endfor %}
+		</select>
+		<input type="button" value="新增" style="width: 72px;height: 30px;cursor: pointer;margin-left: 10px;">
+	</div>
+	<div id="menu_3" class="vhcenter">
+		<input type="text" placeholder="写下你此刻的心情" style="flex: 1;">
+		<input type="button" value="确认" style="width: 72px;height: 36px;cursor: pointer;margin-left: 10px;">
+	</div>
+	<div id="suspende_menu">
+		<span class="iconfont icon-navlist"></span><span>菜单</span>	
+		<ul id="menus">
+			<li id="write">写文章</li>
+			<li id="blogs">博客列表</li>
+			<li id="lable">标签管理</li>
+			<li id="mood">心情</li>
+			<li id="home">返回主页</li>
 		</ul>
-		<main></main>
-	</div>
-	<div id="page" total="{{article_num}}">
-		<div id="previous_page"><i class="iconfont icon-previous"></i></div>
-		<div id="next_page"><i class="iconfont icon-next"></i></div>
-	</div>
-	<div id="write">
-		<span class="iconfont icon-write"></span><span>写文章</span>
 	</div>
     <div class="myloading_1"></div>
 	<script type="text/javascript" src="../static/js/myajax.js"></script>

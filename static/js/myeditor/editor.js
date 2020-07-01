@@ -132,7 +132,7 @@ var Editor = {
 				let post_key = data["post_key"]
 				Editor.submited = true
 				Editor.file.diff_file(data.article_content)
-				Interactive.XHRSave(data,function(result){
+				Interactive.XHRSave(data,'post',function(result){
 					let xhr = Interactive.creatXHR()
 					xhr.open("GET",`/updatearticlenum?tag_name=${data['article_tag']}&operation=add`,true)
 					xhr.onreadystatechange = function(){

@@ -25,7 +25,6 @@ var Interactive = {
 	XHRApart: function(table,fields,order,offset,num,cb) {
 		var xhr = Interactive.creatXHR()
 		var myurl = `/getapart?table=${table}&fields=${fields}&order=${order}&offset=${offset}&num=${num}`
-		console.log(myurl)
 		xhr.open('get',myurl,true)
 		xhr.send(null)
 		xhr.onreadystatechange = function() {
@@ -53,9 +52,9 @@ var Interactive = {
 			}
 		}
 	},
-	XHRSave: function(data,cb) {
+	XHRSave: function(data,type,cb) {
 		var xhr = Interactive.creatXHR()
-		xhr.open('post','/save',true);
+		xhr.open('post',`/save?type=${type}`,true);
 		xhr.setRequestHeader("Content-type","application/json;charset=utf-8");
 		var data = JSON.stringify(data)
 		xhr.send(data)

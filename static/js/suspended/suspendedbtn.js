@@ -2,6 +2,7 @@ function coordinate(element){
 	this.flag = false
 	this.el = element
 	this.el.computed_style = window.getComputedStyle(element)
+	this.el.show = false
 	this.el.m_p_b_height = parseInt(this.el.computed_style.height) + parseInt(this.el.computed_style.marginTop) + parseInt(this.el.computed_style.marginBottom) + parseInt(this.el.computed_style.borderBottomWidth) + parseInt(this.el.computed_style.borderTopWidth)
 	this.el.m_p_b_width = parseInt(this.el.computed_style.width) + parseInt(this.el.computed_style.marginLeft) + parseInt(this.el.computed_style.marginRight) + parseInt(this.el.computed_style.borderLeftWidth) + parseInt(this.el.computed_style.borderRightWidth)
 	this.time = 0
@@ -66,7 +67,8 @@ coordinate.prototype.mouseup=function(){
 	if (dtime>150) {
 		this.el.onclick = null
 	}else{
-		SuspendedBtn.register_write()
+		//SuspendedBtn.register_write()
+		SuspendedBtn.pop_menu(this.el)
 	}
 	document.body.removeEventListener('mousemove',this.__newev__)
 	document.body.removeEventListener('touchmove',this.__newev__)
@@ -74,17 +76,60 @@ coordinate.prototype.mouseup=function(){
 
 
 var SuspendedBtn={
-	register_write: function (){
-		var write = document.getElementById('write')
-		window.location.href = '/publish'
+	register_menu: function (){
+		var menus = document.getElementById('menus')
+		console.log(menus)
+		var menu_1 = document.getElementById('menu_1')
+		var menu_2 = document.getElementById('menu_2')
+		var menu_3 = document.getElementById('menu_3')
+		menus.addEventListener("click",(e)=>{
+			console.log(e)
+			let menu = e.srcElement.id
+			console.log(menu)
+			switch (menu){
+				case "blogs":
+					menu_1.style.display='block'
+					menu_3.style.display='none'
+					menu_2.style.display='none'
+					break
+				case "write":
+					window.location.href = '/publish'
+					break
+				case "lable":
+					menu_1.style.display='none'
+					menu_3.style.display='none'
+					menu_2.style.display='flex'
+					break
+				case "mood":
+					menu_1.style.display='none'
+					menu_2.style.display='none'
+					menu_3.style.display='flex'
+					break
+				case "home":
+					window.location.href="/"
+					break
+			}
+				
+		})
+		
+	},
+	pop_menu:function(element){
+		console.log('click')
+		if(element.show){
+			element.style.overflow = 'hidden'
+			element.show = false
+		}else{
+			element.style.overflow = 'inherit'
+			element.show = true
+		}
 	},
 	suspended: function (){
-		var write = document.getElementById('write')
-		mycoordinate = new coordinate(write)
-		write.addEventListener('mousedown',mycoordinate.mousedown.bind(mycoordinate),false)
-		write.addEventListener('mouseup',mycoordinate.mouseup.bind(mycoordinate),false)
-		write.addEventListener('touchstart',mycoordinate.mousedown.bind(mycoordinate),false)
-		write.addEventListener('touchend',mycoordinate.mouseup.bind(mycoordinate),false)
+		var suspende_menu = document.getElementById('suspende_menu')
+		mycoordinate = new coordinate(suspende_menu)
+		suspende_menu.addEventListener('mousedown',mycoordinate.mousedown.bind(mycoordinate),false)
+		suspende_menu.addEventListener('mouseup',mycoordinate.mouseup.bind(mycoordinate),false)
+		suspende_menu.addEventListener('touchstart',mycoordinate.mousedown.bind(mycoordinate),false)
+		suspende_menu.addEventListener('touchend',mycoordinate.mouseup.bind(mycoordinate),false)
 	},
 	
 }

@@ -159,7 +159,7 @@
                     return
                 }
                 offset = offset + 10
-                content_height = document.documentElement.scrollHeight
+                content_height = document.documentElement.scrollHeight || document.body.scrollHeight
                 if (content_height<client_height) {
                     firstGet()
                 }else{
@@ -204,7 +204,7 @@
                 content,
                 table: "timeline"
             }
-            Interactive.XHRSave(data,function(){
+            Interactive.XHRSave(data,"post",function(){
                 console.log('success')
                 cb()
             })
@@ -309,7 +309,7 @@
             }
             div1.appendChild(p);
             if (focus) {
-                ul.insertBefore(li,tail);
+                ul.insertBefore(li,ul.firstElementChild);
                 p.contentEditable=true;
                 h3.contentEditable=true;
                 h3.focus()

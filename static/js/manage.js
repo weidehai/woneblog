@@ -6,6 +6,7 @@ window.onload = function() {
 	//console.log(manager_loading)
 	first_get()
 	SuspendedBtn.suspended()
+	SuspendedBtn.register_menu()
 	manager_loading.style.display = "block"
 }
 
