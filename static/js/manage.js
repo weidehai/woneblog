@@ -2,11 +2,23 @@ let num = 10
 let offset = 0
 let end = false
 let manager_loading = document.getElementsByClassName("myloading_1")[0]
+let mood_submit = document.getElementById("mood_submit")
+let mood_text = document.getElementById("mood_text")
+let mood_tail = document.getElementById("mood_tail")
+let mood_tail_text = document.getElementById("mood_tail_text")
+let lable_list = document.getElementById("lable_list")
+let lable = document.getElementById("lable")
+let add_tag_btn = document.getElementById("add_tag")
+let del_tag_btn = document.getElementById("del_tag")
+let new_tag = document.getElementById("new_tag")
+let new_tag_submit = document.getElementById("new_tag_submit")
+let add_new_tag_wrapper = document.getElementById("add_new_tag_wrapper")
 window.onload = function() {
 	//console.log(manager_loading)
 	first_get()
 	SuspendedBtn.suspended()
 	SuspendedBtn.register_menu()
+	addevent()
 	manager_loading.style.display = "block"
 }
 
@@ -194,5 +206,76 @@ function get_info() {
 			return
 		}
 
+	})
+}
+
+
+function addevent(argument) {	
+	mood_submit.addEventListener("click",()=>{
+		let data = {
+			"table":'admin',
+			"mood":mood_text.value,
+			"post_key":1
+		}
+		mood_update(data,mood_text) 
+	})
+	mood_tail.addEventListener("click",()=>{
+		let data = {
+			"table":'admin',
+			"mood_tail":mood_tail_text.value,
+			"post_key":1
+		}
+		mood_update(data,mood_tail_text) 	
+	})
+	lable_list.addEventListener('change',function(){
+		console.log(this)
+		lable.innerText = this.options[this.options.selectedIndex].value
+	})
+	add_tag_btn.addEventListener("click",()=>{
+		add_new_tag_wrapper.style.display = 'flex'
+	})
+	new_tag_submit.addEventListener("click",()=>{
+		let data = {
+			"table":'blogtags',
+			"tag_name":new_tag.value
+		}
+		add_tag(data,new_tag)
+	})
+	del_tag_btn.addEventListener("click",()=>{
+		if (parseInt(lable_list.selectedOptions[0].getAttribute('data-total'))){
+			alert("该标签文章数不为0，无法删除！！！")
+		}else{
+			let id = lable_list.selectedOptions[0].innerText
+			del_tag(id)
+		}
+	})
+}
+
+
+function mood_update(mood,el){
+	Interactive.XHRUpdate(mood,(r)=>{
+		el.value = ""
+	})	
+}
+
+
+function add_tag(data,el) {
+	Interactive.XHRSave(data,"post",()=>{
+		el.value = ""
+		let option = document.createElement("option")
+		option.innerText = data["tag_name"]
+		lable_list.appendChild(option)
+		option.selected = true
+		lable.innerText = data["tag_name"]
+	})
+}
+
+function del_tag(id){
+	Interactive.XHRDel("blogtags",id,()=>{
+		console.log(lable_list.options)
+		previous_index = lable_list.options.selectedIndex-1
+		lable_list.removeChild(lable_list.selectedOptions[0])
+		lable_list.options[previous_index].selected = true
+		lable.innerText = lable_list.options[previous_index].value
 	})
 }

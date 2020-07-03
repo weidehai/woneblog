@@ -83,17 +83,40 @@ button:hover {
 	width: 95%;
 	text-align:center;
 	justify-content: center;
+	flex-direction: column;
+}
+
+#menu_2 div{
+	display: flex;
+	justify-content: center;
+	margin-bottom: 15px;
+	align-items: center;
+}
+
+#menu_3 div{
+	display: flex;
+	justify-content: center;
+	margin-bottom: 15px;
 }
 
 #menu_2 select{
 	border:1px black solid;
 	padding: 5px;
 	max-width: 500px;
+	height: 32px;
 	flex: 1;
 }
 
 #menu_2 select option{
 	font-size: 17px;
+}
+
+#new_tag{
+	padding: 5px;
+	max-width: 488px;
+	border-radius:2px;
+	border:1px solid #8bc34a;
+	height: 22px;
 }
 
 #menu_3 input{

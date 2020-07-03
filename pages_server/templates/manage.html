@@ -26,16 +26,35 @@
 		</div>
 	</div>
 	<div id="menu_2" class="vhcenter">
-		<select>
-			{% for tag in tags %}
-			<option>{{tag["tag_name"]}}</option>
-			{% endfor %}
-		</select>
-		<input type="button" value="新增" style="width: 72px;height: 30px;cursor: pointer;margin-left: 10px;">
+		<div>
+			<select id="lable_list">
+				{% for tag in tags %}
+				<option data-total={{tag["quantity"]}}>{{tag["tag_name"]}}</option>
+				{% endfor %}
+			</select>
+			<input type="button" value="新增" style="width: 72px;height: 30px;cursor: pointer;margin-left: 10px;" id="add_tag">	
+		</div>
+		<div id="add_new_tag_wrapper" style="display:none;">
+			<!-- 需要判断重复 -->
+			<input type="text" placeholder="请输入新增的标签名" style="flex: 1;" id="new_tag">
+			<input type="button" value="确认" style="width: 72px;height: 30px;cursor: pointer;margin-left: 10px;" id="new_tag_submit">
+		</div>
+		<div>
+			<span>当前选中的标签是：</span><span id="lable">javascript</span>
+			<input type="button" value="删除" style="width: 72px;height: 30px;cursor: pointer;margin-left: 20px;" id="del_tag">
+		</div>
 	</div>
 	<div id="menu_3" class="vhcenter">
-		<input type="text" placeholder="写下你此刻的心情" style="flex: 1;">
-		<input type="button" value="确认" style="width: 72px;height: 36px;cursor: pointer;margin-left: 10px;">
+		<div>
+			<input type="text" placeholder="写下你此刻的心情" style="flex: 1;" id="mood_text">
+		    <input type="button" value="确认" style="width: 72px;height: 36px;cursor: pointer;margin-left: 10px;" id="mood_submit">	
+		</div>
+		<div>
+			<!-- 需要限制长度 -->
+			<input type="text" placeholder="添加你的专属小尾巴~" style="flex: 1;flex-wrap: wrap;" id="mood_tail_text">
+		 	<input type="button" value="小尾巴~" style="width: 72px;height: 36px;cursor: pointer;margin-left: 10px;" id="mood_tail">	
+		</div>
+		
 	</div>
 	<div id="suspende_menu">
 		<span class="iconfont icon-navlist"></span><span>菜单</span>	

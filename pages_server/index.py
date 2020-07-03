@@ -22,15 +22,18 @@ class Index:
             print(data)
             projects = Index.getProjects()
             print(projects)
-            visited_num = my_admin.query_field_primary_key(1, ['visited_total'])[0]["visited_total"]
+            admin_info = my_admin.query_field_primary_key(1, ['visited_total', 'mood', 'mood_tail'])[0]
+            visited_num = admin_info['visited_total']
+            mood = admin_info['mood']
+            mood_tail = admin_info['mood_tail']
             if not session.get('user_level'):
                 my_admin.update_data(1, visited_total=str(visited_num+1))
                 session["user_level"] = 444
                 self.app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
                 session.permanent = True
-                return render_template('index.html', articles=data, visited=visited_num+1, projects=projects)
+                return render_template('index.html', articles=data, visited=visited_num+1, projects=projects, mood=mood, tail=mood_tail)
             else:
-                return render_template('index.html', articles=data, visited=visited_num, projects=projects)
+                return render_template('index.html', articles=data, visited=visited_num, projects=projects, mood=mood, tail=mood_tail)
 
     def __addRecently__(self):
         @self.app.route('/getrecently')

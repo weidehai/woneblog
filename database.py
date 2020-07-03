@@ -117,7 +117,7 @@ class Commit:
 
     @staticmethod
     def del_where(table_name, primary_key, where):
-        sql = "delete from %s where %s=%s" % (table_name, primary_key, where)
+        sql = "delete from %s where %s='%s'" % (table_name, primary_key, where)
         Operation.execute_commit(sql)
         return
 
@@ -189,4 +189,4 @@ my_articles = Table("articles", "post_key")
 my_comments = Table("comment", "comment_key")
 my_timeline = Table("timeline", "timeline_id")
 my_admin = Table("admin", "admin_id")
-my_blogtags = Table("blogtags", "id")
+my_blogtags = Table("blogtags", "tag_name")

@@ -36,6 +36,7 @@ var Interactive = {
 			}
 		}
 	},
+	//data: object(key:value)---required:table,post_key
 	XHRUpdate: function(data,cb) {
 		console.log(data)
 		var xhr = Interactive.creatXHR()
@@ -48,10 +49,13 @@ var Interactive = {
 				var r = xhr.responseText
 				if (r=='post success') {
 					cb(r)
+				}else{
+					alert("操作失败！！！")
 				}	
 			}
 		}
 	},
+	//data: object(key:value)
 	XHRSave: function(data,type,cb) {
 		var xhr = Interactive.creatXHR()
 		xhr.open('post',`/save?type=${type}`,true);
@@ -63,7 +67,9 @@ var Interactive = {
 				var r = xhr.responseText
 				if (r=='post success') {
 					cb(r)
-				}	
+				}else{
+					alert("操作失败！！！")
+				}
 			}
 		}
 	},
@@ -105,7 +111,9 @@ var Interactive = {
 				var r = xhr.responseText
 				if (r==='delete success') {
 					cb(r)
-				}	
+				}else{
+					alert("操作失败！！！")
+				}
 			}
 		}
 	},
