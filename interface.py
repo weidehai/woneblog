@@ -1,5 +1,5 @@
 from flask import request, jsonify, session, json
-from database import my_articles,my_comments,my_timeline,my_admin,my_blogtags
+from database import my_articles,my_comments,my_timeline,my_admin,my_blogtags,my_drafts
 from observer import updateob
 import time
 import pymysql
@@ -10,7 +10,8 @@ tables = {
     "comment": my_comments,
     "timeline": my_timeline,
     "admin": my_admin,
-    "blogtags": my_blogtags
+    "blogtags": my_blogtags,
+    "draft": my_drafts
 }
 
 

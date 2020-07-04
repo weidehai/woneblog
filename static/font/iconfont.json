@@ -6,9 +6,16 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "10825018",
+      "name": "草稿",
+      "font_class": "draft",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
       "icon_id": "13776518",
       "name": "后插入行",
-      "font_class": "inset_table_row_behind",
+      "font_class": "insert_table_row_behind",
       "unicode": "e607",
       "unicode_decimal": 58887
     },

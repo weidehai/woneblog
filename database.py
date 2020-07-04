@@ -88,7 +88,7 @@ class Query:
     def query_quantity(table_name):
         # 查询表中有多少条数据
         sql = "select count(*) from %s" % table_name
-        return Operation.execute_query(sql)["count(*)"]
+        return Operation.execute_query(sql)[0]["count(*)"]
 
 
 class Commit:
@@ -190,3 +190,4 @@ my_comments = Table("comment", "comment_key")
 my_timeline = Table("timeline", "timeline_id")
 my_admin = Table("admin", "admin_id")
 my_blogtags = Table("blogtags", "tag_name")
+my_drafts = Table("drafts", "post_key")

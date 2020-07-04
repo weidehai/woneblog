@@ -1,6 +1,7 @@
 let num = 10
 let offset = 0
 let end = false
+let table = "articles"
 let manager_loading = document.getElementsByClassName("myloading_1")[0]
 let mood_submit = document.getElementById("mood_submit")
 let mood_text = document.getElementById("mood_text")
@@ -23,12 +24,16 @@ window.onload = function() {
 }
 
 function first_get(){
+	console.log(table)
 	manager_loading.style.display = 'block'
-	Interactive.XHRApart('articles','article_title,article_time,article_tag,post_key','article_time',offset,10,(result)=>{
+	Interactive.XHRApart(table,'article_title,article_time,article_tag,post_key','article_time',offset,10,(result)=>{
 		render(result)
 		manager_loading.style.display = 'none'
 		if (result.length < 10) {
 			end = true
+			offset = 0
+			console.log(offset,num)
+			pagebtn_init()
 			return
 		}
 		offset = offset + 10
@@ -45,10 +50,21 @@ function first_get(){
 
 function pagebtn_init(){
 	let page = document.getElementById('page')
+	let nav = page.querySelector("nav")
+	if (nav) {
+		page.removeChild(nav)	
+	}
 	let next = document.getElementById('next_page')
-	let previous = document.getElementById('previous_page') 
-	let total = page.getAttribute("total")
+	let previous = document.getElementById('previous_page')
+	let total
+	if (table==="articles") {
+		total = page.getAttribute("data-article_total")	
+	}else{
+		total = page.getAttribute("data-draft_total")
+	}
+	console.log(total)
 	let page_num = Math.ceil(total/num)
+	console.log(page_num)
 	let current_page = 1
 	let next_active = true
 	let previous_active = false
@@ -56,7 +72,10 @@ function pagebtn_init(){
 	let page_active = null
 	//let fragment = document.createDocumentFragment()
 	let div_wrapper = document.createElement('nav')
-	if (page_num<=1) {return}
+	if (page_num<=1) {
+		page.style.display = "none"
+		return
+	}
 	for (let i=1;i<=page_num;i++){
 		let div = document.createElement('div')
 		div.innerText = i
@@ -159,22 +178,31 @@ function render(result){
 		li3.setAttribute('style','width:16%;')
 		li4.setAttribute('style','width:16%;')
 		bt1.addEventListener('click',()=>{
-			window.location.href = `/publish?getid=${result[i]['post_key']}`
+			if (table==="articles") {
+				window.location.href = `/publish?getid=${result[i]['post_key']}`
+			}else{
+				window.location.href = `/publish?draftid=${result[i]['post_key']}`
+			}
+			
 		})
 		bt2.addEventListener('click',()=>{
 			dialog = window.confirm(`您确定要删除 ${result[i]['article_title']} 这篇文章？`)
 			if (dialog) {
-				Interactive.XHRDel('articles',result[i]['post_key'],()=>{
-					let xhr = Interactive.creatXHR()
-					xhr.open("GET",`/updatearticlenum?tag_name=${result[i]['article_tag']}&operation=sub`,true)
-					xhr.onreadystatechange = function(){
-						if (xhr.readyState===4) {
-							if (xhr.responseText==="success") {
-								main.removeChild(bt2.parentElement.parentElement)			
+				Interactive.XHRDel(table,result[i]['post_key'],()=>{
+					if (table==="articles") {
+						let xhr = Interactive.creatXHR()
+						xhr.open("GET",`/updatearticlenum?tag_name=${result[i]['article_tag']}&operation=sub`,true)
+						xhr.onreadystatechange = function(){
+							if (xhr.readyState===4) {
+								if (xhr.responseText==="success") {
+									main.removeChild(bt2.parentElement.parentElement)			
+								}
 							}
 						}
+						xhr.send(null)	
+					}else{
+						main.removeChild(bt2.parentElement.parentElement)
 					}
-					xhr.send(null)
 				})
 			}
 		})
@@ -192,11 +220,10 @@ function render(result){
 		//这里可以使用document.createDocumentFragment()来创建一个文档片段。先将节点放在文档片段中在统一渲染，避免直接插入dom造成多次渲染
 		main.appendChild(ul)
 	}
-	
 }
 function get_info() {
 	manager_loading.style.display = 'block'
-	Interactive.XHRApart('articles','article_title,article_time,article_tag,post_key','article_time',offset,num,(result)=>{
+	Interactive.XHRApart(table,'article_title,article_time,article_tag,post_key','article_time',offset,num,(result)=>{
 		document.querySelector('main').innerHTML = ""
 		render(result)
 		manager_loading.style.display = "none"

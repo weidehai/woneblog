@@ -91,6 +91,11 @@ var SuspendedBtn={
 					menu_1.style.display='block'
 					menu_3.style.display='none'
 					menu_2.style.display='none'
+					if (table !== "articles") {
+						document.querySelector('main').innerHTML = ""
+						table = 'articles'
+						first_get()	
+					}
 					break
 				case "write":
 					window.location.href = '/publish'
@@ -107,6 +112,16 @@ var SuspendedBtn={
 					break
 				case "home":
 					window.location.href="/"
+					break
+				case "draft":
+					menu_1.style.display='block'
+					menu_3.style.display='none'
+					menu_2.style.display='none'
+					if (table !== "draft") {
+						document.querySelector('main').innerHTML = ""
+						table = 'draft'
+						first_get()	
+					}
 					break
 			}
 				

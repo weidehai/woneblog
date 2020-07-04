@@ -83,7 +83,6 @@ var Editor = {
 		var link = document.getElementById('link')
 		var linkbt = document.getElementById('insertL')
 		var file = document.getElementById('file')
-		var submitbt = document.getElementById('submit')
 		var code = document.getElementById('code')
 		var code_status = document.getElementsByClassName('code_status')
 		var suspension = document.getElementsByClassName('suspension')[0]
@@ -92,12 +91,51 @@ var Editor = {
 		var tags = document.getElementById('tags')
 		var linkedit = document.getElementById('linkedit')
 		var linkhref = document.getElementById('linkhref')
-		var where = window.location.search.replace('?getid=','')
+		var post_where = window.location.search.replace('?getid=','')
+		var draft_where = window.location.search.replace('?draftid=','')
 		tags.addEventListener("change",function(){
 			Editor.article_tag = this.options[this.options.selectedIndex].value
 			console.log(Editor.article_tag)
 		})
-		if (where) {
+		Editor.register_submit(post_where)
+		Editor.register_draft(draft_where)
+		h1.addEventListener('click',stylecmd.formatblockH1)
+		h2.addEventListener('click',stylecmd.formatblockH2)
+		table.addEventListener('click',stylecmd.table.insertTable)
+		rowfront.addEventListener('click',stylecmd.table.insertRowFront)
+		colfront.addEventListener('click',stylecmd.table.insertColFront)
+		rowbehind.addEventListener('click',stylecmd.table.insertRowBehind)
+		colbehind.addEventListener('click',stylecmd.table.insertColBehind)
+		removerow.addEventListener("click",stylecmd.table.removeRow)
+		removecol.addEventListener("click",stylecmd.table.removeCol)
+		justifyleft.addEventListener('click',stylecmd.justifyLeft)
+		justifycenter.addEventListener('click',stylecmd.justifyCenter)
+		quote.addEventListener('click',stylecmd.formatblockquote)
+		clear.addEventListener('click',stylecmd.clearformat)
+		list.addEventListener('click',stylecmd.insertList)
+		linkbt.addEventListener('click',stylecmd.insertlink)
+		file.addEventListener('change',Editor.file.upload)
+		code.addEventListener('click',stylecmd.insertCode)
+		link.addEventListener('click',function() {
+			if (linkedit.getAttribute('data-show')==="true") {
+				linkedit.style.display='none'
+				linkedit.setAttribute('data-show',false)
+			}else{
+				linkedit.style.display='block'
+				linkedit.setAttribute('data-show',true)
+				linkhref.focus()
+			}
+		})
+		code_status[0].addEventListener('click',function(){
+			var el = Editor.code.isCursorInCodeblock_byLabelAttr()
+			if (el) {
+				Editor.code.exit_code(el)
+			}
+	    })
+	},
+	register_submit:function(post_where=false){
+		var submitbt = document.getElementById('submit')
+		if (post_where) {
 			submitbt.addEventListener('click',function(){
 				let data = Editor.getContent()
 				let post_key = data["post_key"]
@@ -110,7 +148,7 @@ var Editor = {
 			})
 			suspension.style.display = 'block'
 			loading.style.display = 'block'
-			Interactive.XHRQuery('articles','article_title,article_tag,article_content',where,(result)=>{
+			Interactive.XHRQuery('articles','article_title,article_tag,article_content',post_where,(result)=>{
 				Editor.editor.setAttribute("contenteditable","true")
 				title.disabled = ""
 				tags.disabled = ""
@@ -152,39 +190,58 @@ var Editor = {
 			Editor.editor.focus()
 			editorCursor.saveRange()
 		}
-		h1.addEventListener('click',stylecmd.formatblockH1)
-		h2.addEventListener('click',stylecmd.formatblockH2)
-		table.addEventListener('click',stylecmd.table.insertTable)
-		rowfront.addEventListener('click',stylecmd.table.insertRowFront)
-		colfront.addEventListener('click',stylecmd.table.insertColFront)
-		rowbehind.addEventListener('click',stylecmd.table.insertRowBehind)
-		colbehind.addEventListener('click',stylecmd.table.insertColBehind)
-		removerow.addEventListener("click",stylecmd.table.removeRow)
-		removecol.addEventListener("click",stylecmd.table.removeCol)
-		justifyleft.addEventListener('click',stylecmd.justifyLeft)
-		justifycenter.addEventListener('click',stylecmd.justifyCenter)
-		quote.addEventListener('click',stylecmd.formatblockquote)
-		clear.addEventListener('click',stylecmd.clearformat)
-		list.addEventListener('click',stylecmd.insertList)
-		linkbt.addEventListener('click',stylecmd.insertlink)
-		file.addEventListener('change',Editor.file.upload)
-		code.addEventListener('click',stylecmd.insertCode)
-		link.addEventListener('click',function() {
-			if (linkedit.getAttribute('data-show')==="true") {
-				linkedit.style.display='none'
-				linkedit.setAttribute('data-show',false)
-			}else{
-				linkedit.style.display='block'
-				linkedit.setAttribute('data-show',true)
-				linkhref.focus()
-			}
-		})
-		code_status[0].addEventListener('click',function(){
-			var el = Editor.code.isCursorInCodeblock_byLabelAttr()
-			if (el) {
-				Editor.code.exit_code(el)
-			}
-	    })
+	},
+	register_draft:function(draft_where=false){
+		var draft = document.getElementById('draft')
+		if (draft_where) {
+			draft.addEventListener('click',function(){
+				let data = Editor.getContent()
+				delete data.article_read
+				delete data.text_for_search
+				delete data.update_time
+				data.table = "draft"
+				console.log(data.article_content)
+				Editor.file.diff_file(data.article_content)
+				Interactive.XHRUpdate(data,function(result){
+					alert("草稿保存成功!!")
+				})
+			})
+			suspension.style.display = 'block'
+			loading.style.display = 'block'
+			Interactive.XHRQuery('draft','article_title,article_tag,article_content',draft_where,(result)=>{
+				Editor.editor.setAttribute("contenteditable","true")
+				title.disabled = ""
+				tags.disabled = ""
+				Editor.editor.innerHTML = result[0]['article_content']
+				Editor.file.get_filelist(result[0]['article_content'])
+				title.setAttribute('value',result[0]['article_title'])
+				Editor.article_tag = result[0]['article_tag']
+				for (let i=tags.options.length-1;i>0;i--){
+					if (tags.options[i].value===Editor.article_tag) {
+						tags.options[i].selected = true
+					}
+				}
+				suspension.style.display = 'none'
+				loading.style.display = 'none'
+			})
+		}else{
+			draft.addEventListener('click',function(){
+				let data = Editor.getContent()
+				delete data.article_read
+				delete data.text_for_search
+				delete data.update_time
+				data.table = "draft"
+				Editor.file.diff_file(data.article_content)
+				Interactive.XHRSave(data,'post',function(result){
+					alert("草稿保存成功!!")
+				})
+			})
+			title.disabled = ""
+			tags.disabled = ""
+			Editor.editor.setAttribute("contenteditable","true")
+			Editor.editor.focus()
+			editorCursor.saveRange()
+		}
 	},
 	getContent: function() {
 		var title = document.getElementById('title')
