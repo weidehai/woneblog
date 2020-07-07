@@ -56,16 +56,16 @@ var Interactive = {
 		}
 	},
 	//data: object(key:value)
-	XHRSave: function(data,type,cb) {
+	XHRSave: function(data,type,judge=false,cb) {
 		var xhr = Interactive.creatXHR()
-		xhr.open('post',`/save?type=${type}`,true);
+		xhr.open('post',`/save?type=${type}&judge=${judge}`,true);
 		xhr.setRequestHeader("Content-type","application/json;charset=utf-8");
 		var data = JSON.stringify(data)
 		xhr.send(data)
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4) {
 				var r = xhr.responseText
-				if (r=='post success') {
+				if (r=='post success' || r=="update success") {
 					cb(r)
 				}else{
 					alert("操作失败！！！")
@@ -73,9 +73,9 @@ var Interactive = {
 			}
 		}
 	},
-	XHRUpload: function(file,cb,progress=false,upload_success=false) {
+	XHRUpload: function(file,type,dir,cb,progress=false,upload_success=false) {
 		var xhr = Interactive.creatXHR()
-		xhr.open('post','/upload',true);
+		xhr.open('post',`/upload?type=${type}&dir=${dir}`,true);
 		console.log("do upload...........")
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4) {
@@ -96,11 +96,21 @@ var Interactive = {
 		}
 		xhr.send(file)
 	},
-	XHRDelFile:function(file){
+	XHRDelFile:function(file,type="file",cb){
 		var xhr = Interactive.creatXHR()
-		xhr.open('post','/deletefile',true);
+		xhr.open('post',`/deletefile?type=${type}`,true);
 		xhr.setRequestHeader("Content-type","application/json;charset=utf-8");
 		xhr.send(file)
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4) {
+				var r = xhr.responseText
+				if (r==='delete success') {
+					cb(r)
+				}else{
+					alert("操作失败！！！")
+				}
+			}
+		}
 	},
 	XHRDel: function(table,id,cb) {
 		var xhr = Interactive.creatXHR()

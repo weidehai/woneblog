@@ -4,6 +4,8 @@ from observer import updateob
 import time
 import pymysql
 import os
+import shutil
+import re
 
 tables = {
     "articles": my_articles,
@@ -11,7 +13,7 @@ tables = {
     "timeline": my_timeline,
     "admin": my_admin,
     "blogtags": my_blogtags,
-    "draft": my_drafts
+    "drafts": my_drafts
 }
 
 
@@ -62,7 +64,8 @@ class Interface:
     def __addSave__(self):
         @self.app.route('/save', methods=["POST"])
         def save():
-            save_type = request.args.get("type")
+            judge = request.args.get("judge")   #控制是否需要判断提交的内容是否已存在
+            save_type = request.args.get("type")  #控制提交是否是要权限，评论的提交不需要权限
             if session.get('user_level') != 777 and save_type == "post":
                 return "illegal access!!!!!!!!!!"
             data = json.loads(request.get_data())
@@ -73,7 +76,19 @@ class Interface:
                     pass
             table = data['table']
             del data['table']
-            tables[table].save_data(**data)
+            print(judge)
+            if judge:
+                exists = my_articles.customize_sql("select 1 from %s where post_key=%s limit 1" % (table, data["post_key"]), "query")
+                print(exists)
+                if exists:
+                    try:
+                        del data['article_time']
+                        del data["article_read"]
+                    finally:
+                        tables[table].update_data(data["post_key"], **data)
+                        return 'update success'
+                else:
+                    tables[table].save_data(**data)
             return 'post success'
 
     def __addUpdate__(self):
@@ -89,9 +104,9 @@ class Interface:
                     pass
             table = data['table']
             where = data["post_key"]
-            print(data)
             del data['table']
             del data["post_key"]
+            print(data)
             tables[table].update_data(where, **data)
             for item in updateob.observerlist:
                 try:
@@ -104,16 +119,21 @@ class Interface:
         @self.app.route('/upload', methods=["POST"])
         def upload():
             if session.get('user_level') == 777:
+                file_save_to = request.args.get("type")
+                file_dir = request.args.get('dir')
                 file = request.files["file"]
                 file_type = file.filename.split('.').pop().lower()
                 file_name = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
                 base_path = os.path.dirname(__file__)
-                upload_path = os.path.join('static', 'upload')
+                upload_path = os.path.join('static', file_save_to)
                 file_path = file_name + "." + file_type
-                path = os.path.join(base_path, upload_path, file_path)
+                path = os.path.join(base_path, upload_path, file_dir, file_path)
+                print(path)
+                if not os.path.exists(os.path.join(base_path, upload_path, file_dir)):
+                    os.mkdir(os.path.join(base_path, upload_path, file_dir))
                 print(path)
                 file.save(path)
-                return '.\\' + os.path.join(upload_path, file_path)
+                return '.\\' + os.path.join(upload_path, file_dir, file_path)
             else:
                 return 'illegal upload'
 
@@ -122,11 +142,20 @@ class Interface:
         def delete_file():
             if session.get('user_level') == 777:
                 print(json.loads(request.get_data()))
+                file_type = request.args.get("type")  #控制是删除文件还是dir
+                print(file_type)
                 file_list = json.loads(request.get_data())["filelist"]
-                for file in file_list:
-                    base_path = os.path.dirname(__file__)
-                    path = os.path.join(base_path, file)
-                    os.remove(path)
+                base_path = os.path.dirname(__file__)
+                if file_type == 'dir':
+                    path = os.path.join(base_path, file_list)
+                    shutil.rmtree(path)
+                else:
+                    for file in file_list:
+                        path = os.path.join(base_path, file)
+                        try:
+                            os.remove(path)
+                        except FileNotFoundError:
+                            pass
                 return "delete success"
             else:
                 return 'illegal operation'

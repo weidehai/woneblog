@@ -156,6 +156,7 @@ class DataBase:
         return Query.get_next(self.table_name, post_id)
 
     def update_data(self, where, **kwargs):
+        print(kwargs)
         Commit.update_data(self.table_name, self.primary_key, where, **kwargs)
         return
 

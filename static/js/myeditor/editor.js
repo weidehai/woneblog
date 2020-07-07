@@ -8,6 +8,9 @@ var Editor = {
 	//初始化编辑框
 	submited:false,
 	article_tag:"Javascript",
+	draft:false,
+	newone:true,
+	post_key:Math.random().toString().substring(2,5)+Date.now(),
 	init: function() {
 		//将编辑框的默认换行元素改为p
 		document.execCommand("defaultParagraphSeparator", false, "p")
@@ -19,6 +22,15 @@ var Editor = {
 			p.appendChild(br)
 		}
 		//控制keydown换行事件
+		if (window.location.search.indexOf("?draftid=") !== -1) {
+			Editor.draft = true
+			Editor.newone = false
+			Editor.post_key =  window.location.search.replace("?draftid=","")
+		}else if (window.location.search.indexOf("?getid=") !== -1) {
+			Editor.draft = false
+			Editor.newone = false
+			Editor.post_key = window.location.search.replace("?getid=","")
+		}
 		//为editor的鼠标和键盘事件注册处理函数
 		Editor.editor.addEventListener('keydown',editorKeyControl.editorKeydown)
     	Editor.editor.addEventListener('focus',Editor.hideAllsusp)
@@ -85,20 +97,23 @@ var Editor = {
 		var file = document.getElementById('file')
 		var code = document.getElementById('code')
 		var code_status = document.getElementsByClassName('code_status')
-		var suspension = document.getElementsByClassName('suspension')[0]
-		var loading = suspension.getElementsByClassName('myloading_1')[0]
 		var title = document.getElementById('title')
 		var tags = document.getElementById('tags')
 		var linkedit = document.getElementById('linkedit')
 		var linkhref = document.getElementById('linkhref')
-		var post_where = window.location.search.replace('?getid=','')
-		var draft_where = window.location.search.replace('?draftid=','')
+		if (Editor.newone) {
+			Editor.register_submit()
+		}else if (Editor.draft) {
+			var draft_where = window.location.search.replace('?draftid=','')
+			Editor.register_submit(draft_where)
+		}else{
+			var post_where = window.location.search.replace('?getid=','')
+			Editor.register_submit(post_where)
+		}
 		tags.addEventListener("change",function(){
 			Editor.article_tag = this.options[this.options.selectedIndex].value
 			console.log(Editor.article_tag)
 		})
-		Editor.register_submit(post_where)
-		Editor.register_draft(draft_where)
 		h1.addEventListener('click',stylecmd.formatblockH1)
 		h2.addEventListener('click',stylecmd.formatblockH2)
 		table.addEventListener('click',stylecmd.table.insertTable)
@@ -133,133 +148,160 @@ var Editor = {
 			}
 	    })
 	},
-	register_submit:function(post_where=false){
+	register_submit:function(where=false){
 		var submitbt = document.getElementById('submit')
-		if (post_where) {
-			submitbt.addEventListener('click',function(){
-				let data = Editor.getContent()
-				let post_key = data["post_key"]
-				Editor.submited = true
+		var draft = document.getElementById('draft')
+		var suspension = document.getElementsByClassName('suspension')[0]
+		var loading = suspension.getElementsByClassName('myloading_1')[0]
+		if (where) {
+			suspension.style.display = 'block'
+			loading.style.display = 'block'
+			let table = Editor.draft?"drafts":"articles"
+			Interactive.XHRQuery(table,'article_title,article_tag,article_content',where,(result)=>{
+				Editor.editor.innerHTML = result[0]['article_content']
+				Editor.file.get_filelist(result[0]['article_content'])
+				title.setAttribute('value',result[0]['article_title'])
+				Editor.article_tag = result[0]['article_tag']
+				for (let i=tags.options.length-1;i>0;i--){
+					if (tags.options[i].value===Editor.article_tag) {
+						tags.options[i].selected = true
+					}
+				}
+				suspension.style.display = 'none'
+				loading.style.display = 'none'
+				title.disabled = ""
+				tags.disabled = ""
+				Editor.editor.setAttribute("contenteditable","true")
+			})
+		}else{
+			title.disabled = ""
+			tags.disabled = ""
+			Editor.editor.setAttribute("contenteditable","true")
+			if (!Editor.draft) {
+				Editor.editor.focus()
+				editorCursor.saveRange()	
+			}	
+		}
+		
+		submitbt.addEventListener('click',function(){
+			let data = Editor.getContent()
+			let post_key = data["post_key"]
+			if (!Editor.draft && !Editor.newone) {
+				delete data.article_time
 				console.log(data.article_content)
+				Editor.submited = true
 				Editor.file.diff_file(data.article_content)
 				Interactive.XHRUpdate(data,function(result){
 					window.location.href = `/articledetails?id=${post_key}`
-				})
-			})
-			suspension.style.display = 'block'
-			loading.style.display = 'block'
-			Interactive.XHRQuery('articles','article_title,article_tag,article_content',post_where,(result)=>{
-				Editor.editor.setAttribute("contenteditable","true")
-				title.disabled = ""
-				tags.disabled = ""
-				Editor.editor.innerHTML = result[0]['article_content']
-				Editor.file.get_filelist(result[0]['article_content'])
-				title.setAttribute('value',result[0]['article_title'])
-				Editor.article_tag = result[0]['article_tag']
-				for (let i=tags.options.length-1;i>0;i--){
-					if (tags.options[i].value===Editor.article_tag) {
-						tags.options[i].selected = true
-					}
-				}
-				suspension.style.display = 'none'
-				loading.style.display = 'none'
-			})
-		}else{
-			submitbt.addEventListener('click',function(){
-				let data = Editor.getContent()
-				let post_key = data["post_key"]
+				})	
+			}
+			if (Editor.draft || Editor.newone) {
 				Editor.submited = true
 				Editor.file.diff_file(data.article_content)
-				Interactive.XHRSave(data,'post',function(result){
-					let xhr = Interactive.creatXHR()
-					xhr.open("GET",`/updatearticlenum?tag_name=${data['article_tag']}&operation=add`,true)
-					xhr.onreadystatechange = function(){
-						if (xhr.readyState===4) {
-							if (xhr.responseText==="success") {
-								window.location.href = `/articledetails?id=${post_key}`			
-							}
-						}
+				//将文件从draft替换到upload
+				for (let file of Editor.file.filelist){
+					data.article_content = data.article_content.replace(file,file.replace("draft","upload"))
+				}
+				//回调太多，用promise来解决地狱回调
+				new Promise((resolve,reject)=>{
+					if (Editor.file.filelist.length !== 0) {
+						let dir = post_key
+						Editor.file.copy_draftfile_to_upload(resolve,dir,"draft","upload")	
+					}else{
+						resolve()
 					}
-					xhr.send(null)
+				}).then(()=>{
+					let p = new Promise((resolve,reject)=>{
+								Interactive.XHRSave(data,'post',true,function(result){
+									console.log(result)
+									resolve(result)
+								})		
+							})
+					return p
+				}).then((result)=>{
+					console.log(result)
+					if (result.indexOf("update") === -1) {
+						let p = new Promise((resolve,reject)=>{
+									let xhr = Interactive.creatXHR()
+									xhr.open("GET",`/updatearticlenum?tag_name=${data['article_tag']}&operation=add`,true)
+									xhr.onreadystatechange = function(){
+										if (xhr.readyState===4) {
+											if (xhr.responseText==="success") {
+												resolve()	
+											}
+										}
+									}
+									xhr.send(null)
+								})
+						return p
+					}else{
+						return Promise.resolve()
+					}
+				}).then(()=>{
+					//如果草稿发表出去，需要删除草稿及其文件
+					if (Editor.draft) {
+						Interactive.XHRDel("drafts",post_key,()=>{
+							if (Editor.file.filelist.length !== 0) {
+								Interactive.XHRDelFile(JSON.stringify({filelist:`static\\draft\\${data.post_key}`}),"dir",()=>{
+									window.location.href = `/articledetails?id=${post_key}`	
+								})	
+							}else{
+								window.location.href = `/articledetails?id=${post_key}`	
+							}
+						})	
+					}else{
+						window.location.href = `/articledetails?id=${post_key}`	
+					}
 				})
-
-			})
-			title.disabled = ""
-			tags.disabled = ""
-			Editor.editor.setAttribute("contenteditable","true")
-			Editor.editor.focus()
-			editorCursor.saveRange()
-		}
-	},
-	register_draft:function(draft_where=false){
-		var draft = document.getElementById('draft')
-		if (draft_where) {
-			draft.addEventListener('click',function(){
-				let data = Editor.getContent()
-				delete data.article_read
-				delete data.text_for_search
-				delete data.update_time
-				data.table = "draft"
-				console.log(data.article_content)
+			}
+			
+		})
+		draft.addEventListener('click',function(){
+			let data = Editor.getContent()
+			let post_key = data["post_key"]
+			delete data.text_for_search
+			delete data.article_read
+			delete data.update_time
+			data.table = "drafts"
+			Editor.submited = true
+			//将文件从upload替换到draft
+			for (let file of Editor.file.filelist){
+				data.article_content = data.article_content.replace(file,file.replace("upload","draft"))
+			}
+			if (Editor.draft) {
 				Editor.file.diff_file(data.article_content)
 				Interactive.XHRUpdate(data,function(result){
 					alert("草稿保存成功!!")
-				})
-			})
-			suspension.style.display = 'block'
-			loading.style.display = 'block'
-			Interactive.XHRQuery('draft','article_title,article_tag,article_content',draft_where,(result)=>{
-				Editor.editor.setAttribute("contenteditable","true")
-				title.disabled = ""
-				tags.disabled = ""
-				Editor.editor.innerHTML = result[0]['article_content']
-				Editor.file.get_filelist(result[0]['article_content'])
-				title.setAttribute('value',result[0]['article_title'])
-				Editor.article_tag = result[0]['article_tag']
-				for (let i=tags.options.length-1;i>0;i--){
-					if (tags.options[i].value===Editor.article_tag) {
-						tags.options[i].selected = true
+				})	
+			}
+			if (!Editor.draft) {
+				new Promise((resolve,reject)=>{
+					if (Editor.file.filelist.length !== 0) {
+						let dir = post_key
+						Editor.file.copy_draftfile_to_upload(resolve,dir,"upload","draft")	
+					}else{
+						resolve()
 					}
-				}
-				suspension.style.display = 'none'
-				loading.style.display = 'none'
-			})
-		}else{
-			draft.addEventListener('click',function(){
-				let data = Editor.getContent()
-				delete data.article_read
-				delete data.text_for_search
-				delete data.update_time
-				data.table = "draft"
-				Editor.file.diff_file(data.article_content)
-				Interactive.XHRSave(data,'post',function(result){
-					alert("草稿保存成功!!")
+				}).then(()=>{
+					Interactive.XHRSave(data,'post',true,function(result){
+						alert("草稿保存成功!!")
+					})
 				})
-			})
-			title.disabled = ""
-			tags.disabled = ""
-			Editor.editor.setAttribute("contenteditable","true")
-			Editor.editor.focus()
-			editorCursor.saveRange()
-		}
+			}
+		})
 	},
 	getContent: function() {
 		var title = document.getElementById('title')
-		var update = window.location.search.replace("?getid=","")
 		var data = {
 			"article_title":title.value,
-			"article_content":editor.innerHTML,
+			"article_content":Editor.editor.innerHTML,
 			"article_tag":Editor.article_tag,
-			"text_for_search":Editor.editor.innerText,
+			"article_time":dateFormat('YYYY-MM-DD'),	
 			"update_time":dateFormat('YYYY-MM-DD'),
-			"article_time":dateFormat('YYYY-MM-DD'),
+			"post_key": Editor.post_key,
+			"text_for_search": Editor.editor.innerText,
 			"article_read":'0',
-			"post_key": update || Math.random().toString().substring(2,5)+Date.now(),
 			"table":'articles'
-		}
-		if (update) {
-			delete data["article_time"]
-			delete data["article_read"]
 		}
 		return data;
 	},
@@ -301,7 +343,6 @@ var Editor = {
 			}
 		}catch{}
 	},
-	
 }
 
 
@@ -312,6 +353,8 @@ var Editor = {
 
 Editor.file = {
 	filelist:[],
+	deleted_filelist:[],
+	new_filelist:[],
 	upload: function(e) {
 		var suspension = document.getElementsByClassName('suspension')[0]
 		var uploading_wrapper = suspension.getElementsByClassName('uploading_wrapper')[0]
@@ -319,11 +362,14 @@ Editor.file = {
 		var percent = uploading_wrapper.getElementsByClassName('percent')[0]
 		var f = e.target.files[0]
 		var formdata = new FormData()
+		var type = Editor.draft?"draft":"upload"
+		var dir = Editor.post_key
 		//将文件转换为二进制数据然后上传
 		formdata.append('file',f)
 		e.target.value = null
-		Interactive.XHRUpload(formdata,function(result){
+		Interactive.XHRUpload(formdata,type,dir,function(result){
 			Editor.file.filelist.push(result.substring(2))
+			Editor.file.new_filelist.push(result.substring(2))
 			stylecmd.insertfile(result)
 			console.log(Editor.file.filelist)
 		},function(e){
@@ -340,7 +386,7 @@ Editor.file = {
 		})
 	},
 	get_filelist:function(content){
-		let find_file = /(\.(\\|\/)static(\\|\/)upload(\\|\/)\S+?)(?=">)/g
+		let find_file = /(\.(\\|\/)static(\\|\/)(upload|draft)(\\|\/)\S+?)(?=">)/g
 		Editor.file.filelist = content.match(find_file) || []
 		// try{
 		// 	for(let file of content.match(find_file)){
@@ -352,16 +398,29 @@ Editor.file = {
 		// }		
 		console.log(Editor.file.filelist)
 	},
+	copy_draftfile_to_upload:function(resolve,dir,from_dir,to_dir){
+		let xhr = Interactive.creatXHR()
+		xhr.open("post","/copyfile",true)
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState===4 && xhr.status===200) {
+				if (xhr.responseText==="copy success") {
+					resolve()
+				}
+			}
+		}
+		xhr.send(JSON.stringify({dir,from_dir,to_dir}))
+	},
 	diff_file:function(content){
 		if (Editor.file.filelist===null || Editor.file.filelist.length === 0) return
 		for(let index in Editor.file.filelist){
 			console.log(content.indexOf(Editor.file.filelist[index]))
-			if (content.indexOf(Editor.file.filelist[index]) !== -1) {
+			if (content.indexOf(Editor.file.filelist[index]) === -1) {
+				Editor.file.deleted_filelist.push(Editor.file.filelist[index])
 				Editor.file.filelist.splice(index,1)
 			}
 		}
-		if (Editor.file.filelist.length !== 0) {
-			Interactive.XHRDelFile(JSON.stringify({filelist:Editor.file.filelist}))
+		if (Editor.file.deleted_filelist.length !== 0 && Editor.submited) {
+			Interactive.XHRDelFile(JSON.stringify({filelist:Editor.file.deleted_filelist}))
 		}
 	}
 }
@@ -569,6 +628,7 @@ Editor.code = {
 
 window.onload = function() {
 	Editor.init()
+	//移动端原生支持不显示滚动条滚动，pc端不显示滚动条则无法滚动，所以需要判断移动端或pc端，只有在pc端绑定菜单滚动事件
 	if (systeminfo.get_systeminfo().indexOf('IOS') === -1 && systeminfo.get_systeminfo().indexOf('Android') === -1) {
 		if (document.documentElement.clientWidth<1090) {
 			Editor.scroll_menu.bindevent()
@@ -594,8 +654,21 @@ window.onbeforeunload = function() {
 // }
 
 window.onpagehide = function(){
-	if (!Editor.submited && Editor.file.filelist !== null && Editor.file.filelist.length!==0) {
-		navigator.sendBeacon("/deletefile",JSON.stringify({filelist:Editor.file.filelist}))
+	if (Editor.newone) {
+		if (!Editor.submited && Editor.file.filelist.length!==0) {
+			if (Editor.draft) {
+				var dir = `static/draft/${Editor.post_key}`
+				//linux 用反斜杠分割路径
+			}else{
+				var dir = `static/upload/${Editor.post_key}`
+			}
+			navigator.sendBeacon("/deletefile?type=dir",JSON.stringify({filelist:dir}))
+		}	
+	}else{
+		//如果不是新的文章，且没有提交，那么就删除新增的文件
+		if (!Editor.submited && Editor.file.new_filelist.length!==0) {
+			navigator.sendBeacon("/deletefile",JSON.stringify({filelist:Editor.file.new_filelist}))
+		}	
 	}
 }
 //--------------------------------------------------------------------

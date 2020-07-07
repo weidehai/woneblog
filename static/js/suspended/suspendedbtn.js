@@ -117,9 +117,9 @@ var SuspendedBtn={
 					menu_1.style.display='block'
 					menu_3.style.display='none'
 					menu_2.style.display='none'
-					if (table !== "draft") {
+					if (table !== "drafts") {
 						document.querySelector('main').innerHTML = ""
-						table = 'draft'
+						table = 'drafts'
 						first_get()	
 					}
 					break
