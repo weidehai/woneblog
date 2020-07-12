@@ -29,6 +29,7 @@ body {
 }
 a {
 	text-decoration: none;
+	-webkit-tap-highlight-color:transparent;
 }
 
 li {
@@ -70,4 +71,18 @@ li {
 		margin-bottom: 2rem;
 	}
 
+}
+
+a:link {color: inherit;} 
+a:visited {color: inherit;} 
+a:hover {color: inherit;}  
+a:active{color: #2bbc8a;}
+
+@media screen and (min-width: 1024px) {
+	a:hover{
+		color: #2bbc8a;
+	}
+	a:active{
+		color: inherit;
+	}
 }

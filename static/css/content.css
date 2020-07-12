@@ -48,6 +48,12 @@
 	margin:0 2px;
 }
 
+.detail hr{
+	background-image: linear-gradient(to right, #FFEB3B, #00BCD4, #8BC34A);
+	height: 1px;
+	border: 0;
+}
+
 .detail q {
 	margin-top: 16px;
 	margin-bottom:16px;

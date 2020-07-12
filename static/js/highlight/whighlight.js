@@ -59,7 +59,7 @@ class whl {
 			return false
 		}
 		this.newstr = this.newstr.replacePos(s1,s2,pos1+this.extralen,pos2+this.extralen)
-		//console.log(this.newstr)
+		console.log(this.newstr)
 		this.extralen = s2.length-olen+this.extralen
 	}
 

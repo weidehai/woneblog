@@ -7,8 +7,11 @@ var stylecmd = {
 		document.execCommand('formatblock',false,'H2')
 		editorCursor.saveRange()
 	},
-	clearformat: function(){
-		document.execCommand("formatblock",false,'p')
+	// clearformat: function(){
+	// 	document.execCommand("formatblock",false,'p')
+	// },
+	insertcutline: function(){
+		document.execCommand("insertHTML",false,"<hr><p><br></p>")
 	},
 	formatblockquote:function(){
 		document.execCommand('formatblock',false,'BLOCKQUOTE')

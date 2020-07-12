@@ -8,12 +8,8 @@
 	margin-bottom: 1rem;
 }
 .post-item a {
-	border-bottom: 1px solid #c9cacc
+	border-bottom: 1px solid #c9cacc;
 }
-.post-item a:hover {
-	color: #2bbc8a
-}
-
 
 @media screen and (min-width: 480px) {
 	.post-item{

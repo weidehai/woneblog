@@ -66,15 +66,15 @@ var Editor = {
 	disableFocus:function () {
 		//阻止样式按钮的点击获取焦点事件
 		var menus = document.getElementsByTagName('i')
-		var video = document.getElementById("video")
+		//var video = document.getElementById("video")
 		for (var k=0,len=menus.length;k<len;k++) {
 			menus[k].addEventListener('mousedown',function(e){
 				e.preventDefault()
 			})
 		}
-		video.addEventListener('mousedown',function(e){
-			e.preventDefault()
-		})
+		// video.addEventListener('mousedown',function(e){
+		// 	e.preventDefault()
+		// })
 
 	},
 	eventListen:function(){
@@ -90,7 +90,8 @@ var Editor = {
 		var justifyleft = document.getElementById('justifyleft')
 		var justifycenter = document.getElementById('justifycenter')
 		var quote = document.getElementById('quote')
-		var clear = document.getElementById('clear')
+		//var clear = document.getElementById('clear')
+		var cutline = document.getElementById('cutline')
 		var list = document.getElementById('list')
 		var link = document.getElementById('link')
 		var linkbt = document.getElementById('insertL')
@@ -126,7 +127,8 @@ var Editor = {
 		justifyleft.addEventListener('click',stylecmd.justifyLeft)
 		justifycenter.addEventListener('click',stylecmd.justifyCenter)
 		quote.addEventListener('click',stylecmd.formatblockquote)
-		clear.addEventListener('click',stylecmd.clearformat)
+		//clear.addEventListener('click',stylecmd.clearformat)
+		cutline.addEventListener("click",stylecmd.insertcutline)
 		list.addEventListener('click',stylecmd.insertList)
 		linkbt.addEventListener('click',stylecmd.insertlink)
 		file.addEventListener('change',Editor.file.upload)

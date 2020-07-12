@@ -11,7 +11,7 @@ function coordinate(element){
 	this.location={
 		x:0,
 		y:0
-	}
+	}	
 }
 
 
@@ -68,7 +68,7 @@ coordinate.prototype.mouseup=function(){
 		this.el.onclick = null
 	}else{
 		//SuspendedBtn.register_write()
-		SuspendedBtn.pop_menu(this.el)
+		SuspendedBtn.pop_menu()
 	}
 	document.body.removeEventListener('mousemove',this.__newev__)
 	document.body.removeEventListener('touchmove',this.__newev__)
@@ -76,13 +76,25 @@ coordinate.prototype.mouseup=function(){
 
 
 var SuspendedBtn={
+	//检查是click还是touch
+	touchevent: "ontouchstart" in suspende_menu?true:false,
+	menus: document.getElementById('menus'),
+	suspende_menu: document.getElementById('suspende_menu'),
+	menus_show: false,
 	register_menu: function (){
-		var menus = document.getElementById('menus')
-		console.log(menus)
 		var menu_1 = document.getElementById('menu_1')
 		var menu_2 = document.getElementById('menu_2')
 		var menu_3 = document.getElementById('menu_3')
-		menus.addEventListener("click",(e)=>{
+		if (!this.touchevent) {
+			this.menus.addEventListener('mousedown',(e)=>{
+				e.stopPropagation()
+			})
+		}else{
+			this.menus.addEventListener('touchstart',(e)=>{
+				e.stopPropagation()
+			})
+		}
+		this.menus.addEventListener("click",(e)=>{
 			console.log(e)
 			let menu = e.srcElement.id
 			console.log(menu)
@@ -124,27 +136,29 @@ var SuspendedBtn={
 					}
 					break
 			}
+			this.pop_menu()
 				
 		})
 		
 	},
-	pop_menu:function(element){
-		console.log('click')
-		if(element.show){
-			element.style.overflow = 'hidden'
-			element.show = false
+	pop_menu:function(){
+		if(this.menus_show){
+			this.suspende_menu.style.overflow = 'hidden'
+			this.menus_show = false
 		}else{
-			element.style.overflow = 'inherit'
-			element.show = true
+			this.suspende_menu.style.overflow = 'inherit'
+			this.menus_show = true
 		}
 	},
 	suspended: function (){
-		var suspende_menu = document.getElementById('suspende_menu')
-		mycoordinate = new coordinate(suspende_menu)
-		suspende_menu.addEventListener('mousedown',mycoordinate.mousedown.bind(mycoordinate),false)
-		suspende_menu.addEventListener('mouseup',mycoordinate.mouseup.bind(mycoordinate),false)
-		suspende_menu.addEventListener('touchstart',mycoordinate.mousedown.bind(mycoordinate),false)
-		suspende_menu.addEventListener('touchend',mycoordinate.mouseup.bind(mycoordinate),false)
+		mycoordinate = new coordinate(this.suspende_menu)
+		if (!this.touchevent) {
+			this.suspende_menu.addEventListener('mousedown',mycoordinate.mousedown.bind(mycoordinate),false)
+			this.suspende_menu.addEventListener('mouseup',mycoordinate.mouseup.bind(mycoordinate),false)	
+		}else{
+			this.suspende_menu.addEventListener('touchstart',mycoordinate.mousedown.bind(mycoordinate),false)
+			this.suspende_menu.addEventListener('touchend',mycoordinate.mouseup.bind(mycoordinate),false)	
+		}
 	},
 	
 }

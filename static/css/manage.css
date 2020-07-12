@@ -40,13 +40,14 @@ button {
 	outline: none;
 	text-align: right;
 	color: blue;
+	-webkit-tap-highlight-color:transparent;
 }
 
 button:nth-child(1){
 	margin-right: 5px;
 }
 
-button:hover {
+button:active {
 	color: black;
 }
 

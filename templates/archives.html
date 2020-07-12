@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 	<meta name="description" itemprop="description" content="编程随笔,一个编程技术博客.想到哪,学到哪,写到哪.">
 	<meta name="author" content="Wone">
 	<meta name="keywords" content="Wone, 编程随笔, programming note, web前端博客, Python, Javascript, Java, 汇编语言, 网页制作, 前端, html5, css, Vue.js, 云服务器, Seo">
@@ -25,7 +25,9 @@
 			<a href="/">
 				<div id="logo" style="background-image: url(../static/img/avatar.jpg);"></div>
 			</a>
-			<span style="font-size: 1.5rem;font-weight: bold;line-height: 2rem;display: inline-block;" id="title">Archives</span>
+			<a href="/archives">
+				<span style="font-size: 1.5rem;font-weight: bold;line-height: 2rem;display: inline-block;" id="title">Archives</span>
+			</a>
 			<div id="nav">
 				<ul>
 					<li class="navicon">
@@ -46,12 +48,11 @@
 				</ul>
 			</div>
 		</header>
-			<div id="theme-tag">
-				{% for tag in tags %}
-				<a href='/archives?article_tag="{{tag["tag_name"]}}"'><span>{{tag["tag_name"]}}</span>
-				{% endfor %}
-			</div>
-			
+		<div id="theme-tag">
+			{% for tag in tags %}
+			<a href='/archives?article_tag="{{tag["tag_name"]}}"'><span>{{tag["tag_name"]}}</span></a>
+			{% endfor %}
+		</div>
 		<section id="wrapper">
 			<!-- {% for data in articles %}
 			<div class="archive">
@@ -109,7 +110,7 @@
 			laflush.eventlistener()
 			laflush.flush = function(){
 				getData("articles","article_time, article_title, post_key",where,render)
-			}			
+			}
 		}
 		function getData(table,fields,where,cb){
 			if (year<2019) {

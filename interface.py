@@ -148,7 +148,10 @@ class Interface:
                 base_path = os.path.dirname(__file__)
                 if file_type == 'dir':
                     path = os.path.join(base_path, file_list)
-                    shutil.rmtree(path)
+                    try:
+                        shutil.rmtree(path)
+                    except FileNotFoundError:
+                        pass
                 else:
                     for file in file_list:
                         path = os.path.join(base_path, file)

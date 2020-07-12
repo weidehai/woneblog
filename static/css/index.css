@@ -36,9 +36,7 @@
 .project-item a {
 	border-bottom: 1px solid #c9cacc;
 }
-.project-item a:hover {
-	color: #2bbc8a;
-}
+
 .project-item {
 	margin-bottom: 5px;
 }
@@ -71,11 +69,6 @@
 		content: ""
 	}
 }
-
-a:link {color: inherit;} 
-a:visited {color: inherit;} 
-a:hover {color: inherit;} 
-a:active {color: inherit;} 
 
 
 

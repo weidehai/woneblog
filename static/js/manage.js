@@ -195,7 +195,9 @@ function render(result){
 						xhr.onreadystatechange = function(){
 							if (xhr.readyState===4) {
 								if (xhr.responseText==="success") {
-									main.removeChild(bt2.parentElement.parentElement)			
+									Interactive.XHRDelFile(JSON.stringify({'filelist':`static\\upload\\${result[i]['post_key']}`}),"dir",()=>{
+										main.removeChild(bt2.parentElement.parentElement)
+									})
 								}
 							}
 						}

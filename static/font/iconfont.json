@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "13106232",
+      "name": "分割线",
+      "font_class": "cutline",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
       "icon_id": "10825018",
       "name": "草稿",
       "font_class": "draft",
