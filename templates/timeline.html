@@ -204,7 +204,7 @@
                 content,
                 table: "timeline"
             }
-            Interactive.XHRSave(data,"post",function(){
+            Interactive.XHRSave(data,"post",false,function(){
                 console.log('success')
                 cb()
             })

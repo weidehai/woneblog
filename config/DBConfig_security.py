@@ -1,8 +1,8 @@
 DB_HOST = 'localhost'
-DB_USERNAME = 'root'
-DB_PASSWORD = 'weidehai123'
+DB_USERNAME = 'xxxxxxxxxxxx'
+DB_PASSWORD = 'xxxxxxxxxx'
 DB_DBNAME = 'myblog'
-DB_PORT = 3306
+DB_PORT = xxxx
 
 DB_MIN_CACHED = 10
 DB_MAX_CACHED = 10

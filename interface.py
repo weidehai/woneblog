@@ -77,7 +77,7 @@ class Interface:
             table = data['table']
             del data['table']
             print(judge)
-            if judge:
+            if judge == 'true':
                 exists = my_articles.customize_sql("select 1 from %s where post_key=%s limit 1" % (table, data["post_key"]), "query")
                 print(exists)
                 if exists:
@@ -89,6 +89,8 @@ class Interface:
                         return 'update success'
                 else:
                     tables[table].save_data(**data)
+            else:
+                tables[table].save_data(**data)
             return 'post success'
 
     def __addUpdate__(self):
