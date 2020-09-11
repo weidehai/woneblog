@@ -3,6 +3,14 @@
 现阶段只支持在本地先将视频转成gif在上传，以后会应用会支持视频转gif
 */
 
+/*
+待修复bug
+1.首次（非首次同样）进入publish页面，然后光标首先（非第一次同样）落在pre中，点击菜单右上角退出代码块按钮无效（此时代码块下面已经有了一行空白行）
+并且代码块位于文章最末（修复完毕）
+2.新需求
+从别的地方复制粘贴过来的文本需要清除样式
+ */
+
 var Editor = {
 	editor:document.getElementById('editor'),
 	//初始化编辑框
@@ -190,7 +198,9 @@ var Editor = {
 			let post_key = data["post_key"]
 			if (!Editor.draft && !Editor.newone) {
 				delete data.article_time
+				delete data.article_read
 				console.log(data.article_content)
+				console.log(data)
 				Editor.submited = true
 				Editor.file.diff_file(data.article_content)
 				Interactive.XHRUpdate(data,function(result){
@@ -584,14 +594,29 @@ Editor.code = {
 		return false
 	},
 	exit_code:function(el){
-		if (el.nextSibling) {  //如果active_pre有下一个兄弟元素就直接跳到下一个兄弟元素
-			var endnode = Editor.get_deep_lastchild(el.parentNode)
-			try{
-				var offset = endnode.nodeValue.length
-			}catch{
-				offset = 0 
+		console.log(el)
+		let nextsb = el.nextSibling
+		console.log(nextsb)
+		if (nextsb) {
+			/*
+			 如果active_pre有下一个兄弟元素就直接跳到下一个兄弟元素
+			 2020-7-28》》
+			 如果有一下个兄弟元素，但是这个元素是空的比如<p></p>，那么光标无法设置成功，也就是空元素无法设置光标，需要加一个空白占位符<br>
+			 */
+			//兼容空元素的情况 2020-07-28
+			if(!nextsb.innerHTML){
+				nextsb.innerHTML = '<br>'
+				editorCursor.setRange(nextsb)
+			}else{
+				var endnode = Editor.get_deep_lastchild(el.parentNode)
+				//addrange后设置一下collapseToEnd就可以将光标折叠到最后了
+				// try{
+				// 	var offset = endnode.nodeValue.length
+				// }catch{
+				// 	offset = 0
+				// }
+				editorCursor.setRange(endnode)
 			}
-			editorCursor.setRange(endnode)
 		}else{
 			//如果没有就新增一行
 			var p = document.createElement("p")

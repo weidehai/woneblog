@@ -17,7 +17,10 @@ class ArticlesDetail:
         @self.app.route('/articledetails')
         def article_details():
             article_id = request.args.get('id')
-            has_cache_data = self.cache.get(article_id)
+            try:
+                has_cache_data = self.cache.get(article_id)
+            except Exception:
+                has_cache_data = False
             # 如果缓存中取不到id这个记录,就到数据库中取
             # 这里的缓存是共享的
             if not (has_cache_data and request.cookies.get(article_id)):
@@ -44,7 +47,10 @@ class ArticlesDetail:
                     'previous': previous_article,
                     'next': next_article
                 }
-                self.cache.set(article_id, cache_data)
+                try:
+                    self.cache.set(article_id, cache_data)
+                except Exception:
+                    print("cache has some error")
                 resp = Response(render_template('articledetails.html',
                                                 article=data,
                                                 previous=previous_article and previous_article[0]['post_key'] or 0,

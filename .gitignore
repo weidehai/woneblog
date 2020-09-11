@@ -5,3 +5,4 @@ __pycache__
 /config/.idea
 /pages_server/__pycache__
 /config/DBConfig.py
+/server_monitor/database.py

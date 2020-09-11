@@ -110,6 +110,7 @@ class Interface:
             del data["post_key"]
             print(data)
             tables[table].update_data(where, **data)
+            #触发观察者
             for item in updateob.observerlist:
                 try:
                     item(where)
