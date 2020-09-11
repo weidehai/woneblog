@@ -1,6 +1,6 @@
 # coding=utf-8
 from config import redisconfig
-import os,sys
+import os
 from flask import Flask, render_template, send_from_directory
 from flask_caching import Cache
 from pages_server.index import Index
