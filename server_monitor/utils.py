@@ -10,3 +10,10 @@ def calcul_cpu_mem(list):
         else:
             mem_info += float(list[i])
     return [cpu_info,mem_info]
+
+
+def to_dict(this):
+    dict = this.__dict__
+    if "_sa_instance_state" in dict:
+        del dict["_sa_instance_state"]
+    return dict

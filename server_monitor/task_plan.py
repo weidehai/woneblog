@@ -28,7 +28,10 @@ def do_plan_task():
     scheduler.start()
     for job in jobs:
         try:
-            scheduler.add_job(job["task"],id=job['id'],trigger="cron", second="*/30",misfire_grace_time=58)
+            #scheduler.add_job(job["task"],id=job['id'],trigger="cron", replace_existing=True, minute=59, second=0 ,misfire_grace_time=58)
+            scheduler.add_job(job["task"], id=job['id'], trigger="cron", replace_existing=True, second="*/30",
+                              misfire_grace_time=58)
+            #https://apscheduler.readthedocs.io/en/latest/modules/triggers/cron.html#module-apscheduler.triggers.cron
             #触发条件，分钟59秒钟00，也就是每个小时结束前一分钟
             #misfire_grace_time设置任务错过执行后，下次有机会执行时的超时时间
             #比如，在整点也就是每小时的0分0秒执行，但是若在此时刻因某种原因没有被执行，那么在60s内如果有机会执行就会执行，超过了60s则就算有机会执行也不执行

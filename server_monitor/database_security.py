@@ -17,6 +17,12 @@ class ServerInfo(Base):
     cpu_info = Column(Integer)
     #server_version = Column(String(50))
 
+    def to_dict(self):
+        dict = self.__dict__
+        if "_sa_instance_state" in dict:
+            del dict["_sa_instance_state"]
+        return dict
+
 class Flows(Base):
     __tablename__ = 'flows'
     id = Column(Integer, primary_key=True)

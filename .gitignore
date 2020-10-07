@@ -6,3 +6,5 @@ __pycache__
 /pages_server/__pycache__
 /config/DBConfig.py
 /server_monitor/database.py
+/server_monitor/ssh_connect.py
+jobs.sqlite

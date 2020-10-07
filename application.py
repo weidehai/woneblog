@@ -41,5 +41,5 @@ if __name__ == '__main__':
     login = Login(app)
     interface = Interface(app)
     monitor = Monitor(app)
-
+    print("weidehai")
     app.run()

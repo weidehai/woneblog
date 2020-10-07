@@ -17,6 +17,8 @@ body {
 	line-height: 1.725;
 	display: flex;
 	flex-direction: column;
+	/*防止移动端横屏时字体大小不一致*/
+	-webkit-text-size-adjust:none;
 }
 .content {
 	flex: 1;
