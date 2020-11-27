@@ -5,7 +5,7 @@ import server_monitor.utils as utils
 import re
 import time
 import math
-from server_monitor.database import session,ServerInfo,Flows,Requests
+from server_monitor.database import ServerInfo,Flows,Requests,session_scope
 from server_monitor.ssh_connect import monitor
 import globalv
 
@@ -25,30 +25,30 @@ class SeverMonitor:
         time_hour = time.localtime().tm_hour
         time_hour_range = "%s~%s" % (str(time_hour).zfill(2), str(time_hour+1).zfill(2))
         total_requests = int(re.findall(r"requests\n\s*?\d+?\s\d+?\s(\d+)", r.read().decode('utf-8'))[0])
-        try:
-            if globalv.LAST_REQUESTS_COUNT == -1:
-                globalv.LAST_REQUESTS_COUNT= int(session.query(Requests).order_by(Requests.id.desc()).first().count)
-            previous_count = int(session.query(Requests).order_by(Requests.id.desc()).first().count)
-        except Exception:
-            globalv.LAST_REQUESTS_COUNT = 0
-            previous_count = 0
-        total_requests = total_requests + globalv.LAST_REQUESTS_COUNT
-        requests = total_requests - previous_count
-
-        print(requests)
-        #multi thread should add lock
         config.LOCK.acquire()
+        # multi thread should add lock
         print("get_requests get lock.............................................................")
-        try:
-            session.add(Requests(time_day=time_day,time_hour=time_hour_range,requests=requests,count=total_requests))
-            #减一是因为脚本去获取的时候会产出一次访问
-            session.commit()
-            print("requests write success:"+time_hour_range)
-        except Exception:
-            session.rollback()
-            print("transaction error")
-        config.LOCK.release()
-        print("get_requests release lock")
+        with session_scope() as session:
+            try:
+                if globalv.LAST_REQUESTS_COUNT == -1:
+                    globalv.LAST_REQUESTS_COUNT= int(session.query(Requests).order_by(Requests.id.desc()).first().count)
+                previous_count = int(session.query(Requests).order_by(Requests.id.desc()).first().count)
+            except Exception:
+                globalv.LAST_REQUESTS_COUNT = 0
+                previous_count = 0
+            total_requests = total_requests + globalv.LAST_REQUESTS_COUNT
+            requests = total_requests - previous_count
+            print(requests)
+            try:
+                session.add(Requests(time_day=time_day,time_hour=time_hour_range,requests=requests,count=total_requests))
+                #减一是因为脚本去获取的时候会产出一次访问
+                session.commit()
+                print("requests write success:"+time_hour_range)
+            except Exception:
+                #session.rollback()
+                print("transaction error")
+            config.LOCK.release()
+            print("get_requests release lock")
 
     @staticmethod
     def get_flows():
@@ -71,18 +71,19 @@ class SeverMonitor:
             print(total_flow)
             config.LOCK.acquire()
             print("get_flows get lock")
-            try:
-                session.add(Flows(time_day=time_day,time_hour=time_hour_range, flow=total_flow))
-                session.commit()
-                print("flows write success:"+will_get_time)
-            except Exception:
-                '''
-                The flush process of the Session, described at Flushing, will roll back the database transaction if an error is encountered, in order to maintain internal consistency. However, once this occurs, 
-                the session’s transaction is now “inactive” and must be explicitly rolled back by the calling application, 
-                in the same way that it would otherwise need to be explicitly committed if a failure had not occurred.
-                '''
-                session.rollback()
-                print("transaction error")
+            with session_scope() as session:
+                try:
+                    session.add(Flows(time_day=time_day,time_hour=time_hour_range, flow=total_flow))
+                    session.commit()
+                    print("flows write success:"+will_get_time)
+                except Exception:
+                    '''
+                    The flush process of the Session, described at Flushing, will roll back the database transaction if an error is encountered, in order to maintain internal consistency. However, once this occurs, 
+                    the session’s transaction is now “inactive” and must be explicitly rolled back by the calling application, 
+                    in the same way that it would otherwise need to be explicitly committed if a failure had not occurred.
+                    '''
+                    #session.rollback()
+                    print("transaction error")
         except Exception as e:
             print("something wrong")
             pass
@@ -115,13 +116,14 @@ class SeverMonitor:
         #查看当前登陆用户
         print(cpu_info,mem_info,nginx_v,server_v)
         config.LOCK.acquire()
-        try:
-            session.add(ServerInfo(os=server_v,cpu_info=cpu_info,mem_info=mem_info,nginx_info=nginx_v))
-            session.commit()
-        except Exception:
-            session.rollback()
-            print("transaction error")
-        config.LOCK.release()
+        with session_scope() as session:
+            try:
+                session.add(ServerInfo(os=server_v,cpu_info=cpu_info,mem_info=mem_info,nginx_info=nginx_v))
+                session.commit()
+            except Exception:
+                #session.rollback()
+                print("transaction error")
+            config.LOCK.release()
         return {"server_v": server_v,"nginx_v": nginx_v,"cpu_info": cpu_info,"mem_info": mem_info}
 
     @staticmethod
@@ -136,24 +138,48 @@ class SeverMonitor:
         #统计一个小时内的访问次数前十的来源，存入数据库，然后根据这些数据也可以得到历史最高访问次数来源
         now_time = time.localtime()
         will_get_time = time.strftime("%Y-%m-%dT", now_time) + str(time.localtime().tm_hour).zfill(2)
+        #will_get_time = '2020-10-12T15'
         print(will_get_time)
         #?:---不获取匹配，这样就少一个分组
         #?=---- lookahead assertion (?!)
         #?<=----positive lookbehind assertion  (?<!)
-        request_origins = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}).*?((?:http|https)://.+)', monitor.exe_cmd("cat /var/log/nginx/access.log | grep %s" % will_get_time))
-        for i in request_origins:
-            ips = i[0]
-            urls = i[1]
-            print("ip=%s,url=%s" % (i[0],i[1]))
-
-        pass
+        try:
+            request_origins = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}).*?HTTP/.*?((?:http|https)://.+)', monitor.exe_cmd("cat /var/log/nginx/access.log | grep %s" % will_get_time))
+        except Exception:
+            print("no data")
+            return False
+        print(request_origins)
+        if len(request_origins) <= 0:
+            print("no data")
+            return False
+        hash_ip={}
+        hash_url={}
+        for i,j in request_origins:
+            #print(hash_ip.get(i))
+            if not hash_ip.get(i):
+                hash_ip[i] = 1
+            else:
+                hash_ip[i] = hash_ip[i]+1
+            if not hash_url.get(j):
+                hash_url[j] = 1
+            else:
+                hash_url[j] = hash_url[j] + 1
+        print(hash_ip)
+        print(hash_url)
+        #hash_ip = {'8.210.238.20': 4,'8.210.238.21': 7,'8.210.238.22': 6,'8.210.238.23': 30,'8.210.238.222': 2,'8.210.238.24': 20,'8.210.238.25': 19,'8.210.238.241': 6,'8.210.238.251': 5,'8.210.238.242': 1,'8.210.238.252': 90}
+        listtop10_ip = utils.get_request_origin_top10(hash_ip,"ip")
+        listtop10_url = utils.get_request_origin_top10(hash_url,"url")
+        print(listtop10_ip)
+        print(listtop10_url)
+        return {"listtop10_ip":listtop10_ip,"listtop10_url":listtop10_url}
+        #print(hash_url)
 
 
 if __name__ == "__main__":
     pass
-    SeverMonitor.get_flows()
+    #SeverMonitor.get_flows()
     #SeverMonitor.get_requests()
     #SeverMonitor.get_request_origin()
     print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx222222222")
-    #SeverMonitor.get_request_origin()
+    SeverMonitor.get_request_origin()
 

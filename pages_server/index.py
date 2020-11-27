@@ -48,6 +48,9 @@ class Index:
     @staticmethod
     def getProjects():
         url = "https://project.haiblog.cn/apigetitem?content=1&fields=project_url,project_time,project_title&sort=0&start=0&num=3"
+        #url = "http://www.haiblog.cn"
+        #print(requests.get(url))
         res = json.loads(requests.get(url).text)
+
         res.pop()
         return res

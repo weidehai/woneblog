@@ -9,6 +9,7 @@ class Monitor:
         self.__AddGetServerinfo__()
         self.__AddGetRequests__()
         self.__AddGetFlows__()
+        self.__AddGetRequestOrigin__()
         task_plan.do_plan_task()
 
     def __AddGetServerinfo__(self):
@@ -25,7 +26,14 @@ class Monitor:
     def __AddGetFlows__(self):
         @self.app.route('/get_flows')
         def get_flows():
-            return DataInterface.get_serverinfo()
+            get_time = request.args.get("get_time")
+            return json.jsonify(DataInterface.get_flows(get_time))
+
+    def __AddGetRequestOrigin__(self):
+        @self.app.route('/get_request_origin')
+        def get_request_origin():
+            return DataInterface.get_request_origin()
+
 
 
 

@@ -40,6 +40,6 @@ if __name__ == '__main__':
     publish = Publish(app)
     login = Login(app)
     interface = Interface(app)
-    monitor = Monitor(app)
+    #monitor = Monitor(app)
     print("weidehai")
     app.run()

@@ -29,7 +29,7 @@ def do_plan_task():
     for job in jobs:
         try:
             #scheduler.add_job(job["task"],id=job['id'],trigger="cron", replace_existing=True, minute=59, second=0 ,misfire_grace_time=58)
-            scheduler.add_job(job["task"], id=job['id'], trigger="cron", replace_existing=True, second="*/30",
+            scheduler.add_job(job["task"], id=job['id'], trigger="cron", replace_existing=True, second="*/59",
                               misfire_grace_time=58)
             #https://apscheduler.readthedocs.io/en/latest/modules/triggers/cron.html#module-apscheduler.triggers.cron
             #触发条件，分钟59秒钟00，也就是每个小时结束前一分钟

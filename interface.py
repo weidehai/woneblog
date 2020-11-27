@@ -6,7 +6,7 @@ import pymysql
 import os
 import shutil
 import re
-
+WINDOW = True
 tables = {
     "articles": my_articles,
     "comment": my_comments,
@@ -136,6 +136,9 @@ class Interface:
                     os.mkdir(os.path.join(base_path, upload_path, file_dir))
                 print(path)
                 file.save(path)
+                if WINDOW:
+                    print(os.path.join(upload_path, file_dir, file_path))
+                    return os.path.join(upload_path, file_dir, file_path)
                 return '.\\' + os.path.join(upload_path, file_dir, file_path)
             else:
                 return 'illegal upload'

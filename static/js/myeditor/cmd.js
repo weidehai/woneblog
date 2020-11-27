@@ -49,11 +49,51 @@ var stylecmd = {
 		editorCursor.saveRange()
 		editorCursor.selection.collapseToEnd()
 	},
-	insertfile: function(result){
+	insertmedia: function(result,type){
+		var createp = false
+		console.log("weidehai")
+		console.log(editorCursor.selection)
+		if(editorCursor.selection.focusNode.nodeName=="#text"){
+			if(editorCursor.selection.focusNode.length==editorCursor.selection.focusOffset){
+				createp = true
+			}
+		}else if(editorCursor.selection.focusNode.nextElementSibling==null) {
+			createp = true
+		}
+		if(editorCursor.selection.focusNode.id=="editor"){
+			createp = true
+		}
+		
+		document.execCommand("insertHTML",false,"<hr class='video_control_hr'>")
 		editorCursor.restoreRange()
+		document.getElementsByClassName('video_control_hr')[0].remove()
+		
+
 		console.dir(document.activeElement)
-		var data = `<img src="${result}">`
-		document.execCommand('insertHTML',false,data)
+		if(TEST){
+			if(type===1){
+				var fr  = document.createDocumentFragment()
+				//var figure = document.createElement('figure')
+				var video = document.createElement("video")
+				video.src = result
+				video.controls="controls"
+				//figure.appendChild(video)
+				fr.appendChild(video)
+				if(createp){
+					var p = document.createElement('p')
+					var br = document.createElement("br")
+					p.appendChild(br)
+					fr.appendChild(p)
+				}
+				
+				
+			}
+			editorCursor.nowRange.insertNode(fr)
+		}else{
+			var data = type===2?`<img src="${result}">`:`<figure><video src="${result}" controls="controls"></video></figure>`
+			document.execCommand('insertHTML',false,data)	
+		}
+		
 		editorCursor.saveRange()
 	},
 	insert_keyboard:function(){

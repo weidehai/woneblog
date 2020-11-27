@@ -1,6 +1,6 @@
 /*
 使用gif代替视频
-现阶段只支持在本地先将视频转成gif在上传，以后会应用会支持视频转gif
+现阶段只支持在本地先将视频转成gif在上传，以后会应用会支持视频转gif(放弃，因为视频转gif体积会变大几倍到几十倍)
 */
 
 /*
@@ -10,7 +10,7 @@
 2.新需求
 从别的地方复制粘贴过来的文本需要清除样式
  */
-
+var TEST = true
 var Editor = {
 	editor:document.getElementById('editor'),
 	//初始化编辑框
@@ -53,6 +53,7 @@ var Editor = {
 		})
 		Editor.disableFocus()
 		Editor.eventListen()
+		Editor.video_control.on_init()
 		
 	},
 	//当编辑框获取焦点时隐藏所有的悬浮窗口
@@ -373,6 +374,7 @@ Editor.file = {
 		var uploading = uploading_wrapper.getElementsByClassName("uploading")[0]
 		var percent = uploading_wrapper.getElementsByClassName('percent')[0]
 		var f = e.target.files[0]
+		var file_type = Editor.file.get_filetype(e.target.value)
 		var formdata = new FormData()
 		var type = Editor.draft?"draft":"upload"
 		var dir = Editor.post_key
@@ -382,7 +384,7 @@ Editor.file = {
 		Interactive.XHRUpload(formdata,type,dir,function(result){
 			Editor.file.filelist.push(result.substring(2))
 			Editor.file.new_filelist.push(result.substring(2))
-			stylecmd.insertfile(result)
+			stylecmd.insertmedia(result,file_type)
 			console.log(Editor.file.filelist)
 		},function(e){
 			var total_lenght = uploading_wrapper.clientWidth
@@ -396,6 +398,14 @@ Editor.file = {
 			suspension.style.display="none"
 			uploading_wrapper.style.display = 'none'
 		})
+	},
+	get_filetype:function(name){
+		var type = name.substring(name.lastIndexOf("."))
+		if (/mp4|wmv|avi/i.test(type)) {
+			return 1 //video
+		}else if(/png|gif|jpeg|jpg/i.test(type)){
+			return 2 //image
+		}
 	},
 	get_filelist:function(content){
 		let find_file = /(\.(\\|\/)static(\\|\/)(upload|draft)(\\|\/)\S+?)(?=">)/g
@@ -651,6 +661,80 @@ Editor.code = {
 	}
 }
 //-----------------------------------------------------------------
+
+
+
+
+Editor.video_control = {
+	video_focued_node:null,
+	on_init(){
+		console.log("init video_control")
+		Editor.video_control.video_control()
+	},
+	video_control(){
+		Editor.editor.addEventListener("keydown",(e)=>{
+			console.log(editorCursor.selection)
+			if(editorCursor.selection.focusNode){
+				var pes = editorCursor.selection.focusNode.previousElementSibling || null
+			}
+			var offset = editorCursor.selection.focusOffset
+			console.log(editorCursor.selection.focusNode.innerHTML=="")
+			if(offset==1 && editorCursor.selection.focusNode.innerHTML=="<br>"){
+				offset=0
+			}
+			if(pes && e.keyCode===8 && pes.nodeName==="VIDEO" && offset===0){
+				e.preventDefault()
+				console.log(pes)
+				if(!Editor.video_control.video_focued_node){
+					pes.focus()
+					Editor.video_control.video_focued_node = pes
+					Editor.video_control.video_focued_node.className = Editor.video_control.video_focued_node.className + " videofocus"
+					return
+				}
+			}
+			if(offset===0 && e.keyCode===8){
+				var pe = editorCursor.selection.focusNode.parentElement
+				while(pe.id!=="editor"){
+					if(pe){
+						if(pe.previousElementSibling){
+							if(pe.previousElementSibling.nodeName==="VIDEO"){
+								e.preventDefault()
+								if(!Editor.video_control.video_focued_node){
+									pe.previousElementSibling.focus()
+									Editor.video_control.video_focued_node = pe.previousElementSibling
+									Editor.video_control.video_focued_node.className = Editor.video_control.video_focued_node.className + " videofocus"
+									return
+								}
+							}	
+						}
+					}
+					pe = pe.parentElement
+					console.log(pe)
+				}
+			}
+			if(Editor.video_control.video_focued_node && e.keyCode===8){
+				Editor.video_control.video_focued_node.remove()
+				Editor.video_control.video_focued_node = null
+			}
+		},true)
+		Editor.editor.addEventListener("mouseup",(e)=>{
+			var target = e.target
+			console.log(target)
+			if(target.nodeName!=="VIDEO" && Editor.video_control.video_focued_node){
+				Editor.video_control.video_focued_node.className = Editor.video_control.video_focued_node.className.replace(" videofocus","")
+				Editor.video_control.video_focued_node = null
+			}else if(target.nodeName==="VIDEO" && !Editor.video_control.video_focued_node){
+				Editor.video_control.video_focued_node = target
+				Editor.video_control.video_focued_node.className = Editor.video_control.video_focued_node.className + " videofocus"
+			}
+		})
+	}
+
+}
+
+
+
+
 
 
 window.onload = function() {
