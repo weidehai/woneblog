@@ -50,51 +50,47 @@ var stylecmd = {
 		editorCursor.selection.collapseToEnd()
 	},
 	insertmedia: function(result,type){
-		var createp = false
-		console.log("weidehai")
-		console.log(editorCursor.selection)
-		if(editorCursor.selection.focusNode.nodeName=="#text"){
-			if(editorCursor.selection.focusNode.length==editorCursor.selection.focusOffset){
+		//1:video  2:img
+		if(type===2){
+			var data = `<img src="${result}">`
+			document.execCommand('insertHTML',false,data)	
+		}else{
+			var createp = false
+			//判断是否需要预留位置
+			if(editorCursor.selection.focusNode.nodeName=="#text"){
+				if(editorCursor.selection.focusNode.length==editorCursor.selection.focusOffset){
+					createp = true
+				}
+			}else if(editorCursor.selection.focusNode.nextElementSibling==null) {
 				createp = true
 			}
-		}else if(editorCursor.selection.focusNode.nextElementSibling==null) {
-			createp = true
-		}
-		if(editorCursor.selection.focusNode.id=="editor"){
-			createp = true
-		}
-		
-		document.execCommand("insertHTML",false,"<hr class='video_control_hr'>")
-		editorCursor.restoreRange()
-		document.getElementsByClassName('video_control_hr')[0].remove()
-		
-
-		console.dir(document.activeElement)
-		if(TEST){
-			if(type===1){
-				var fr  = document.createDocumentFragment()
-				//var figure = document.createElement('figure')
-				var video = document.createElement("video")
-				video.src = result
-				video.controls="controls"
-				//figure.appendChild(video)
-				fr.appendChild(video)
-				if(createp){
-					var p = document.createElement('p')
-					var br = document.createElement("br")
-					p.appendChild(br)
-					fr.appendChild(p)
-				}
-				
-				
+			if(editorCursor.selection.focusNode.id=="editor"){
+				createp = true
+			}
+			//防止video嵌套
+			document.execCommand("insertHTML",false,"<hr class='video_control_hr'>")
+			editorCursor.restoreRange()
+			document.getElementsByClassName('video_control_hr')[0].remove()
+			
+			var fr  = document.createDocumentFragment()
+			var video = document.createElement("video")
+			video.src = result
+			video.controls="controls"
+			fr.appendChild(video)
+			if(createp){
+				var p = document.createElement('p')
+				var br = document.createElement("br")
+				p.appendChild(br)
+				fr.appendChild(p)
 			}
 			editorCursor.nowRange.insertNode(fr)
-		}else{
-			var data = type===2?`<img src="${result}">`:`<figure><video src="${result}" controls="controls"></video></figure>`
-			document.execCommand('insertHTML',false,data)	
+			if(createp){
+				editorCursor.setRange(p)
+			}else{
+				editorCursor.setRange(video.nextElementSibling,1)
+			}
 		}
-		
-		editorCursor.saveRange()
+		editorCursor.saveRange()		
 	},
 	insert_keyboard:function(){
 		if(!Editor.code.isRangeCantainerCodeLable() && !Editor.code.isCursorInCodeblock_byLabelAttr()){

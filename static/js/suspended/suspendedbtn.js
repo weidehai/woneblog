@@ -81,10 +81,71 @@ var SuspendedBtn={
 	menus: document.getElementById('menus'),
 	suspende_menu: document.getElementById('suspende_menu'),
 	menus_show: false,
+	manage_navigate:function(route){
+		switch (route){
+			case "articles":
+				this.menu_1.style.display='block'
+				this.menu_3.style.display='none'
+				this.menu_2.style.display='none'
+				if (table !== "articles") {
+					document.querySelector('main').innerHTML = ""
+					table = 'articles'
+					sessionStorage.setItem(`manage_table`,`${table}`)
+					change_hash_nocallback(`${table}`)
+					state_pop()
+					if(sessionStorage.getItem(`articlesfirst`)){
+						get_info()
+						pagebtn_init()
+						return
+					}
+					first_get()
+				}
+				break
+			case "write":
+				this.close_menu_force()
+				window.location.href = '/publish'
+				break
+			case "lable":
+				this.menu_1.style.display='none'
+				this.menu_3.style.display='none'
+				this.menu_2.style.display='flex'
+				change_hash_nocallback('lable')
+				break
+			case "mood":
+				this.menu_1.style.display='none'
+				this.menu_2.style.display='none'
+				this.menu_3.style.display='flex'
+				change_hash_nocallback('mood')
+				break
+			case "home":
+				window.location.href="/"
+				break
+			case "drafts":
+				this.menu_1.style.display='block'
+				this.menu_3.style.display='none'
+				this.menu_2.style.display='none'
+				if (table !== "drafts") {
+					document.querySelector('main').innerHTML = ""
+					table = 'drafts'
+					sessionStorage.setItem(`manage_table`,`${table}`)
+					change_hash_nocallback(`${table}`)
+					state_pop()
+					if(sessionStorage.getItem(`draftsfirst`)){
+						get_info()
+						pagebtn_init()
+						return
+					}
+					
+					first_get()	
+				}
+				break
+		}
+	},
 	register_menu: function (){
-		var menu_1 = document.getElementById('menu_1')
-		var menu_2 = document.getElementById('menu_2')
-		var menu_3 = document.getElementById('menu_3')
+		console.log(this)
+		this.menu_1 = document.getElementById('menu_1')
+		this.menu_2 = document.getElementById('menu_2')
+		this.menu_3 = document.getElementById('menu_3')
 		if (!this.touchevent) {
 			this.menus.addEventListener('mousedown',(e)=>{
 				e.stopPropagation()
@@ -97,45 +158,8 @@ var SuspendedBtn={
 		this.menus.addEventListener("click",(e)=>{
 			console.log(e)
 			let menu = e.srcElement.id
-			console.log(menu)
-			switch (menu){
-				case "blogs":
-					menu_1.style.display='block'
-					menu_3.style.display='none'
-					menu_2.style.display='none'
-					if (table !== "articles") {
-						document.querySelector('main').innerHTML = ""
-						table = 'articles'
-						first_get()	
-					}
-					break
-				case "write":
-					window.location.href = '/publish'
-					break
-				case "lable":
-					menu_1.style.display='none'
-					menu_3.style.display='none'
-					menu_2.style.display='flex'
-					break
-				case "mood":
-					menu_1.style.display='none'
-					menu_2.style.display='none'
-					menu_3.style.display='flex'
-					break
-				case "home":
-					window.location.href="/"
-					break
-				case "draft":
-					menu_1.style.display='block'
-					menu_3.style.display='none'
-					menu_2.style.display='none'
-					if (table !== "drafts") {
-						document.querySelector('main').innerHTML = ""
-						table = 'drafts'
-						first_get()	
-					}
-					break
-			}
+			//console.log(menu)
+			this.manage_navigate(menu)
 			this.pop_menu()
 				
 		})
@@ -144,11 +168,18 @@ var SuspendedBtn={
 	pop_menu:function(){
 		if(this.menus_show){
 			this.suspende_menu.style.overflow = 'hidden'
+			this.menus.style.display = "none"
 			this.menus_show = false
 		}else{
 			this.suspende_menu.style.overflow = 'inherit'
+			this.menus.style.display = "block"
 			this.menus_show = true
 		}
+	},
+	close_menu_force:function(){
+		this.suspende_menu.style.overflow = 'hidden'
+		this.menus.style.display = "none"
+		this.menus_show = false
 	},
 	suspended: function (){
 		mycoordinate = new coordinate(this.suspende_menu)

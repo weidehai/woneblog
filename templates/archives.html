@@ -101,20 +101,59 @@
 	</footer>
 	<script type="text/javascript" src="../static/js/flush/laflush.js"></script>
 	<script type="text/javascript">
+		let cache_where = sessionStorage.getItem("archives_where")
 		let offset = 0
 		let year = 2020
 		let where = window.location.search.substr(1) || "all" 
+		let data_sort = []
+		let archives_done = 0
+		sessionStorage.setItem("archives_where",where)
+		window.onpagehide = function(){
+			var scroll_top = document.documentElement.scrollTop
+			sessionStorage.setItem("archives_scroll_top",scroll_top)
+		}
+
 		window.onload = function () {
 			eventListen()
-			getData("articles","article_time, article_title, post_key",where,render)
+			let archives = JSON.parse(sessionStorage.getItem("archives"))
+			console.log(JSON.parse(sessionStorage.getItem("archives")))
+			if(archives && cache_where==where){
+				offset = parseInt(sessionStorage.getItem("archives_offset")) || 0
+				archives_done = parseInt(sessionStorage.getItem("archives_done")) || 0
+				years = Object.keys(archives)
+				if(years.length>0){
+					for(let year_key of years){
+						year = parseInt(year_key)
+						//console.log(archives[year_key])
+						//入栈
+						data_sort.push(archives[year_key])
+						data_sort.push(year)
+					}
+					while(data_sort.length>0){
+						//出栈
+						year = data_sort.pop()
+						render(data_sort.pop())
+					}
+				}
+				let scroll_top = sessionStorage.getItem("archives_scroll_top") || 0
+				document.documentElement.scrollTop = scroll_top
+				window.scrollTo(scroll_top,0)
+				window.scrollTop = scroll_top
+				year = parseInt(sessionStorage.getItem("archives_year"))
+			}else{
+				sessionStorage.clear()
+				sessionStorage.setItem("archives_where",where)
+				getData("articles","article_time, article_title, post_key",where,render)
+			}
 			laflush.eventlistener()
 			laflush.flush = function(){
 				getData("articles","article_time, article_title, post_key",where,render)
 			}
 		}
 		function getData(table,fields,where,cb){
-			if (year<2019) {
+			if (year<2019 || archives_done) {
 				//laflush.removelistener()
+				sessionStorage.setItem("archives_done",1)
 				return
 			}
 			let loading_wrapper = document.getElementsByClassName("loading_wrapper")[0]
@@ -127,15 +166,40 @@
 					var str = xhr.responseText
 					var obj = eval('(' + str + ')')
 					loading_wrapper.style.display = 'none'
+					offset = offset + 10
 					if (obj.length !== 0) {
+						//{"archive":{2020:[],2019:[]}}
+						let archives = sessionStorage.getItem("archives")
+						let data={}
+						console.log("set cache")
+						if(archives){
+							if(year in JSON.parse(archives)){
+								console.log("innnnnnnnn")
+								data = JSON.parse(archives)
+								data[year] = data[year].concat(obj)
+								console.log(data)
+								sessionStorage.setItem("archives",JSON.stringify(data))
+							}else{
+								data = JSON.parse(archives)
+								data[year] = obj
+								sessionStorage.setItem("archives",JSON.stringify(data))
+							}
+						}else{
+							data[year] = obj
+							console.log(data)
+							sessionStorage.setItem("archives",JSON.stringify(data))
+							//console.log(sessionStorage.getItem("archives"))
+						}
 						cb(obj)
 					}
-					offset = offset + 10
+					
 					if (obj.length<10) {
 						year = year - 1
 						offset = 0
 					}
 					console.log(offset,year)
+					sessionStorage.setItem("archives_offset",offset)
+					sessionStorage.setItem("archives_year",year)
 					if (document.documentElement.scrollHeight<=document.documentElement.clientHeight) {
 						getData("articles","article_time, article_title, post_key",where,render)
 					}
@@ -143,6 +207,7 @@
 			}
 			xhr.send()
 		}
+		
 		function render(result){
 			let wrapper = document.getElementById("wrapper")
 			let archive = document.getElementById(year)

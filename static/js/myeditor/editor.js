@@ -10,7 +10,6 @@
 2.新需求
 从别的地方复制粘贴过来的文本需要清除样式
  */
-var TEST = true
 var Editor = {
 	editor:document.getElementById('editor'),
 	//初始化编辑框
@@ -664,18 +663,102 @@ Editor.code = {
 
 
 
-
+//----------------------------视频块控制-----------------------------
 Editor.video_control = {
 	video_focued_node:null,
 	on_init(){
 		console.log("init video_control")
 		Editor.video_control.video_control()
 	},
+	find_root_elementfor(node){
+		if(node.id==="editor"){
+			return null
+		}
+		while(node.parentElement.id!=="editor"){
+			node = node.parentElement
+		}
+		return node
+	},
+	video_get_focus(focus_video){
+		Editor.video_control.video_focued_node = focus_video
+		editorCursor.selection.removeAllRanges()
+		if(!document.activeElement.id==="editor"){
+			Editor.editor.focus()
+		}
+		Editor.video_control.video_focued_node.className = Editor.video_control.video_focued_node.className + " videofocus"
+	},
+	video_loss_focus(){
+		Editor.video_control.video_focued_node.className = Editor.video_control.video_focued_node.className.replace(" videofocus","")
+		Editor.video_control.video_focued_node = null
+	},
+	del_video(){
+		if(Editor.video_control.video_focued_node.previousElementSibling){
+			editorCursor.setRange(Editor.video_control.video_focued_node.previousElementSibling)
+		}else if(Editor.video_control.video_focued_node.nextElementSibling){
+			editorCursor.setRange(Editor.video_control.video_focued_node.nextElementSibling,1)
+		}
+		Editor.video_control.video_focued_node.remove()
+		Editor.video_control.video_focued_node = null
+	},
 	video_control(){
 		Editor.editor.addEventListener("keydown",(e)=>{
-			console.log(editorCursor.selection)
+			var pes,nes
+			//删除video
+			if(Editor.video_control.video_focued_node && e.keyCode===8){
+				Editor.video_control.del_video()
+				return
+			}
+			//console.log(editorCursor.selection)
+			//上下左右及tab键处理
+			//tab:9  left:37  right:39  down:40  up:38
+			if(e.keyCode===40){
+				if(!Editor.video_control.video_focued_node){
+					var rootnode = Editor.video_control.find_root_elementfor(editorCursor.selection.focusNode)
+					if(rootnode && rootnode.nextElementSibling && rootnode.nextElementSibling.nodeName==="VIDEO"){
+						e.preventDefault()
+						e.stopPropagation()
+						Editor.video_control.video_get_focus(rootnode.nextElementSibling)
+					}
+				}else{
+					e.preventDefault()
+					e.stopPropagation()
+					nes = Editor.video_control.video_focued_node.nextElementSibling
+					if(nes){
+						editorCursor.setRange(nes,1)	
+					}
+					Editor.video_control.video_loss_focus()
+				}
+				return
+			}
+			if(e.keyCode===38){
+				if(!Editor.video_control.video_focued_node){
+					var rootnode = Editor.video_control.find_root_elementfor(editorCursor.selection.focusNode)
+					if(rootnode && rootnode.previousElementSibling &&rootnode.previousElementSibling.nodeName==="VIDEO"){
+						e.preventDefault()
+						e.stopPropagation()
+						Editor.video_control.video_get_focus(rootnode.previousElementSibling)
+					}
+				}else{
+					e.preventDefault()
+					e.stopPropagation()
+					pes = Editor.video_control.video_focued_node.previousElementSibling
+					if(pes){
+						editorCursor.setRange(pes)	
+					}
+					Editor.video_control.video_loss_focus()
+				}
+				return
+			}
+			if(e.keyCode===9){
+				if(Editor.video_control.video_focued_node){
+					Editor.video_control.video_loss_focus()
+				}
+				return
+			}
+
+
 			if(editorCursor.selection.focusNode){
-				var pes = editorCursor.selection.focusNode.previousElementSibling || null
+				pes = editorCursor.selection.focusNode.previousElementSibling || null
 			}
 			var offset = editorCursor.selection.focusOffset
 			console.log(editorCursor.selection.focusNode.innerHTML=="")
@@ -684,11 +767,10 @@ Editor.video_control = {
 			}
 			if(pes && e.keyCode===8 && pes.nodeName==="VIDEO" && offset===0){
 				e.preventDefault()
+				e.stopPropagation()
 				console.log(pes)
 				if(!Editor.video_control.video_focued_node){
-					pes.focus()
-					Editor.video_control.video_focued_node = pes
-					Editor.video_control.video_focued_node.className = Editor.video_control.video_focued_node.className + " videofocus"
+					Editor.video_control.video_get_focus(pes)
 					return
 				}
 			}
@@ -699,33 +781,36 @@ Editor.video_control = {
 						if(pe.previousElementSibling){
 							if(pe.previousElementSibling.nodeName==="VIDEO"){
 								e.preventDefault()
+								e.stopPropagation()
 								if(!Editor.video_control.video_focued_node){
-									pe.previousElementSibling.focus()
-									Editor.video_control.video_focued_node = pe.previousElementSibling
-									Editor.video_control.video_focued_node.className = Editor.video_control.video_focued_node.className + " videofocus"
+									Editor.video_control.video_get_focus(pe.previousElementSibling)
 									return
 								}
 							}	
 						}
 					}
 					pe = pe.parentElement
-					console.log(pe)
+					//console.log(pe)
 				}
 			}
 			if(Editor.video_control.video_focued_node && e.keyCode===8){
-				Editor.video_control.video_focued_node.remove()
-				Editor.video_control.video_focued_node = null
+				Editor.video_control.del_video()
 			}
 		},true)
-		Editor.editor.addEventListener("mouseup",(e)=>{
+		Editor.editor.addEventListener("mousedown",(e)=>{
 			var target = e.target
-			console.log(target)
+			//console.log(target)
+			if(target.nodeName==="VIDEO"){
+				e.preventDefault()
+				e.stopPropagation()
+				if(Editor.video_control.video_focued_node){
+					return
+				}
+			}
 			if(target.nodeName!=="VIDEO" && Editor.video_control.video_focued_node){
-				Editor.video_control.video_focued_node.className = Editor.video_control.video_focued_node.className.replace(" videofocus","")
-				Editor.video_control.video_focued_node = null
+				Editor.video_control.video_loss_focus()
 			}else if(target.nodeName==="VIDEO" && !Editor.video_control.video_focued_node){
-				Editor.video_control.video_focued_node = target
-				Editor.video_control.video_focued_node.className = Editor.video_control.video_focued_node.className + " videofocus"
+				Editor.video_control.video_get_focus(target)
 			}
 		})
 	}

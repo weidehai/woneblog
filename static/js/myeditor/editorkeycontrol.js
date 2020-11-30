@@ -35,6 +35,8 @@ var editorKeyControl = {
 	editorKeyup:function(){
 		var prevent_editor_deltoempty = Editor.prevent_editor_deltoempty.bind(this)
 		prevent_editor_deltoempty()
+		//防止删除后焦点为null(待实现)
+		//console.log(editorCursor.selection)
 		Editor.code.updatePreStatus()
 	}
 }

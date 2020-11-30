@@ -2,6 +2,7 @@ let num = 10
 let offset = 0
 let end = false
 let table = "articles"
+let current_page = 1
 let manager_loading = document.getElementsByClassName("myloading_1")[0]
 let mood_submit = document.getElementById("mood_submit")
 let mood_text = document.getElementById("mood_text")
@@ -14,19 +15,57 @@ let del_tag_btn = document.getElementById("del_tag")
 let new_tag = document.getElementById("new_tag")
 let new_tag_submit = document.getElementById("new_tag_submit")
 let add_new_tag_wrapper = document.getElementById("add_new_tag_wrapper")
+let hashcallback = true
+window.onhashchange = ()=>{
+	if(!hashcallback) return
+	console.log("docallback")
+	if(window.location.hash===""){
+		history.back(-1)
+	}else if(/articles|drafts/ig.test(window.location.hash)){
+		//table = window.location.hash.substring(1)
+		SuspendedBtn.manage_navigate(window.location.hash.replace("#",""))
+		//sessionStorage.setItem(`manage_table`,`${table}`)
+		pagebtn_init()
+		//get_info()
+	}else{
+		SuspendedBtn.manage_navigate(window.location.hash.replace("#",""))	
+	}
+	control_from_browser = false
+	SuspendedBtn.close_menu_force()
+}
+
+function change_hash_nocallback(hash){
+	hashcallback = false
+	window.location.hash = hash
+	setTimeout(()=>{
+		hashcallback = true
+	},0)
+}
+
 window.onload = function() {
-	//console.log(manager_loading)
-	first_get()
 	SuspendedBtn.suspended()
 	SuspendedBtn.register_menu()
+	if(window.location.hash===""){
+		change_hash_nocallback(`${table}`)
+		sessionStorage.setItem(`manage_table`,`${table}`)
+		first_get()
+		manager_loading.style.display = "block"
+	}else if(/articles|drafts/ig.test(window.location.hash)){
+		table = window.location.hash.substring(1)
+		sessionStorage.setItem(`manage_table`,`${table}`)
+		pagebtn_init()
+		get_info()
+	}else{
+		SuspendedBtn.manage_navigate(window.location.hash.replace("#",""))	
+	}
+	SuspendedBtn.close_menu_force()
 	addevent()
-	manager_loading.style.display = "block"
 }
 
 function first_get(){
-	console.log(table)
 	manager_loading.style.display = 'block'
 	Interactive.XHRApart(table,'article_title,article_time,article_tag,post_key','article_time',offset,10,(result)=>{
+		sessionStorage.setItem(`${table}first`,1)
 		render(result)
 		manager_loading.style.display = 'none'
 		if (result.length < 10) {
@@ -44,6 +83,8 @@ function first_get(){
 		}
 		offset = 0
 		console.log(offset,num)
+		sessionStorage.setItem(`${table}current_page`,1)
+		sessionStorage.setItem(`${table}num`,num)
 		pagebtn_init()
 	})
 }
@@ -51,12 +92,22 @@ function first_get(){
 function pagebtn_init(){
 	let page = document.getElementById('page')
 	let nav = page.querySelector("nav")
-	if (nav) {
-		page.removeChild(nav)	
-	}
+	let next_active = false
+	let previous_active = false
+	let pagebtn = []
+	let page_active = null
+	//let fragment = document.createDocumentFragment()
+	let div_wrapper = document.createElement('nav')
 	let next = document.getElementById('next_page')
 	let previous = document.getElementById('previous_page')
 	let total
+	num = parseInt(sessionStorage.getItem(`${table}num`)) || 10
+	current_page = parseInt(sessionStorage.getItem(`${table}current_page`)) || 1
+	offset = num*(current_page-1) || 0
+	console.log(num,current_page,offset	)
+	if (nav) {
+		page.removeChild(nav)	
+	}
 	if (table==="articles") {
 		total = page.getAttribute("data-article_total")	
 	}else{
@@ -65,13 +116,6 @@ function pagebtn_init(){
 	console.log(total)
 	let page_num = Math.ceil(total/num)
 	console.log(page_num)
-	let current_page = 1
-	let next_active = true
-	let previous_active = false
-	let pagebtn = []
-	let page_active = null
-	//let fragment = document.createDocumentFragment()
-	let div_wrapper = document.createElement('nav')
 	if (page_num<=1) {
 		page.style.display = "none"
 		return
@@ -80,17 +124,17 @@ function pagebtn_init(){
 		let div = document.createElement('div')
 		div.innerText = i
 		div.style.display = 'inline-block'
-		//fragment.appendChild(div)
 		div_wrapper.appendChild(div)
 		pagebtn.push(div)
 	}
 	page.insertBefore(div_wrapper,next)
 	page.style.display = "flex"
-	page_active = div_wrapper.querySelectorAll("div")[0]
+	page_active = div_wrapper.querySelectorAll("div")[current_page-1]
 	page_active.style.backgroundColor = 'gray'
+	check_whether_headortail()
 	div_wrapper.addEventListener("click",(e)=>{
 		let want_page = parseInt(e.target.innerText)
-		if (want_page===current_page) {return}
+		if (want_page===current_page) return
 		page_active.style.backgroundColor = "#409eff"
 		e.target.style.backgroundColor = 'gray'
 		page_active = e.target
@@ -103,12 +147,8 @@ function pagebtn_init(){
 		}
 		if (current_page===page_num) {
 			is_tail()	
-		}
-		 
+		}	
 	})
-	//previous.addEventListener('click',previous_page)
-	next.addEventListener('click',next_page)
-
 	function next_page() {
 		current_page++
 		console.log(current_page,page_num)
@@ -119,8 +159,8 @@ function pagebtn_init(){
 		page_active = pagebtn[current_page-1]
 		is_tail()
 	}
-
 	function previous_page() {
+		console.log(current_page)
 		current_page--
 		offset = offset - num
 		get_info()
@@ -132,25 +172,50 @@ function pagebtn_init(){
 	function is_head() {
 		console.log("head")
 		if (current_page===1) {
-			previous.removeEventListener("click",previous_page)
+			previous.onclick = null
 			previous.style.backgroundColor='gray'
 			previous_active=false	
 		}
 		if (!next_active) {
-			next.addEventListener("click",next_page)
+			next.onclick = next_page
 			next.style.backgroundColor='#409eff'
 			next_active=true
 		}
 	}
 	function is_tail() {
 		console.log("tail")
+		console.log(current_page,page_num)
 		if (current_page===page_num) {
-			next.removeEventListener("click",next_page)
+			next.onclick = null
 			next.style.backgroundColor='gray'
 			next_active=false
 		}
 		if (!previous_active) {
-			previous.addEventListener("click",previous_page)
+			previous.onclick = previous_page
+			previous.style.backgroundColor="#409eff"
+			previous_active=true
+		}
+	}
+	function check_whether_headortail(){
+		if (current_page===1) {
+			previous.onclick = null
+			previous.style.backgroundColor='gray'
+			previous_active=false
+			next.onclick = next_page
+			next.style.backgroundColor='#409eff'
+			next_active=true
+		}else if(current_page===page_num){
+			next.onclick = null
+			next.style.backgroundColor='gray'
+			next_active=false
+			previous.onclick = previous_page
+			previous.style.backgroundColor="#409eff"
+			previous_active=true
+		}else{
+			next.onclick = next_page
+			next.style.backgroundColor='#409eff'
+			next_active=true
+			previous.onclick = previous_page
 			previous.style.backgroundColor="#409eff"
 			previous_active=true
 		}
@@ -228,6 +293,9 @@ function get_info() {
 	Interactive.XHRApart(table,'article_title,article_time,article_tag,post_key','article_time',offset,num,(result)=>{
 		document.querySelector('main').innerHTML = ""
 		render(result)
+		sessionStorage.setItem(`${table}current_page`,current_page)
+		sessionStorage.setItem(`${table}offset`,offset)
+		sessionStorage.setItem(`${table}num`,num)
 		manager_loading.style.display = "none"
 		//console.log(result.length,offset,num)
 		if (result.length<num) {
@@ -307,4 +375,11 @@ function del_tag(id){
 		lable_list.options[previous_index].selected = true
 		lable.innerText = lable_list.options[previous_index].value
 	})
+}
+
+
+function state_pop(){
+	num = parseInt(sessionStorage.getItem(`${table}num`)) || 10
+	current_page = parseInt(sessionStorage.getItem(`${table}current_page`)) || 1
+	offset = num*(current_page-1) || 0
 }
