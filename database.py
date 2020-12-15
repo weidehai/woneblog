@@ -1,5 +1,5 @@
 from PoolDB import Pool
-
+#本文件只保留公共的方法，页面特有的方法放到pages_server中
 
 class Operation:
     @staticmethod
