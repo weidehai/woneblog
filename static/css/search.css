@@ -41,6 +41,13 @@
 
 .title{
 	border-bottom: 1px solid #c9cacc;
+	overflow: hidden;
+	max-width: 100%;
+	width: auto;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	line-height: 17px;
+	display: inline-block;
 }
 
 .title:hover{
@@ -53,6 +60,7 @@
 	-webkit-line-clamp: 2;
 	height: 50px;
 	overflow: hidden;
+	word-wrap: break-all;
 }
 .preview *{
 	display: inline-block;

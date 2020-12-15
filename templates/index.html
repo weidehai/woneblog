@@ -80,6 +80,10 @@
 						</div>
 						<a href="http://project.haiblog.cn{{item['project_url']}}">{{item["project_title"]}}</a>
 					</li>
+					{% else %}
+					<li class="project-item">
+						<span>没有任何内容😅😅😅😅😅😅😅</span>
+					</li>
 					{% endfor %}
 					<!-- <li class="project-item">
 						<a href="https://github.com/weidehai/myblog_dev/tree/myblog_hl_dev">个人博客代码高亮js插件</a>

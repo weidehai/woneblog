@@ -2,7 +2,6 @@
 使用gif代替视频
 现阶段只支持在本地先将视频转成gif在上传，以后会应用会支持视频转gif(放弃，因为视频转gif体积会变大几倍到几十倍)
 */
-
 /*
 待修复bug
 1.首次（非首次同样）进入publish页面，然后光标首先（非第一次同样）落在pre中，点击菜单右上角退出代码块按钮无效（此时代码块下面已经有了一行空白行）
@@ -12,12 +11,10 @@
  */
 var Editor = {
 	editor:document.getElementById('editor'),
-	//初始化编辑框
+	title:document.getElementById('title'),
+	tags:document.getElementById('tags'),
 	submited:false,
-	article_tag:"Javascript",
-	draft:false,
-	newone:true,
-	post_key:Math.random().toString().substring(2,5)+Date.now(),
+	//初始化编辑框
 	init: function() {
 		//将编辑框的默认换行元素改为p
 		document.execCommand("defaultParagraphSeparator", false, "p")
@@ -27,16 +24,6 @@ var Editor = {
 			var br = document.createElement('br')
 			Editor.editor.appendChild(p)
 			p.appendChild(br)
-		}
-		//控制keydown换行事件
-		if (window.location.search.indexOf("?draftid=") !== -1) {
-			Editor.draft = true
-			Editor.newone = false
-			Editor.post_key =  window.location.search.replace("?draftid=","")
-		}else if (window.location.search.indexOf("?getid=") !== -1) {
-			Editor.draft = false
-			Editor.newone = false
-			Editor.post_key = window.location.search.replace("?getid=","")
 		}
 		//为editor的鼠标和键盘事件注册处理函数
 		Editor.editor.addEventListener('keydown',editorKeyControl.editorKeydown)
@@ -50,42 +37,236 @@ var Editor = {
 			status[0].style.display = 'none'
 			editorCursor.saveRange
 		})
-		Editor.disableFocus()
-		Editor.eventListen()
-		Editor.video_control.on_init()
-		
 	},
-	//当编辑框获取焦点时隐藏所有的悬浮窗口
-	hideAllsusp: function() {
-		var susp = document.getElementsByClassName('suspended')
-		var length = susp.length
-		for(var i=0;i<length;i++){
-			susp[i].style.display = 'none'
-			susp[i].setAttribute('data-show','false')
-		}
+	register_submit:function(where=false){
+		submitbt.addEventListener('click',function(){
+			let data = Editor.get_content()
+			let post_key = data["post_key"]
+			Editor.submited = true
+			Editor.tabletransfer = Editor.draft || Editor.newone ? true : false
+			Interactive.XHRPost(data,post_key)
+		})
+		draft.addEventListener('click',function(){
+			let data = Editor.get_content()
+			let post_key = data["post_key"]
+			delete data.text_for_search
+			delete data.article_read
+			delete data.update_time
+			data.table = "drafts"
+			Editor.submited = true
+			tabletransfer = !Editor.draft ? true : false
+			Interactive.XHRPost(data,post_key)
+			if (Editor.draft) {
+				new Promise((resolve,reject)=>{
+					//删除多余的文件
+					Editor.file.diff_file(data.article_content,(result)=>{resolve(result)})
+				}).then(()=>{
+					let p = new Promise((resolve,reject)=>{
+						if(!Editor.newone){
+							let XHRJudgeArticleExistOrNot = `/existornot?post_key=${post_key}&table=${data.table}`
+							Interactive.XHRCommon(XHRJudgeArticleExistOrNot,null,null,"get",(result)=>{
+								if(result !== "0000"){
+									if(!window.confirm("草稿已存在，确定覆盖吗？")) return reject()
+									resolve(true)
+								}else{
+									resolve(false)	
+								}
+							})
+						}else{
+							resolve(false)
+						}
+					})
+					return p
+				}).then(()=>{
+					//将文件从upload替换到draft
+					for (let file of Editor.file.filelist){
+						data.article_content = data.article_content.replace(file,file.replace("upload","draft"))
+						data.article_content = data.article_content.replace(file,file.replace("temporary","draft"))
+					}
+					let p = new Promise((resolve,reject)=>{
+						Interactive.XHRUpdate(data,function(result){
+							alert("草稿保存成功!!")
+							resolve()
+						})	
+					})
+					return p
+				}).then(()=>{
+					let dir = post_key
+					if (Editor.file.new_filelist.length !== 0) {
+						Editor.file.copy_file_to(null,dir,"temporary","draft")
+					}
+				}).catch(()=>{
+					alert("Ops!Something Error😅")
+				})
+			}
+			if (!Editor.draft) {
+				new Promise((resolve,reject)=>{
+					//删除多余的文件
+					Editor.file.diff_file(data.article_content,(result)=>{resolve(result)})
+				}).then((result)=>{
+					for (let file of Editor.file.filelist){
+						data.article_content = data.article_content.replace(file,file.replace("upload","draft"))
+						data.article_content = data.article_content.replace(file,file.replace("temporary","draft"))
+					}
+					//判断文章是否存在
+					let p = new Promise((resolve,reject)=>{
+						if(!Editor.newone){
+							let XHRJudgeArticleExistOrNot = `/existornot?post_key=${post_key}&table=${data.table}`
+							Interactive.XHRCommon(XHRJudgeArticleExistOrNot,null,null,"get",(result)=>{
+								if(result !== "0000"){
+									if(!window.confirm("草稿已存在，确定覆盖吗？")) return reject()
+									resolve(true)
+								}else{
+									resolve(false)	
+								}
+							})
+						}else{
+							resolve(false)
+						}
+						
+					})
+					return p
+				}).then((exists)=>{
+					let p = new Promise((resolve,reject)=>{
+						Interactive.XHRSave(data,'post',exists,function(result){
+							alert("草稿保存成功!!")
+							resolve()
+						})
+					})
+					return p
+				}).then(()=>{
+					if (Editor.file.filelist.length !== 0) {
+						let dir = post_key
+						Editor.file.copy_file_to(null,dir,"upload","draft")
+						Editor.file.copy_file_to(null,dir,"temporary","draft")	
+					}
+				}).catch(()=>{
+					alert("Ops!Something Error😅")
+				})
+			}
+		})
 	},
-	//防止编辑器被删除为空
-	prevent_editor_deltoempty: function(){
-		//this表示触发这个事件的元素
-		if (this.innerHTML=='') {
-			this.innerHTML='<p><br></p>'
+	get_content: function() {
+		var title = document.getElementById('title')
+		var data = {
+			"article_title":title.value,
+			"article_content":Editor.editor.innerHTML,
+			"article_tag":Editor.article_tag,
+			"article_time":dateFormat('YYYY-MM-DD'),	
+			"update_time":dateFormat('YYYY-MM-DD'),
+			"post_key": Editor.post_key,
+			"text_for_search": Editor.editor.innerText,
+			"article_read":'0',
+			"table":'articles'
 		}
+		return data;
 	},
-	disableFocus:function () {
-		//阻止样式按钮的点击获取焦点事件
-		var menus = document.getElementsByTagName('i')
-		//var video = document.getElementById("video")
-		for (var k=0,len=menus.length;k<len;k++) {
-			menus[k].addEventListener('mousedown',function(e){
-				e.preventDefault()
-			})
+	//获取指定元素的最后一个子元素，若此子元素还有子元素则继续获取，直到那个元素不再有子元素
+	get_deep_lastchild:function(targetElement){
+		lastele = targetElement.lastChild
+		if (lastele) {
+			lastele = Editor.get_deep_lastchild(lastele)
+			return lastele
 		}
-		// video.addEventListener('mousedown',function(e){
-		// 	e.preventDefault()
-		// })
+		return targetElement
+	},
+	//判断nodename是否被node包含
+	if_node_contained_by: function(nodename,node){
+		try{
+			if (node.nodeName == nodename){
+				return node
+			}else if(node.parentNode.nodeName == nodename){
+				return node.parentNode
+			}else if (node.id !== 'editor' && node.parentNode.id !== 'editor') {
+				var node = node.parentNode
+				return Editor.if_node_contained_by(nodename,node)
+			}else {
+				return false
+			}
+		}catch{}
+	},
+	lock:function(){
+		Editor.title.disabled = "disabled"
+		Editor.tags.disabled = "disabled"
+		Editor.editor.setAttribute("contenteditable","false")
+	},
+	unlock:function(){
+		Editor.title.disabled = ""
+		Editor.tags.disabled = ""
+		Editor.editor.setAttribute("contenteditable","true")
+	},
+	generate_post_key:function(){
+		//生成post_key
+		//取0-1之间的随机小数的2，3，4个字符加上当前时间戳
+		return Math.random().toString().substring(2,5)+Date.now()
+	}
+}
 
+
+
+Editor.tableinfo = {
+	current_table:null,
+	save_to:null,
+	post_key:null,
+	article_tag:"Javascript",
+	article_title:null,
+	init_table_info:function(){
+		//判断新建，修改
+		if (window.location.search.indexOf("?draftid=") !== -1) {
+			Editor.tableinfo.current_table = "drafts"
+			Editor.tableinfo.post_key =  window.location.search.replace("?draftid=","")
+		}else if (window.location.search.indexOf("?getid=") !== -1) {
+			Editor.tableinfo.current_table = "articles"
+			Editor.tableinfo.post_key = window.location.search.replace("?getid=","")
+		}
+		if(Editor.tableinfo.current_table && Editor.tableinfo.post_key){
+			get_table_content()
+		}else{
+			Editor.tableinfo.post_key = Editor.generate_post_key()
+		}
 	},
-	eventListen:function(){
+	get_table_content:function(){
+		Editor.loadingUI.display()
+		Interactive.XHRQuery(Editor.tableinfo.current_table,'article_title,article_tag,article_content',Editor.tableinfo.post_key,(result)=>{
+			console.log(result)
+			if(result.length==0 || !result) {
+				Editor.loadingUI.hide()
+				Editor.unlock()
+				window.location.href = "/publish"
+				return
+			}
+			Editor.editor.innerHTML = result[0]['article_content']
+			Editor.file.get_filelist(result[0]['article_content'])
+			Editor.title.setAttribute('value',result[0]['article_title'])
+			Editor.tableinfo.article_tag = result[0]['article_tag']
+			for (let i=Editor.tags.options.length-1;i>0;i--){
+				if (Editor.tags.options[i].value===Editor.tableinfo.article_tag) {
+					Editor.tags.options[i].selected = true
+				}
+			}
+			Editor.loadingUI.hide()
+			Editor.unlock()
+		})
+	}
+}
+
+Editor.component = {
+	
+	submitbt:document.getElementById('submit'),
+    draftbt:document.getElementById('draft'),
+    
+    
+}
+
+
+Editor.menus = {
+	menus:document.getElementsByTagName('i'),
+	menu_wrap:document.getElementsByClassName("stylemenu_wrapper")[0],
+	menu_susp:document.getElementsByClassName('suspended'),
+	scroll_x:0,
+	scroll_lenght:0,
+	start_x:0,
+	init:function(){
 		var h2 = document.getElementById('h2')
 		var h1 = document.getElementById('h1')
 		var table = document.getElementById('table')
@@ -98,7 +279,6 @@ var Editor = {
 		var justifyleft = document.getElementById('justifyleft')
 		var justifycenter = document.getElementById('justifycenter')
 		var quote = document.getElementById('quote')
-		//var clear = document.getElementById('clear')
 		var cutline = document.getElementById('cutline')
 		var list = document.getElementById('list')
 		var link = document.getElementById('link')
@@ -106,8 +286,7 @@ var Editor = {
 		var file = document.getElementById('file')
 		var code = document.getElementById('code')
 		var code_status = document.getElementsByClassName('code_status')
-		var title = document.getElementById('title')
-		var tags = document.getElementById('tags')
+		
 		var linkedit = document.getElementById('linkedit')
 		var linkhref = document.getElementById('linkhref')
 		if (Editor.newone) {
@@ -158,164 +337,21 @@ var Editor = {
 			}
 	    })
 	},
-	register_submit:function(where=false){
-		var submitbt = document.getElementById('submit')
-		var draft = document.getElementById('draft')
-		var suspension = document.getElementsByClassName('suspension')[0]
-		var loading = suspension.getElementsByClassName('myloading_1')[0]
-		if (where) {
-			suspension.style.display = 'block'
-			loading.style.display = 'block'
-			let table = Editor.draft?"drafts":"articles"
-			Interactive.XHRQuery(table,'article_title,article_tag,article_content',where,(result)=>{
-				Editor.editor.innerHTML = result[0]['article_content']
-				Editor.file.get_filelist(result[0]['article_content'])
-				title.setAttribute('value',result[0]['article_title'])
-				Editor.article_tag = result[0]['article_tag']
-				for (let i=tags.options.length-1;i>0;i--){
-					if (tags.options[i].value===Editor.article_tag) {
-						tags.options[i].selected = true
-					}
-				}
-				suspension.style.display = 'none'
-				loading.style.display = 'none'
-				title.disabled = ""
-				tags.disabled = ""
-				Editor.editor.setAttribute("contenteditable","true")
+	disableFocus:function () {
+		//阻止样式按钮的点击获取焦点事件
+		for (var k=0,len=Editor.menus.menus.length;k<len;k++) {
+			Editor.menus.menus[k].addEventListener('mousedown',function(e){
+				e.preventDefault()
 			})
-		}else{
-			title.disabled = ""
-			tags.disabled = ""
-			Editor.editor.setAttribute("contenteditable","true")
-			if (!Editor.draft) {
-				Editor.editor.focus()
-				editorCursor.saveRange()	
-			}	
 		}
-		
-		submitbt.addEventListener('click',function(){
-			let data = Editor.getContent()
-			let post_key = data["post_key"]
-			if (!Editor.draft && !Editor.newone) {
-				delete data.article_time
-				delete data.article_read
-				console.log(data.article_content)
-				console.log(data)
-				Editor.submited = true
-				Editor.file.diff_file(data.article_content)
-				Interactive.XHRUpdate(data,function(result){
-					window.location.href = `/articledetails?id=${post_key}`
-				})	
-			}
-			if (Editor.draft || Editor.newone) {
-				Editor.submited = true
-				Editor.file.diff_file(data.article_content)
-				//将文件从draft替换到upload
-				for (let file of Editor.file.filelist){
-					data.article_content = data.article_content.replace(file,file.replace("draft","upload"))
-				}
-				//回调太多，用promise来解决地狱回调
-				new Promise((resolve,reject)=>{
-					if (Editor.file.filelist.length !== 0) {
-						let dir = post_key
-						Editor.file.copy_draftfile_to_upload(resolve,dir,"draft","upload")	
-					}else{
-						resolve()
-					}
-				}).then(()=>{
-					let p = new Promise((resolve,reject)=>{
-								Interactive.XHRSave(data,'post',true,function(result){
-									console.log(result)
-									resolve(result)
-								})		
-							})
-					return p
-				}).then((result)=>{
-					console.log(result)
-					if (result.indexOf("update") === -1) {
-						let p = new Promise((resolve,reject)=>{
-									let xhr = Interactive.creatXHR()
-									xhr.open("GET",`/updatearticlenum?tag_name=${data['article_tag']}&operation=add`,true)
-									xhr.onreadystatechange = function(){
-										if (xhr.readyState===4) {
-											if (xhr.responseText==="success") {
-												resolve()	
-											}
-										}
-									}
-									xhr.send(null)
-								})
-						return p
-					}else{
-						return Promise.resolve()
-					}
-				}).then(()=>{
-					//如果草稿发表出去，需要删除草稿及其文件
-					if (Editor.draft) {
-						Interactive.XHRDel("drafts",post_key,()=>{
-							if (Editor.file.filelist.length !== 0) {
-								Interactive.XHRDelFile(JSON.stringify({filelist:`static\\draft\\${data.post_key}`}),"dir",()=>{
-									window.location.href = `/articledetails?id=${post_key}`	
-								})	
-							}else{
-								window.location.href = `/articledetails?id=${post_key}`	
-							}
-						})	
-					}else{
-						window.location.href = `/articledetails?id=${post_key}`	
-					}
-				})
-			}
-			
-		})
-		draft.addEventListener('click',function(){
-			let data = Editor.getContent()
-			let post_key = data["post_key"]
-			delete data.text_for_search
-			delete data.article_read
-			delete data.update_time
-			data.table = "drafts"
-			Editor.submited = true
-			//将文件从upload替换到draft
-			for (let file of Editor.file.filelist){
-				data.article_content = data.article_content.replace(file,file.replace("upload","draft"))
-			}
-			if (Editor.draft) {
-				Editor.file.diff_file(data.article_content)
-				Interactive.XHRUpdate(data,function(result){
-					alert("草稿保存成功!!")
-				})	
-			}
-			if (!Editor.draft) {
-				new Promise((resolve,reject)=>{
-					if (Editor.file.filelist.length !== 0) {
-						let dir = post_key
-						Editor.file.copy_draftfile_to_upload(resolve,dir,"upload","draft")	
-					}else{
-						resolve()
-					}
-				}).then(()=>{
-					Interactive.XHRSave(data,'post',true,function(result){
-						alert("草稿保存成功!!")
-					})
-				})
-			}
-		})
 	},
-	getContent: function() {
-		var title = document.getElementById('title')
-		var data = {
-			"article_title":title.value,
-			"article_content":Editor.editor.innerHTML,
-			"article_tag":Editor.article_tag,
-			"article_time":dateFormat('YYYY-MM-DD'),	
-			"update_time":dateFormat('YYYY-MM-DD'),
-			"post_key": Editor.post_key,
-			"text_for_search": Editor.editor.innerText,
-			"article_read":'0',
-			"table":'articles'
+	//当编辑框获取焦点时隐藏菜单悬浮窗口
+	hideAllsusp: function() {
+		var length = Editor.menus.menu_susp.length
+		for(var i=0;i<length;i++){
+			Editor.menus.menu_susp[i].style.display = 'none'
+			Editor.menus.menu_susp[i].setAttribute('data-show','false')
 		}
-		return data;
 	},
 	getLinkData: function() {
 		linkedit = document.getElementById('linkedit')
@@ -332,35 +368,39 @@ var Editor = {
 		linkname.value = ""
 		return data
 	},
-	//获取指定元素的最后一个子元素，若此子元素还有子元素则继续获取，直到那个元素不再有子元素
-	get_deep_lastchild:function(targetElement){
-		lastele = targetElement.lastChild
-		if (lastele) {
-			lastele = Editor.get_deep_lastchild(lastele)
-			return lastele
+	//菜单栏拖动
+	enable_scroll_menu:function{
+		Editor.menus.scroll_x = Editor.menus.menu_wrap.scrollLeft
+		Editor.menus.scroll_lenght = Editor.menus.menu_wrap.scrollWidth - 500
+		Editor.menus.menu_wrap.addEventListener('mousedown',function(e){
+			e.preventDefault()
+			Editor.menus.start_x = e.pageX
+			Editor.menus.menu_wrap.addEventListener('mousemove',Editor.menus.scrollto)
+		})
+		Editor.menus.menu.addEventListener("mouseup",()=>{
+			Editor.menus.scroll_x = Editor.menus.menu.scrollLeft
+			Editor.menus.menu.removeEventListener('mousemove',Editor.menus.scrollto)
+		})
+		Editor.menus.menu.addEventListener("mouseleave",()=>{
+			Editor.menus.scroll_x = Editor.menus.menu.scrollLeft
+			Editor.menus.menu.removeEventListener('mousemove',Editor.menus.scrollto)	
+		})
+	},
+	scrollto:function(e){
+	    let delta_x = e.pageX-Editor.menus.start_x
+		console.log(Editor.menus.scroll_x)
+		console.log(e.pageX-Editor.menus.start_x)
+		if (Editor.scroll_menu.scroll_lenght<=(Editor.menus.scroll_x+delta_x)) {
+			console.log("return")
+			return
 		}
-		return targetElement
-	},
-	getCursorNode: function(nodename,node){
-		try{
-			if (node.nodeName == nodename){
-				return node
-			}else if(node.parentNode.nodeName == nodename){
-				return node.parentNode
-			}else if (node.id !== 'editor' && node.parentNode.id !== 'editor') {
-				var node = node.parentNode
-				return Editor.getCursorNode(nodename,node)
-			}else {
-				return false
-			}
-		}catch{}
-	},
+		if (Editor.menus.scroll_x+delta_x<=0) {
+			console.log("left limit")
+			return	
+		}
+		Editor.menus.menu.scrollTo((Editor.menus.scroll_x + delta_x),0)
+	}	
 }
-
-
-
-
-
 
 
 Editor.file = {
@@ -368,6 +408,7 @@ Editor.file = {
 	deleted_filelist:[],
 	new_filelist:[],
 	upload: function(e) {
+		//20201211文件一律上传到temp
 		var suspension = document.getElementsByClassName('suspension')[0]
 		var uploading_wrapper = suspension.getElementsByClassName('uploading_wrapper')[0]
 		var uploading = uploading_wrapper.getElementsByClassName("uploading")[0]
@@ -375,7 +416,8 @@ Editor.file = {
 		var f = e.target.files[0]
 		var file_type = Editor.file.get_filetype(e.target.value)
 		var formdata = new FormData()
-		var type = Editor.draft?"draft":"upload"
+		//var type = Editor.newone?"temporary":Editor.draft?"draft":"upload"
+		var type = 'temporary'
 		var dir = Editor.post_key
 		//将文件转换为二进制数据然后上传
 		formdata.append('file',f)
@@ -407,7 +449,7 @@ Editor.file = {
 		}
 	},
 	get_filelist:function(content){
-		let find_file = /(\.(\\|\/)static(\\|\/)(upload|draft)(\\|\/)\S+?)(?=">)/g
+		let find_file = /(\.?(\\|\/)?static(\\|\/)(upload|draft)(\\|\/)\S+?)(?=">)/g
 		Editor.file.filelist = content.match(find_file) || []
 		// try{
 		// 	for(let file of content.match(find_file)){
@@ -419,20 +461,20 @@ Editor.file = {
 		// }		
 		console.log(Editor.file.filelist)
 	},
-	copy_draftfile_to_upload:function(resolve,dir,from_dir,to_dir){
+	copy_file_to:function(cb,dir,from_dir,to_dir){
 		let xhr = Interactive.creatXHR()
 		xhr.open("post","/copyfile",true)
 		xhr.onreadystatechange = function(){
 			if (xhr.readyState===4 && xhr.status===200) {
-				if (xhr.responseText==="copy success") {
-					resolve()
+				if (xhr.responseText==="copy success" || xhr.responseText==="src not found" || xhr.responseText==="empty src") {
+					if(cb) cb(xhr.responseText)
 				}
 			}
 		}
 		xhr.send(JSON.stringify({dir,from_dir,to_dir}))
 	},
-	diff_file:function(content){
-		if (Editor.file.filelist===null || Editor.file.filelist.length === 0) return
+	diff_file:function(content,cb){
+		if (Editor.file.filelist===null || Editor.file.filelist.length === 0) return cb?cb("do nothing"):void 0
 		for(let index in Editor.file.filelist){
 			console.log(content.indexOf(Editor.file.filelist[index]))
 			if (content.indexOf(Editor.file.filelist[index]) === -1) {
@@ -441,7 +483,9 @@ Editor.file = {
 			}
 		}
 		if (Editor.file.deleted_filelist.length !== 0 && Editor.submited) {
-			Interactive.XHRDelFile(JSON.stringify({filelist:Editor.file.deleted_filelist}))
+			Interactive.XHRDelFile(JSON.stringify({filelist:Editor.file.deleted_filelist}),'file',cb)
+		}else{
+			return cb?cb("do nothing"):void 0
 		}
 	}
 }
@@ -500,7 +544,7 @@ Editor.table = {
 		//使用collapsed来判断光标是否重叠，也就是是否有选中内容
 		console.log(editorCursor.nowRange.collapsed)
 		if (editorCursor.nowRange.collapsed){
-			if (Editor.getCursorNode("TABLE",commonAncestorContainer)) {
+			if (Editor.if_node_contained_by("TABLE",commonAncestorContainer)) {
 				return true
 			}
 			return false
@@ -509,48 +553,6 @@ Editor.table = {
 	},
 }
 //-----------------------------------------------------------------
-
-
-//-----------------------------菜单栏拖动----------------------------
-Editor.scroll_menu = {
-	menu:document.getElementsByClassName("stylemenu_wrapper")[0],
-	start_x:0,
-	scroll_x:0,
-	scroll_lenght:0,
-	bindevent:function(){
-		Editor.scroll_menu.scroll_x = Editor.scroll_menu.menu.scrollLeft
-		Editor.scroll_menu.scroll_lenght = Editor.scroll_menu.menu.scrollWidth - 500
-		Editor.scroll_menu.menu.addEventListener('mousedown',function(e){
-			e.preventDefault()
-			Editor.scroll_menu.start_x = e.pageX
-			Editor.scroll_menu.menu.addEventListener('mousemove',Editor.scroll_menu.scrollto)
-		})
-		Editor.scroll_menu.menu.addEventListener("mouseup",()=>{
-			Editor.scroll_menu.scroll_x = Editor.scroll_menu.menu.scrollLeft
-			Editor.scroll_menu.menu.removeEventListener('mousemove',Editor.scroll_menu.scrollto)
-		})
-		Editor.scroll_menu.menu.addEventListener("mouseleave",()=>{
-			Editor.scroll_menu.scroll_x = Editor.scroll_menu.menu.scrollLeft
-			Editor.scroll_menu.menu.removeEventListener('mousemove',Editor.scroll_menu.scrollto)	
-		})
-	},
-	scrollto:function(e){
-	    let delta_x = e.pageX-Editor.scroll_menu.start_x
-		console.log(Editor.scroll_menu.scroll_x)
-		console.log(e.pageX-Editor.scroll_menu.start_x)
-		if (Editor.scroll_menu.scroll_lenght<=(Editor.scroll_menu.scroll_x+delta_x)) {
-			console.log("return")
-			return
-		}
-		if (Editor.scroll_menu.scroll_x+delta_x<=0) {
-			console.log("left limit")
-			return	
-		}
-		Editor.scroll_menu.menu.scrollTo((Editor.scroll_menu.scroll_x + delta_x),0)
-	}	
-}
-//------------------------------------------------------------------
-
 
 
 
@@ -572,7 +574,7 @@ Editor.code = {
 	isCursorInCodeblock_byNowRange: function(){
 		//console.log(Editor.getCursorNode("PRE"))
 		let commonAncestorContainer = editorCursor.nowRange.commonAncestorContainer
-		return Editor.getCursorNode("PRE",commonAncestorContainer)
+		return Editor.if_node_contained_by("PRE",commonAncestorContainer)
 	},
 	//-------------------------------------------------------------------------
 	/**
@@ -818,7 +820,18 @@ Editor.video_control = {
 }
 
 
-
+Editor.loadingUI = {
+	suspension:document.getElementsByClassName('suspension')[0],
+	loading:document.getElementsByClassName('myloading_1')[0],
+	display:function(){
+		this.suspension.style.display = 'block'
+		this.loading.style.display = 'block'
+	},
+	hide:function(){
+		this.suspension.style.display = 'none'
+		this.loading.style.display = 'none'
+	}
+}
 
 
 
@@ -852,12 +865,14 @@ window.onbeforeunload = function() {
 window.onpagehide = function(){
 	if (Editor.newone) {
 		if (!Editor.submited && Editor.file.filelist.length!==0) {
-			if (Editor.draft) {
-				var dir = `static/draft/${Editor.post_key}`
-				//linux 用反斜杠分割路径
-			}else{
-				var dir = `static/upload/${Editor.post_key}`
-			}
+			// if (Editor.draft) {
+			// 	var dir = `static/draft/${Editor.post_key}`
+			// 	//linux 用反斜杠分割路径
+			// }else{
+			// 	var dir = `static/upload/${Editor.post_key}`
+			// }
+			//20201210未提交的文件保存在temp
+			var dir = `static/temporary/${Editor.post_key}`
 			navigator.sendBeacon("/deletefile?type=dir",JSON.stringify({filelist:dir}))
 		}	
 	}else{

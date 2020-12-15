@@ -16,6 +16,7 @@ let new_tag = document.getElementById("new_tag")
 let new_tag_submit = document.getElementById("new_tag_submit")
 let add_new_tag_wrapper = document.getElementById("add_new_tag_wrapper")
 let hashcallback = true
+let should_first_get = false
 window.onhashchange = ()=>{
 	if(!hashcallback) return
 	console.log("docallback")
@@ -25,7 +26,6 @@ window.onhashchange = ()=>{
 		//table = window.location.hash.substring(1)
 		SuspendedBtn.manage_navigate(window.location.hash.replace("#",""))
 		//sessionStorage.setItem(`manage_table`,`${table}`)
-		pagebtn_init()
 		//get_info()
 	}else{
 		SuspendedBtn.manage_navigate(window.location.hash.replace("#",""))	
@@ -53,10 +53,10 @@ window.onload = function() {
 	}else if(/articles|drafts/ig.test(window.location.hash)){
 		table = window.location.hash.substring(1)
 		sessionStorage.setItem(`manage_table`,`${table}`)
-		pagebtn_init()
-		get_info()
+		auto_get()
 	}else{
-		SuspendedBtn.manage_navigate(window.location.hash.replace("#",""))	
+		SuspendedBtn.manage_navigate(window.location.hash.replace("#",""))
+		should_first_get = true
 	}
 	SuspendedBtn.close_menu_force()
 	addevent()
@@ -65,7 +65,7 @@ window.onload = function() {
 function first_get(){
 	manager_loading.style.display = 'block'
 	Interactive.XHRApart(table,'article_title,article_time,article_tag,post_key','article_time',offset,10,(result)=>{
-		sessionStorage.setItem(`${table}first`,1)
+		//sessionStorage.setItem(`${table}first`,1)
 		render(result)
 		manager_loading.style.display = 'none'
 		if (result.length < 10) {
@@ -101,9 +101,9 @@ function pagebtn_init(){
 	let next = document.getElementById('next_page')
 	let previous = document.getElementById('previous_page')
 	let total
-	num = parseInt(sessionStorage.getItem(`${table}num`)) || 10
-	current_page = parseInt(sessionStorage.getItem(`${table}current_page`)) || 1
-	offset = num*(current_page-1) || 0
+	// num = parseInt(sessionStorage.getItem(`${table}num`)) || 10
+	// current_page = parseInt(sessionStorage.getItem(`${table}current_page`)) || 1
+	//offset = num*(current_page-1) || 0
 	console.log(num,current_page,offset	)
 	if (nav) {
 		page.removeChild(nav)	
@@ -268,7 +268,9 @@ function render(result){
 						}
 						xhr.send(null)	
 					}else{
-						main.removeChild(bt2.parentElement.parentElement)
+						Interactive.XHRDelFile(JSON.stringify({'filelist':`static\\draft\\${result[i]['post_key']}`}),"dir",()=>{
+							main.removeChild(bt2.parentElement.parentElement)
+						})
 					}
 				})
 			}
@@ -288,6 +290,7 @@ function render(result){
 		main.appendChild(ul)
 	}
 }
+
 function get_info() {
 	manager_loading.style.display = 'block'
 	Interactive.XHRApart(table,'article_title,article_time,article_tag,post_key','article_time',offset,num,(result)=>{
@@ -379,7 +382,20 @@ function del_tag(id){
 
 
 function state_pop(){
-	num = parseInt(sessionStorage.getItem(`${table}num`)) || 10
-	current_page = parseInt(sessionStorage.getItem(`${table}current_page`)) || 1
+	let sessionitem_num = sessionStorage.getItem(`${table}num`)
+	let sessionitem_current_page = sessionStorage.getItem(`${table}current_page`)
+	num = parseInt(sessionitem_num) || 10
+	current_page = parseInt(sessionitem_current_page) || 1
 	offset = num*(current_page-1) || 0
+	return !!sessionitem_num && !!sessionitem_current_page
+}
+
+
+function auto_get(){
+	if(state_pop()){
+		pagebtn_init()
+		get_info()	
+	}else{
+		first_get()
+	}
 }

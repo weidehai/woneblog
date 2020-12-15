@@ -92,12 +92,13 @@ var SuspendedBtn={
 					table = 'articles'
 					sessionStorage.setItem(`manage_table`,`${table}`)
 					change_hash_nocallback(`${table}`)
-					state_pop()
-					if(sessionStorage.getItem(`articlesfirst`)){
-						get_info()
-						pagebtn_init()
-						return
-					}
+					auto_get()
+					return
+				}
+				change_hash_nocallback(`${table}`)
+				if(should_first_get){
+					should_first_get = false
+					//state_pop()
 					first_get()
 				}
 				break
@@ -129,14 +130,13 @@ var SuspendedBtn={
 					table = 'drafts'
 					sessionStorage.setItem(`manage_table`,`${table}`)
 					change_hash_nocallback(`${table}`)
-					state_pop()
-					if(sessionStorage.getItem(`draftsfirst`)){
-						get_info()
-						pagebtn_init()
-						return
-					}
-					
-					first_get()	
+					auto_get()
+					return
+				}
+				change_hash_nocallback(`${table}`)
+				if(should_first_get){
+					should_first_get = false
+					first_get()
 				}
 				break
 		}

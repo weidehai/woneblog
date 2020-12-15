@@ -8,7 +8,8 @@ from pages_server.search import Search
 from pages_server.articles import ArticlesDetail
 from pages_server.archives import Archives
 from pages_server.about import About
-from pages_server.manager import admin
+from pages_server.manager import Manager
+from pages_server import admin
 from pages_server.publish import Publish
 from pages_server.login import Login
 from interface import Interface
@@ -18,7 +19,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = b'\xb2t\x9e\xb0\xab\x17g\xc1\x82\xe7\xaep\xe8\xbe+0\xf2\x0e\xaa\xc6\x8e9\xeds'
 cache = Cache(config=redisconfig.config)
 cache.init_app(app)
-app.register_blueprint(admin)
+
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -32,6 +33,7 @@ def robots():
 
 
 if __name__ == '__main__':
+    print("init dddddddd")
     index = Index(app)
     search = Search(app)
     articles_detail = ArticlesDetail(app, cache)
@@ -40,6 +42,8 @@ if __name__ == '__main__':
     publish = Publish(app)
     login = Login(app)
     interface = Interface(app)
+    manager = Manager()
+    app.register_blueprint(admin)
     #monitor = Monitor(app)
     print("weidehai")
     app.run()

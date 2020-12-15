@@ -17,8 +17,13 @@ class Operation:
     def execute_commit(sql):
         conn = Pool.connection()
         cur = conn.cursor()
-        cur.execute(sql)
-        conn.commit()
+        try:
+            cur.execute(sql)
+            conn.commit()
+        #20201205 回滚失败事务防止pymysql死锁
+        except Exception as e:
+            print("pymysql commit has some error:"+e)
+            conn.rollback()
         cur.close()
         conn.close()
         return

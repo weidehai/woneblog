@@ -1,8 +1,8 @@
 import os
 import shutil
-from flask import send_from_directory, redirect, session, request, json
+from flask import render_template, redirect, session, request, json
 from database import my_blogtags, my_admin
-
+from pages_server import admin
 
 class Publish:
     def __init__(self, app):
@@ -10,13 +10,12 @@ class Publish:
         self.__addPublish__()
         self.__addupdateArticlesNum__()
         self.__copyFile__()
-
     def __addPublish__(self):
-        @self.app.route('/publish')
+        @admin.route('/publish')
         def publish():
-            root = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../admin')
+            tags_info = my_blogtags.customize_sql("select tag_name from blogtags", "query")
             if session.get('user_level') == 777:
-                return send_from_directory(root, 'publish.html')
+                return render_template('publish.html',tags=tags_info)
             else:
                 return redirect('/login')
 
@@ -35,16 +34,45 @@ class Publish:
 
     def __copyFile__(self):
         @self.app.route('/copyfile', methods=["post"])
-        def copy_draft_file():
+        def copy_file():
             copy_dir = json.loads(request.get_data())["dir"]
             from_dir = json.loads(request.get_data())["from_dir"]
             to_dir = json.loads(request.get_data())["to_dir"]
             base_path = os.path.dirname(os.path.dirname(__file__))
             src = os.path.join(base_path, "static", from_dir, copy_dir)
             tar = os.path.join(base_path, "static", to_dir, copy_dir)
-            if os.path.exists(tar):
-                shutil.rmtree(tar)
-            shutil.copytree(src, tar)
+            if not os.path.exists(src):
+                return "src not found"
+            if not os.path.exists(tar):
+                print("copytree")
+                print(src)
+                print(tar)
+                if from_dir=="temporary" or from_dir=="draft":
+                    shutil.move(src,tar)
+                else:
+                    shutil.copytree(src, tar)
+            else:
+                print("ddddddddddddddd")
+                print(from_dir)
+                print(os.path.join(base_path, from_dir, copy_dir))
+                for dirpath, dirnames, filenames in os.walk(os.path.join(base_path, "static", from_dir,  copy_dir)):
+                    print(dirpath)
+                    print(dirnames)
+                    print(filenames)
+                    if not filenames:
+                        return "empty src"
+                    if from_dir == "temporary" or from_dir == "draft":
+                        for file in filenames:
+                            shutil.move(os.path.join(src, file),tar)
+                        try:
+                            if not os.listdir(src):
+                                os.rmdir(src)
+                        except FileNotFoundError:
+                            pass
+                    else:
+                        print("copy")
+                        for file in filenames:
+                            shutil.copy(os.path.join(src, file),tar)
             # for file in file_list:
             #     draft_file = os.path.join(base_path, file)
             #     upload_file = os.path.join(base_path, file.replace("draft", "upload"))

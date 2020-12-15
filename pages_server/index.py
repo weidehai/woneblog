@@ -47,10 +47,14 @@ class Index:
 
     @staticmethod
     def getProjects():
-        url = "https://project.haiblog.cn/apigetitem?content=1&fields=project_url,project_time,project_title&sort=0&start=0&num=3"
-        #url = "http://www.haiblog.cn"
-        #print(requests.get(url))
-        res = json.loads(requests.get(url).text)
-
-        res.pop()
+        try:
+            url = "https://project.haiblog.cn/apigetitem?content=1&fields=project_url,project_time,project_title&sort=0&start=0&num=3"
+            #url = "http://www.haiblog.cn"
+            #print(requests.get(url))
+            res = json.loads(requests.get(url).text)
+            #去除数组中多余的内容
+            res.pop()
+        except Exception:
+            res = []
+        print(res)
         return res

@@ -27,6 +27,7 @@ class Interface:
         self.__addGetApart__()
         self.__addGetOne__()
         self.__deleteFile__()
+        self.__addExistOrNot__()
 
     def __addDelById__(self):
         @self.app.route('/delbyid')
@@ -64,7 +65,7 @@ class Interface:
     def __addSave__(self):
         @self.app.route('/save', methods=["POST"])
         def save():
-            judge = request.args.get("judge")   #控制是否需要判断提交的内容是否已存在
+            exists = request.args.get("exists")   #控制是否需要判断提交的内容是否已存在
             save_type = request.args.get("type")  #控制提交是否是要权限，评论的提交不需要权限
             if session.get('user_level') != 777 and save_type == "post":
                 return "illegal access!!!!!!!!!!"
@@ -76,22 +77,29 @@ class Interface:
                     pass
             table = data['table']
             del data['table']
-            print(judge)
-            if judge == 'true':
-                exists = my_articles.customize_sql("select 1 from %s where post_key=%s limit 1" % (table, data["post_key"]), "query")
-                print(exists)
-                if exists:
-                    try:
-                        del data['article_time']
-                        del data["article_read"]
-                    finally:
-                        tables[table].update_data(data["post_key"], **data)
-                        return 'update success'
-                else:
-                    tables[table].save_data(**data)
+            print(exists)
+            if exists == 'true':
+                #exists = my_articles.customize_sql("select 1 from %s where post_key=%s limit 1" % (table, data["post_key"]), "query")
+                try:
+                    del data['article_time']
+                    del data["article_read"]
+                finally:
+                    tables[table].update_data(data["post_key"], **data)
+                    return 'update success'
             else:
                 tables[table].save_data(**data)
             return 'post success'
+
+    def __addExistOrNot__(self):
+        @self.app.route('/existornot')
+        def exist_or_not():
+            post_key = request.args.get('post_key')
+            table = request.args.get("table")
+            exists = my_articles.customize_sql("select 1 from %s where post_key=%s limit 1" % (table, post_key),
+                                               "query")
+            if exists:
+                return "1"
+            return '0000'
 
     def __addUpdate__(self):
         @self.app.route('/update', methods=["POST"])
@@ -122,8 +130,8 @@ class Interface:
         @self.app.route('/upload', methods=["POST"])
         def upload():
             if session.get('user_level') == 777:
-                file_save_to = request.args.get("type")
-                file_dir = request.args.get('dir')
+                file_save_to = request.args.get("type") #draft | uplaod | temporary
+                file_dir = request.args.get('dir')  #postkey
                 file = request.files["file"]
                 file_type = file.filename.split('.').pop().lower()
                 file_name = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
@@ -132,6 +140,8 @@ class Interface:
                 file_path = file_name + "." + file_type
                 path = os.path.join(base_path, upload_path, file_dir, file_path)
                 print(path)
+                if not os.path.exists(os.path.join(base_path, upload_path)):
+                    os.mkdir(os.path.join(base_path, upload_path))
                 if not os.path.exists(os.path.join(base_path, upload_path, file_dir)):
                     os.mkdir(os.path.join(base_path, upload_path, file_dir))
                 print(path)
@@ -157,14 +167,20 @@ class Interface:
                     try:
                         shutil.rmtree(path)
                     except FileNotFoundError:
-                        pass
+                        return "file not found"
                 else:
                     for file in file_list:
                         path = os.path.join(base_path, file)
                         try:
                             os.remove(path)
                         except FileNotFoundError:
-                            pass
+                            return "file not found"
+                        finally:
+                            try:
+                                if not os.listdir(os.path.dirname(path)):
+                                    os.rmdir(os.path.dirname(path))
+                            except FileNotFoundError:
+                                pass
                 return "delete success"
             else:
                 return 'illegal operation'

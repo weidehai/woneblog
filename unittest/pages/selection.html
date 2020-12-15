@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		div{
+			width: 500px;
+			height: 500px;
+		}
+	</style>
+</head>
+<body>
+	<div contenteditable="true" id="editor"></div>
+	<script type="text/javascript">
+		var selection = document.getSelection()
+		try{
+			var nowRange = selection.getRangeAt(0)	
+		}catch{
+
+		}
+		
+		var div = document.getElementById("editor")
+		div.addEventListener("focus",function(){
+			console.log(selection.getRangeAt(0))
+		})
+		div.addEventListener("keyup",function(){
+			console.log(selection)
+			console.log(nowRange)
+		})
+	</script>
+</body>
+</html>

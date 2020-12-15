@@ -27,19 +27,9 @@
 		<div class="titlefield">
 			<input type="text" placeholder="标题" id="title" value="" disabled="disabled">
 			<select id="tags" disabled="disabled">
-				<option>Javascript</option>
-				<option>Vue.js</option>
-				<option>Seo</option>
-				<option>Ubuntu</option>
-				<option>Python</option>
-				<option>数据结构</option>
-				<option>计算机组成原理</option>
-				<option>计算机网络</option>
-				<option>Dos脚本</option>
-				<option>爬虫</option>
-				<option>Algorithm</option>
-				<option>Web前端</option>
-				<option>Mysql</option>
+				{% for tag in tags %}
+				<option>{{tag["tag_name"]}}</option>
+				{% endfor %}
 			</select>
 			<form enctype="multipart/form-data">
 				<input type="file" id="file" name="filecontent" accept="image/png, image/jpeg, image/jpg, image/gif ,video/avi ,video/wmv, video/mp4" style="display: none;">
