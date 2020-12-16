@@ -13,6 +13,7 @@ var Editor = {
 	editor:document.getElementById('editor'),
 	title:document.getElementById('title'),
 	tags:document.getElementById('tags'),
+	submitbt:document.getElementById('submit'),
 	submited:false,
 	//初始化编辑框
 	init: function() {
@@ -37,113 +38,12 @@ var Editor = {
 			status[0].style.display = 'none'
 			editorCursor.saveRange
 		})
-	},
-	register_submit:function(where=false){
 		submitbt.addEventListener('click',function(){
+			//savepost()
 			let data = Editor.get_content()
 			let post_key = data["post_key"]
 			Editor.submited = true
-			Editor.tabletransfer = Editor.draft || Editor.newone ? true : false
 			Interactive.XHRPost(data,post_key)
-		})
-		draft.addEventListener('click',function(){
-			let data = Editor.get_content()
-			let post_key = data["post_key"]
-			delete data.text_for_search
-			delete data.article_read
-			delete data.update_time
-			data.table = "drafts"
-			Editor.submited = true
-			tabletransfer = !Editor.draft ? true : false
-			Interactive.XHRPost(data,post_key)
-			if (Editor.draft) {
-				new Promise((resolve,reject)=>{
-					//删除多余的文件
-					Editor.file.diff_file(data.article_content,(result)=>{resolve(result)})
-				}).then(()=>{
-					let p = new Promise((resolve,reject)=>{
-						if(!Editor.newone){
-							let XHRJudgeArticleExistOrNot = `/existornot?post_key=${post_key}&table=${data.table}`
-							Interactive.XHRCommon(XHRJudgeArticleExistOrNot,null,null,"get",(result)=>{
-								if(result !== "0000"){
-									if(!window.confirm("草稿已存在，确定覆盖吗？")) return reject()
-									resolve(true)
-								}else{
-									resolve(false)	
-								}
-							})
-						}else{
-							resolve(false)
-						}
-					})
-					return p
-				}).then(()=>{
-					//将文件从upload替换到draft
-					for (let file of Editor.file.filelist){
-						data.article_content = data.article_content.replace(file,file.replace("upload","draft"))
-						data.article_content = data.article_content.replace(file,file.replace("temporary","draft"))
-					}
-					let p = new Promise((resolve,reject)=>{
-						Interactive.XHRUpdate(data,function(result){
-							alert("草稿保存成功!!")
-							resolve()
-						})	
-					})
-					return p
-				}).then(()=>{
-					let dir = post_key
-					if (Editor.file.new_filelist.length !== 0) {
-						Editor.file.copy_file_to(null,dir,"temporary","draft")
-					}
-				}).catch(()=>{
-					alert("Ops!Something Error😅")
-				})
-			}
-			if (!Editor.draft) {
-				new Promise((resolve,reject)=>{
-					//删除多余的文件
-					Editor.file.diff_file(data.article_content,(result)=>{resolve(result)})
-				}).then((result)=>{
-					for (let file of Editor.file.filelist){
-						data.article_content = data.article_content.replace(file,file.replace("upload","draft"))
-						data.article_content = data.article_content.replace(file,file.replace("temporary","draft"))
-					}
-					//判断文章是否存在
-					let p = new Promise((resolve,reject)=>{
-						if(!Editor.newone){
-							let XHRJudgeArticleExistOrNot = `/existornot?post_key=${post_key}&table=${data.table}`
-							Interactive.XHRCommon(XHRJudgeArticleExistOrNot,null,null,"get",(result)=>{
-								if(result !== "0000"){
-									if(!window.confirm("草稿已存在，确定覆盖吗？")) return reject()
-									resolve(true)
-								}else{
-									resolve(false)	
-								}
-							})
-						}else{
-							resolve(false)
-						}
-						
-					})
-					return p
-				}).then((exists)=>{
-					let p = new Promise((resolve,reject)=>{
-						Interactive.XHRSave(data,'post',exists,function(result){
-							alert("草稿保存成功!!")
-							resolve()
-						})
-					})
-					return p
-				}).then(()=>{
-					if (Editor.file.filelist.length !== 0) {
-						let dir = post_key
-						Editor.file.copy_file_to(null,dir,"upload","draft")
-						Editor.file.copy_file_to(null,dir,"temporary","draft")	
-					}
-				}).catch(()=>{
-					alert("Ops!Something Error😅")
-				})
-			}
 		})
 	},
 	get_content: function() {
@@ -250,15 +150,6 @@ Editor.tableinfo = {
 	}
 }
 
-Editor.component = {
-	
-	submitbt:document.getElementById('submit'),
-    draftbt:document.getElementById('draft'),
-    
-    
-}
-
-
 Editor.menus = {
 	menus:document.getElementsByTagName('i'),
 	menu_wrap:document.getElementsByClassName("stylemenu_wrapper")[0],
@@ -286,22 +177,9 @@ Editor.menus = {
 		var file = document.getElementById('file')
 		var code = document.getElementById('code')
 		var code_status = document.getElementsByClassName('code_status')
-		
 		var linkedit = document.getElementById('linkedit')
 		var linkhref = document.getElementById('linkhref')
-		if (Editor.newone) {
-			Editor.register_submit()
-		}else if (Editor.draft) {
-			var draft_where = window.location.search.replace('?draftid=','')
-			Editor.register_submit(draft_where)
-		}else{
-			var post_where = window.location.search.replace('?getid=','')
-			Editor.register_submit(post_where)
-		}
-		tags.addEventListener("change",function(){
-			Editor.article_tag = this.options[this.options.selectedIndex].value
-			console.log(Editor.article_tag)
-		})
+		var draftbt = document.getElementById('draft')
 		h1.addEventListener('click',stylecmd.formatblockH1)
 		h2.addEventListener('click',stylecmd.formatblockH2)
 		table.addEventListener('click',stylecmd.table.insertTable)
@@ -314,7 +192,6 @@ Editor.menus = {
 		justifyleft.addEventListener('click',stylecmd.justifyLeft)
 		justifycenter.addEventListener('click',stylecmd.justifyCenter)
 		quote.addEventListener('click',stylecmd.formatblockquote)
-		//clear.addEventListener('click',stylecmd.clearformat)
 		cutline.addEventListener("click",stylecmd.insertcutline)
 		list.addEventListener('click',stylecmd.insertList)
 		linkbt.addEventListener('click',stylecmd.insertlink)
@@ -335,6 +212,9 @@ Editor.menus = {
 			if (el) {
 				Editor.code.exit_code(el)
 			}
+	    })
+	    draftbt.addEventListener("click",function(){
+	    	//savadraft(待实现)
 	    })
 	},
 	disableFocus:function () {
