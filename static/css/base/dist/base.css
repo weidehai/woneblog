@@ -1,0 +1,57 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  font-size: 16px;
+}
+html body {
+  font-family: Meslo LG, Helvetica, Arial, sans-serif, 微软雅黑;
+  background-color: #1d1f21;
+  color: #c9cacc;
+  text-rendering: geometricPrecision;
+  min-height: 100%;
+  -webkit-text-size-adjust: none;
+}
+html a {
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+html a:link {
+  color: inherit;
+}
+html a:visited {
+  color: inherit;
+}
+html a:hover {
+  color: inherit;
+}
+html a:active {
+  color: #2bbc8a;
+}
+html li {
+  list-style: none;
+}
+html .ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+}
+
+@font-face {
+  font-family: "Meslo LG";
+  font-style: normal;
+  src: url("../font/MesloLGS-Regular.woff") format("woff");
+}
+@media screen and (min-width: 1024px) {
+  a:hover {
+    color: #2bbc8a;
+  }
+
+  a:active {
+    color: inherit;
+  }
+}

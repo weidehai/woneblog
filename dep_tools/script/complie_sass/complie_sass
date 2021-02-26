@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+import subprocess,sys,os,platform
+import json
+
+def get_sass_path():
+    wone_depdir = os.environ.get("wone_depdir")
+    return os.path.join(wone_depdir,'extension_tools/node_modules/.bin/sass')
+
+def parse_complie_map():
+    with open(os.path.join(os.path.dirname(__file__),"complie_map.json"),'r') as cm:
+        return json.load(cm)
+
+def complie_sass():
+    cm = parse_complie_map()
+    project_path = os.environ.get('wone_project_path')
+    sass_path = get_sass_path()
+    complie_map=[]
+    for key,value in cm['file_path'].items():
+        input_scss=os.path.join(project_path,key)
+        output_scss=os.path.join(project_path,value)
+        complie_map.append("%s:%s" % (input_scss,output_scss))
+    if platform.system()=="Windows":
+        subprocess.call("%s %s --watch --no-charset --no-source-map --update" % (sass_path," ".join(complie_map)),shell=True)
+    else:
+        subprocess.call("node %s %s --no-charset --no-source-map --update --watch" % (sass_path," ".join(complie_map)),shell=True)
+
+
+if __name__ == '__main__':
+    complie_sass()

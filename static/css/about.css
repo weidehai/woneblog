@@ -1,5 +1,3 @@
-a:link {color: inherit;} 
-a:visited {color: inherit;} 
-a:hover {color: inherit;} 
-a:active {color: inherit;} 
-
+#about {
+  flex: 1;
+}

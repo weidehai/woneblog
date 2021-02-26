@@ -1,0 +1,19 @@
+{
+  "file_path": {
+    "templates/components/header/header.scss": "static/css/header.css",
+    "templates/components/footer/footer.scss": "static/css/footer.css",
+    "templates/components/comment/comment.scss": "static/css/comment.css",
+    "templates/index/index.scss": "static/css/index.css",
+    "templates/article_detail/article_detail.scss": "static/css/article_detail.css",
+    "templates/article_detail/content.scss": "static/css/content.css",
+    "templates/archives/archives.scss": "static/css/archives.css",
+    "templates/loading/loading.scss": "static/css/loading.css",
+    "templates/about/about.scss": "static/css/about.css",
+    "templates/search/search.scss": "static/css/search.css",
+    "templates/error/404/404error.scss": "static/css/404error.css",
+    "templates/admin/login/login.scss": "static/css/login.css",
+    "templates/admin/manage/manage.scss": "static/css/manage.css",
+    "templates/admin/publish/publish.scss": "static/css/publish.css",
+    "static/css/root/root.scss": "static/css/root/dist/root.css"
+  }
+}

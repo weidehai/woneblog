@@ -17,10 +17,11 @@ var systeminfo = {
 	},
 	get_browserinfo:function(){
 		var ua = navigator.userAgent
+		//alert(ua)
 		var edge = /Edge\/(.+?)$/
 		var ie = /Trident/
 		var uc = /UCBrowser\/(.+?)\s/
-		var chrome = /Chrome\/(.+?)\s/
+		var chrome = /(Chrome|CriOS)\/(.+?)\s/
 		var safari = /Version\/(.+?)\s/
 		if (ua.match(edge)) {
 			var browser = 'Edge '+ua.match(edge)[1]
@@ -32,7 +33,8 @@ var systeminfo = {
 			var browser = 'UC '+ua.match(uc)[1]
 			return browser
 		}else if (ua.match(chrome)) {
-			var browser = 'Chrome '+ua.match(chrome)[1]
+			//alert(ua.match(chrome))
+			var browser = 'Chrome '+ua.match(chrome)[2]
 			return browser
 		}else if (ua.match(safari)) {
 			var browser = 'Safari '+ua.match(safari)[1]
@@ -40,3 +42,5 @@ var systeminfo = {
 		}
 	}
 }
+
+

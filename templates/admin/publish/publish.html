@@ -1,0 +1,126 @@
+{% extends "admin/base.html" %}
+{% block title %}发表您的文章{% endblock %}
+{% block css_link %}
+<link rel="stylesheet" type="text/css" href="./static/css/publish.css">
+{% endblock %}
+{% block content %}
+<div id="publish">
+	<div class="title">
+		<p>发表新文章</p>
+	</div>
+	<hr style="background-color: #e6e6e6;height: 1px;border:none;">
+	<div class="main">
+		<div class="titlefield">
+			<input type="text" placeholder="标题" id="title" value="" disabled="disabled">
+		</div>
+		<div class="tagfield">
+			<select id="tags" disabled="disabled">
+				{% for tag in tags %}
+				<option>{{tag["tag_name"]}}</option>
+				{% else %}
+				<option>没有可选择的标签</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="menus">
+			<div class="menu">
+				<i id='h1' class="iconfont icon-h1"></i>
+			</div>
+			<div class="menu">
+				<i id='h2' class="iconfont icon-h2"></i>
+			</div>
+			<div class="menu">
+				<i id='table' class="iconfont icon-table"></i>
+			</div>
+			<div class="menu">
+				<i id='quote' class="iconfont icon-quote"></i>
+			</div>
+			<div class="menu">
+				<i id='code' class="iconfont icon-code"></i>
+			</div>
+			<div class="menu">
+				<i id='list' class="iconfont icon-list"></i>
+			</div>
+			<div class="menu">
+				<i id='link' class="iconfont icon-link"></i>
+			</div>
+			<div class="menu">
+				<label id="picture" class="iconfont icon-picture" for="file"></label>
+				<!--使用for属性将label标签和表单关联-->
+			</div>
+			<div class="menu">
+				<label id="video" class="iconfont icon-video" for="file"></label>
+			</div>
+			<!-- <div class="stylemenu">
+				<label id="video" class="iconfont icon-video"></label>
+			</div> -->
+			<div class="menu">
+				<i id='rowfront' class="iconfont icon-insert_table_row_front"></i>
+			</div>
+			<div class="menu">
+				<i id='rowbehind' class="iconfont icon-insert_table_row_behind"></i>
+			</div>
+			<div class="menu">
+				<i id='colfront' class="iconfont icon-insert_table_col_front"></i>
+			</div>
+			<div class="menu">
+				<i id='colbehind' class="iconfont icon-insert_table_col_behind"></i>
+			</div>
+			<div class="menu">
+				<i id='removerow' class="iconfont icon-remove_table_row"></i>
+			</div>
+			<div class="menu">
+				<i id='removecol' class="iconfont icon-remove_table_col"></i>
+			</div>
+			<div class="menu">
+				<i id='justifyleft' class="iconfont icon-justify_left"></i>
+			</div>
+			<div class="menu">
+				<i id='justifycenter' class="iconfont icon-justify_center"></i>
+			</div>
+			<div class="menu">
+				<i id='draft' class="iconfont icon-draft"></i>
+			</div>
+			<div class="menu">
+				<i id='cutline' class="iconfont icon-cutline"></i>
+			</div>
+				<!-- <div class="stylemenu">
+					<i id='clear' class="iconfont icon-clear"></i>
+				</div> -->
+			<div class="menu code_status">
+				<i id='codeing' class="iconfont icon-code"></i>
+			</div>
+		</div>
+		<div id="linkedit" data-show='false' class="suspended" style="display: none">
+			<div class="desc">插入链接</div>
+			<textarea id="linkhref" class="linkarea" placeholder="please enter href"></textarea>
+			<textarea class="linkarea" id="linkname" placeholder="name of href"></textarea>
+			<button id="insertL">插入</button>
+		</div>
+		<div id="editor" contenteditable="false" data-id=""></div>
+		<div class="action">
+			<input type="button" id="submit" value="发表" class="submit"/>
+			<a href="/"><input type="button" value="返回主页" class="backhome"/></a>
+		</div>
+	</div>
+	<div class="suspension">
+		<div class="myloading_1"></div>
+		<div class="uploading_wrapper">
+			<span>文件上传中...</span><span class="percent"></span>
+			<div class="uploading"></div>
+		</div>
+	</div>
+</div>
+{% block javascript_link %}
+<script type="text/javascript" src="./static/js/myajax.js"></script>
+<script type="text/javascript" src="../static/js/utils/time.js"></script>
+<script type="text/javascript" src="./static/js/myeditor/editor.js"></script>
+<script type="text/javascript" src="./static/js/myeditor/cmd.js"></script>
+<script type="text/javascript" src="./static/js/myeditor/editorcursor.js"></script>
+<script type="text/javascript" src="./static/js/myeditor/editorkeycontrol.js"></script>
+<script type="text/javascript" src="./static/js/utils/systeminfo.js"></script>
+{% endblock %}
+{% endblock %}
+
+{# <body style="display: flex;flex-direction: column;min-height: 100vh;"> #}
+

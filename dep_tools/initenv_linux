@@ -1,0 +1,26 @@
+#!/bin/bash
+
+function isowndir() {
+    current_dir=$(pwd)
+    my_array=(${current_dir//// })
+    dep_path=${my_array[-1]}
+    if [ "$dep_path" != "dep_tools" ];then
+      echo 0
+    else
+      echo 1
+    fi
+
+}
+
+function setenv(){
+    if [ $(isowndir) == 0 ];then
+      echo "please 'cd dep_tools' and 'source initenv_linux'"
+    else
+      export wone_depdir=$(pwd)
+      export wone_project_path=$(dirname "$(pwd)")
+      PATH=$(pwd)/script/complie_sass:$PATH
+      PATH=$(pwd)/script/:$PATH
+    fi
+}
+
+setenv

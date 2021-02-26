@@ -181,7 +181,8 @@ function createTag() {
 function highlight() {
 	main = document.getElementsByClassName('detail')[0]
 	for(let ele of main.getElementsByTagName('pre')){
-		if (main.getAttribute('class')=='javascript') {
+		if (ele.getAttribute('class')=='javascript') {
+			console.log("startMatch...")
 			var uhl = new whl(ele)
 			uhl.startMatch()
 		}

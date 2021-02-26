@@ -1,0 +1,54 @@
+@import "../../font/iconfont.scss";
+* {
+	//box-sizing: border-box;
+	margin:0;
+	padding:0;
+}
+html {
+	height: 100%;
+	font-size: 16px;
+	body {
+		font-family: Meslo LG,Helvetica, Arial, sans-serif, 微软雅黑;
+		background-color: #1d1f21;
+		color: #c9cacc;
+		text-rendering: geometricPrecision;  //文本渲染优化
+		min-height: 100%;
+		//font-size: 14px;
+		//line-height: 1.725;
+		//display: flex;
+		//flex-direction: column;
+		//防止移动端横屏时字体大小不一致
+		-webkit-text-size-adjust:none;
+	}
+	a {
+		text-decoration: none;
+		//防止移动端点击链接时出现的灰色背景
+		-webkit-tap-highlight-color:transparent;
+		&:link {color: inherit;} 
+		&:visited {color: inherit;} 
+		&:hover {color: inherit;}  
+		&:active{color: #2bbc8a;}
+	}
+	li {
+		list-style: none;
+	}
+	.ellipsis{
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		display: block;
+	}
+}
+@font-face{
+	font-family: "Meslo LG";
+	font-style: normal;
+	src:url('../font/MesloLGS-Regular.woff') format('woff');
+}
+@media screen and (min-width: 1024px) {
+	a:hover{
+		color: #2bbc8a;
+	}
+	a:active{
+		color: inherit;
+	}
+}

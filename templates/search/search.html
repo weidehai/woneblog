@@ -1,0 +1,110 @@
+﻿{% extends 'base.html' %}
+{% block css_link %}
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/search.css')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/content.css')}}">
+{% endblock %}
+{% block js_link %}
+<script type="text/javascript" src="{{url_for('static',filename='js/vue.js')}}"></script>
+{% endblock %}
+
+
+{% block content %}
+{% include "./components/header/header.html" ignore missing %}
+<div id="search">
+	<div id="app">
+		<div class="keyword-input-box">
+			<input v-model="keywords" type="text" placeholder="请输入您要搜索的关键字">
+		</div>
+		<input type="button" @click="dosearch" class="dosearch" value="搜索">
+		<sslot :getres="res"></sslot>
+	</div>
+	<template id="sview">
+		<div id="sview_wrapper">
+			<div class="resitem" v-for='item in getres["data"]'>
+				<a class="title" v-bind:href="'/articledetails?id=' + item['post_key']" target="_blank">${item['article_title']}</a>
+				<div class="meta">
+					<div class="postdate">
+						<time>${item['article_time']}</time>
+					</div>
+					<div class="watch">
+						<i class="iconfont icon-glance"><span>${item['article_read']}</span></i>
+					</div>
+					<div class="lable">
+						<i class="iconfont icon-lable"><a href="'/archives?tag=' + item['article_tag']"><span>${item['article_tag']}</span></a></i>
+					</div>
+				</div>
+				<section v-html="item['text_for_search']" class="preview"></section>
+			</div>
+		</div>
+	</template>
+</div>
+
+{% include './components/footer/footer.html' ignore missing %}
+{% endblock %}
+{% block javascript_link %}
+<script type="text/javascript">
+	let vm = new Vue({
+		el:"#app",
+		data:{
+			keywords:"",
+			res:"",
+			offset:0
+		},
+		methods:{
+			dosearch:function(){
+				let xhr = XMLHttpRequest?new XMLHttpRequest():new ActiveXobject("Microsoft.XMLHTTP")
+				var surl = '/search'
+				xhr.open('post',surl,true);
+				var data = {
+					"kw":this.keywords,
+					"offset":this.offset
+				}
+				data = JSON.stringify(data)
+				xhr.send(data)
+				xhr.onreadystatechange=function(){
+					if (xhr.readyState==4) {
+						var str = xhr.responseText
+						var obj = eval('(' + str + ')')
+						this.res = obj
+					}
+				}.bind(this)
+			}
+		},
+		mounted:function(){
+			var s = document.getElementById('search')
+			var i = document.getElementsByClassName('keyword-input-box')[0]
+
+			i[0].onfocus = function(){
+				s.style.borderBottom='1px solid #FF5722'
+			}
+			i[0].onblur=function(){
+				s.style.borderBottom='1px solid #dedede'
+			}
+		},
+		components:{
+			sslot:{
+				template:"#sview",
+				data:function(){
+					return {
+						dynamicsdata:null,
+					}
+				},
+				props:['getres'],
+				watch:{
+					getres(val){
+						this.dynamicsdata = val
+					}
+				},
+				methods:{
+
+				},
+				delimiters:["${","}"]
+			}
+		},
+		delimiters:["${","}"]
+	})
+
+
+</script>
+{% endblock %}
+href="../static/css/search.css">

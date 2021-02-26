@@ -83,7 +83,7 @@ function mycomment_sys(){
 		var commentor_mail = document.getElementsByClassName('commentor_mail')
 		var commentor_link = document.getElementsByClassName('commentor_link')
 		var commentext = document.getElementsByClassName('commentext')
-		this.xhr.open('post','/save',true)
+		this.xhr.open('post','/save?type=comment',true)
 		this.xhr.setRequestHeader("Content-type","application/json;charset=utf-8");
 		this.commentdata = this.data_wrapper()
 		var legalmail = this.commentdata['mail']?this.filteremail(this.commentdata['mail']):true
@@ -162,7 +162,10 @@ function mycomment_sys(){
 	}
 	this.message_area_built = function(){
 		var comment_data = document.getElementsByClassName('comment_data')
-		comment_data[0].className = "comment_data"
+		if (comment_data[0].className !== "comment_data") {
+			comment_data[0].className = "comment_data"
+			comment_data[0].innerText = ""	
+		}
 		if (this.commentdata["reply_belong"]) {
 			var commentblock = document.createElement('div')
 			commentblock.setAttribute('class','inline')

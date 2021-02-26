@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+import os,subprocess
+def install_extension_tools():
+    project_path = os.environ.get('wone_project_path')
+    os.chdir(os.path.join(project_path,"dep_tools/extension_tools"))
+    subprocess.call('npm install',shell=True)
+
+if __name__ == '__main__':
+    install_extension_tools()

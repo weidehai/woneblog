@@ -2,8 +2,6 @@ window.onload = function() {
 	eventListen()
 }
 
-
-
 function eventListen(){
 	var i = document.getElementsByClassName('navicon')[0].getElementsByTagName('i')
 	var r = document.getElementsByClassName('recently')[0]
@@ -22,7 +20,7 @@ function eventListen(){
 			return
 		}
 		requesting = true
-		r.className += " recently_loading"
+		r.className += " color_switch_loading"
 		if (r.getAttribute("recently")==="false") {
 			getrecently((obj)=>{
 				render(obj)
@@ -73,9 +71,10 @@ function render(obj){
 	}
 	p.replaceChild(ul,u[0])
 }
-function getrecently(cb) {
-	let xhr = Interactive.creatXHR()
-	var myurl = '/getrecently'
+
+function index_recently_updata(cb) {
+	
+	var myurl = 
 	xhr.open('get',myurl,true);
 	xhr.send(null)
 	xhr.onreadystatechange = function() {

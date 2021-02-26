@@ -1,0 +1,185 @@
+*{
+	margin:0;
+	padding: 0;
+}
+
+
+.wrapper {
+	position: relative;
+	width: 70%;
+	margin: 15px auto;
+}
+
+
+.wrapper li {
+	float: left;
+	list-style: none;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	box-sizing: border-box;
+	border: 1px #c9cacc solid;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+}
+
+.wrapper ul:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+
+.wrapper ul {
+	padding:0px;
+}
+
+
+button {
+	border: none;
+	outline: none;
+	text-align: right;
+	color: blue;
+	-webkit-tap-highlight-color:transparent;
+}
+
+button:nth-child(1){
+	margin-right: 5px;
+}
+
+button:active {
+	color: black;
+}
+
+#suspende_menu{
+	/*消除移动端点击黑色背景*/
+	-webkit-tap-highlight-color:transparent;
+	position: fixed;
+	left:10px;
+	top: 10px;
+	cursor: pointer;
+	user-select: none;
+	height: 32px;
+	overflow: hidden;
+}
+
+#suspende_menu ul{
+	list-style: none;
+}
+
+#suspende_menu li{
+	padding:5px 5px 5px 5px;
+	background-color: #00bcd4;
+}
+
+.vhcenter{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+}
+
+#menu_2, #menu_3{
+	display: none;
+	width: 95%;
+	text-align:center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+#menu_2 div{
+	display: flex;
+	justify-content: center;
+	margin-bottom: 15px;
+	align-items: center;
+}
+
+#menu_3 div{
+	display: flex;
+	justify-content: center;
+	margin-bottom: 15px;
+}
+
+#menu_2 select{
+	border:1px black solid;
+	padding: 5px;
+	max-width: 500px;
+	height: 32px;
+	flex: 1;
+}
+
+#menu_2 select option{
+	font-size: 17px;
+}
+
+#new_tag{
+	padding: 5px;
+	max-width: 488px;
+	border-radius:2px;
+	border:1px solid #8bc34a;
+	height: 22px;
+}
+
+#menu_3 input{
+	padding: 5px;
+	max-width: 500px;
+	border-radius:2px;
+	border:1px solid #8bc34a;
+	height: 25px;
+}
+
+
+
+#suspende_menu li:hover{
+	background-color: #0094d4;
+}
+#suspende_menu li:first-child{
+	border-radius:3px 3px 0 0;
+}
+#suspende_menu li:last-child{
+	border-radius:0 0 3px 3px;
+}
+
+
+
+#page{
+	display: none;
+	justify-content: center;
+	margin-bottom:15px;
+	-webkit-tap-highlight-color:transparent;
+}
+
+#page div{
+	width: 2rem;
+	height: 2rem;
+	background-color: #409eff;
+	text-align: center;
+	display: inline-block;
+	margin-right:8px;
+	line-height: 2rem;
+	color: #fff;
+	border-radius: 2px;
+	cursor: pointer;
+}
+
+#page>#previous_page{
+	background-color: gray;
+}
+
+.icon-navlist{
+	font-size: 30px !important;
+	margin-right: 5px;
+}
+
+#suspende_menu span{
+	font-size: 20px;
+	display: inline-block;
+	vertical-align: middle;
+
+}
+
+@media screen and (max-width: 900px){
+	.wrapper{
+		width: 90%;
+	}
+}

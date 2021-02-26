@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+import os,subprocess,sys
+def install_python_dep():
+    venv = sys.argv[1]
+    project_path = os.environ.get('wone_project_path')
+    os.chdir(venv)
+    subprocess.call('chmod 777 activate && source ./activate && pip install -r \
+                    {project_path}/dep_tools/python_dep/requirements.txt'.format(project_path=project_path),
+                    shell=True)
+
+if __name__ == '__main__':
+    if len(sys.argv) <= 1:
+        print("please specify python virtual enviroment path[e.g. install_dep /home/venv/bin]")
+        exit()
+    install_python_dep()

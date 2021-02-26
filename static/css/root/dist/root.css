@@ -1,0 +1,106 @@
+@import '../../../font/iconfont.css';
+html {
+  font-size: 16px;
+}
+
+html body {
+  font-family: Meslo LG, Helvetica, Arial, sans-serif, 微软雅黑;
+  background-color: #1d1f21;
+  color: #c9cacc;
+  text-rendering: geometricPrecision;
+}
+
+.flex-content {
+  min-height: calc(100vh - 4rem);
+  display: flex;
+  flex-direction: column;
+}
+
+.max-width44 {
+  max-width: 44rem;
+}
+
+.mx-auto {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.px2 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.my2 {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+}
+
+li {
+  list-style: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a:link {
+  color: inherit;
+}
+
+a:visited {
+  color: inherit;
+}
+
+a:hover {
+  color: inherit;
+}
+
+a:active {
+  color: #2bbc8a;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+}
+
+@media screen and (max-width: 480px) and (min-width: 322px) {
+  html {
+    font-size: 14px;
+  }
+
+  .px1-4 {
+    padding-left: 1.4rem;
+    padding-right: 1.4rem;
+  }
+
+  .my2 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+}
+@media screen and (max-width: 322px) {
+  html {
+    font-size: 12px;
+  }
+}
+@font-face {
+  font-family: "Meslo LG";
+  font-style: normal;
+  src: url("../../../font/MesloLGS-Regular.woff") format("woff");
+}

@@ -1,81 +1,103 @@
-#logo {
-	height: 3.125rem;
-	width: 3.125rem;
-	border-radius: 50%;
-	background-repeat: no-repeat;
-	background-size: 3.125rem 3.125rem;
-	filter: grayscale(100%);
-	float: left;
-	margin-right: 1.25rem;
-}
-
-#logo:hover {
-	filter: grayscale(0%);
+.clearfloat:after {
+  display: block;
+  content: "";
+  clear: both;
+  line-height: 0;
+  font-size: 0;
 }
 
 #header {
-	margin-bottom: 3rem;
+  margin-bottom: 3rem;
+  min-height: 3.125rem;
+  position: relative;
 }
-
-#nav {
-	font-size: .8rem;
-	color: #2bbc8a;
-	letter-spacing:.01em;
+#header .left {
+  float: left;
 }
-
-
-#nav ul {
-	line-height: 15px;
+#header .left #logo {
+  height: 3.125rem;
+  width: 3.125rem;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-size: 3.125rem 3.125rem;
+  filter: grayscale(100%);
 }
-
-#nav ul li{
-	display: inline-block;
-	margin-right: 1rem;
-	border-right: 1px dotted #2bbc8a;
-	padding-right:1rem;
+#header .left #logo:hover {
+  filter: grayscale(0%);
 }
-
-#nav ul .navicon {
-	display: none;
+#header .right {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  left: 4.375rem;
 }
-
-#nav ul .navicon i {
-	cursor: pointer;
+#header .right #wone {
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: inline-block;
 }
-
-.i-2x {
-	font-size: 2.5em;
+#header .right #nav {
+  font-size: 0.8rem;
+  color: #2bbc8a;
+  letter-spacing: 0.01rem;
+  margin-top: 0.2rem;
 }
-
+#header .right #nav.responsive {
+  display: block;
+}
+#header .right #nav.responsive ul li {
+  display: inline-block;
+  margin-right: 1rem;
+  border-right: 1px dotted #2bbc8a;
+  padding-right: 1rem;
+}
+#header .nav-icon {
+  display: none;
+}
+#header .nav-icon i {
+  color: #2bbc8a;
+  cursor: pointer;
+}
+#header .nav-icon .i-2x {
+  font-size: 2rem;
+}
 
 @media screen and (max-width: 480px) {
-	#title {
-		padding-bottom: 9px;
-		padding-top: 9px;
-	}
-	#nav ul li:not(:first-child) {
-		border: none;
-		padding-top: 1rem;
-		padding-left: 70px;
-		font-size: 1rem;
-	}
-
-	#nav ul li {
-		display: none;
-	}
-	#nav .responsive li {
-		display: block;
-	}
-
-
-	#nav ul .navicon {
-		display: inline-block;
-		position: absolute;
-		top: 40px;
-		right: 1rem;
-		border: none;
-		margin-right: 0px;
-		padding-right: 0px;
-	}
-
+  #header {
+    position: static;
+  }
+  #header .right {
+    position: static;
+    transform: translate(0, 0);
+  }
+  #header .right #wone {
+    height: 3.125rem;
+    line-height: 3.125rem;
+    margin-left: 1.25rem;
+  }
+  #header .right #nav {
+    margin-top: 0;
+  }
+  #header .right #nav.responsive {
+    display: none;
+  }
+  #header .right #nav.responsive li {
+    display: block !important;
+    font-size: 1rem;
+    border: none;
+    padding: 0 0 0 4.375rem;
+    margin: 0;
+  }
+  #header .right #nav.responsive li:not(:first-child) {
+    padding-top: 1rem;
+  }
+  #header .nav-icon {
+    display: inline-block;
+    position: absolute;
+    top: 1.7rem;
+    right: 2rem;
+    border: none;
+    margin-right: 0px;
+    padding-right: 0px;
+  }
 }

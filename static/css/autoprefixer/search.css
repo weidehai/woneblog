@@ -1,0 +1,40 @@
+#search {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+#search #app {
+  position: relative;
+  margin-bottom: 1rem;
+}
+#search #app .keyword-input-box {
+  border-bottom: 1px solid #dedede;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  width: 80%;
+}
+#search #app .keyword-input-box * {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+#search #app .keyword-input-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 80%;
+  color: #c9cacc;
+  font-size: 14px;
+  padding-left: 3px;
+}
+#search #app .dosearch {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 18%;
+  color: #313131;
+  background-color: seashell;
+  border: 1px #ededed solid;
+  height: 25px;
+  border-radius: 0.3em;
+  -webkit-appearance: none;
+}

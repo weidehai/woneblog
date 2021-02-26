@@ -1,0 +1,128 @@
+#main {
+  flex: 1;
+}
+#main aside {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  color: #2bbc8a;
+  white-space: nowrap;
+}
+#main aside #nav-aside {
+  margin-bottom: 2.5rem;
+  font-size: 0.8rem;
+}
+#main aside #nav-aside li {
+  display: inline-block;
+  border-right: 1px dotted #2bbc8a;
+  line-height: 15px;
+}
+#main aside #nav-aside li:last-child {
+  border-right: none;
+}
+#main aside #nav-aside li:last-child a {
+  margin-right: 0;
+  margin-left: 10px;
+}
+#main aside #nav-aside li a {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+#main aside #toolbar-aside {
+  color: #c9cacc;
+  text-align: right;
+  user-select: none;
+}
+#main aside #toolbar-aside ul li {
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 16px;
+}
+#main aside #toolbar-aside ul li:last-child {
+  margin-right: 0;
+}
+#main aside #toolbar-aside ul li:hover {
+  color: #2bbc8a;
+}
+#main aside #toolbar-aside ul li:hover:after {
+  display: block;
+  position: absolute;
+  margin-top: 0.2rem;
+  right: 0;
+  content: attr(tips);
+  color: #c9cacc;
+}
+#main aside #shortcut {
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+}
+#main aside #shortcut div {
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #c9cacc;
+  background: gray;
+  margin-bottom: 3px;
+}
+#main aside #shortcut a div {
+  margin-bottom: 0;
+}
+#main article .title {
+  margin-bottom: 0.67rem;
+}
+#main article .title h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+#main article .attribute .iconfont {
+  font-size: 0.95rem;
+}
+#main article .attribute > div:not(:last-child) {
+  border-right: 0.1rem solid #c9cacc;
+  padding-right: 1.5rem;
+}
+#main article .attribute > div:not(:last-child):not(:first-child) {
+  padding-left: 1.5rem;
+}
+#main article .attribute > div:not(:last-child):not(:first-child) span {
+  margin-left: 0.5rem;
+}
+#main article .attribute .update {
+  color: green;
+  margin-top: 0.35rem;
+}
+
+@media screen and (max-width: 1320px) {
+  #nav-aside {
+    display: none !important;
+  }
+
+  .shortcut_home {
+    display: block !important;
+  }
+}
+@media screen and (max-width: 1190px) {
+  #toc {
+    display: none;
+  }
+
+  #toolbar-aside ul {
+    display: none;
+  }
+
+  #shortcut_top {
+    display: block !important;
+  }
+}
+@media screen and (max-width: 900px) {
+  aside {
+    display: none;
+  }
+}
+@media screen and (min-width: 480px) {
+  .detail p {
+    text-align: justify;
+  }
+}

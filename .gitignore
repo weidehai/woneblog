@@ -3,4 +3,11 @@ __pycache__
 .idea
 /config/__pycache__
 /config/.idea
-/pages_server/__pycache__
+/routes/__pycache__
+/config/dbconfig.py
+/server_monitor/database.py
+/server_monitor/ssh_connect.py
+jobs.sqlite
+/pyvenv_woneblog
+/dep_tools/extension_tools/node_modules
+/log

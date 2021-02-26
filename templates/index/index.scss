@@ -1,0 +1,100 @@
+#home{
+    flex:1;
+    #about{
+        .welcome-message{
+            font-size:1rem;
+        }
+        p{
+            height:1rem;
+            .watch {
+                padding-left: 0.5rem;
+                padding-right:0.65rem;
+                display:inline-block;
+                border-right:2px solid;
+                height:1rem;
+            }
+            .Find {
+                padding-right: 0.5rem;
+                padding-left:0.65rem;
+                display:inline-block;
+                height:1rem;
+            }
+        }
+
+        .icon-github{
+            &:hover{
+                color: #2bbc8a;
+            }
+        }
+        p{
+            .iconfont{
+                font-size:0.95rem;
+            }
+        }
+    }
+
+    .list{
+        .title{
+            letter-spacing: .01rem;
+            font-size:1.2rem;
+            font-weight: 700;
+            color: #2bbc8a;
+            margin-top: 2rem;
+            display: inline-block;
+            i{
+                font-size:1rem;
+            }
+        }
+        .recently,.tap{
+	        cursor: pointer;
+            &:hover:after{
+                color: darkgray;
+                font-size: 0.8em;
+                margin-left: 5px;
+                content: attr(tips);
+            }
+        }
+        .item {
+	        p{
+	            time{
+	                margin-right:1rem;
+	            }
+	            a{
+	                &:hover{
+	                    color:#2bbc8a
+	                }
+	            }
+	        }
+        }
+    }
+
+}
+
+#wk{
+	width: 200px;
+	height: 180px;
+	background-image: url('../img/wk.png');
+	animation: wkzou 1s steps(8) infinite;
+	position: fixed;
+	right: 0px;
+	bottom: 0px;
+	z-index: -2;
+}
+
+@keyframes wkzou{
+	to{
+		background-position: -1600px 0;
+	}
+}
+
+@media screen and (max-width: 1200px){
+	#wk{
+		display: none;
+	}
+}
+
+@media screen and (max-width: 1024px){
+	.recently:hover:after,.tap:hover:after{
+		content: ""
+	}
+}

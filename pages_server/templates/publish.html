@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>发表您的文章</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0, user-scalable=no">
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="./static/font/iconfont.css">
+	<link rel="stylesheet" type="text/css" href="./static/css/write.css">
+	<link rel="stylesheet" type="text/css" href="./static/css/loading.css">
+	<link rel="icon" type="image/x-icon" href="../static/img/wone.ico">
+</head>
+<body style="display: flex;flex-direction: column;min-height: 100vh;">
+	<div class="suspension">
+		<div class="myloading_1"></div>
+		<div class="uploading_wrapper">
+			<span>文件上传中...</span><span class="percent"></span>
+			<div class="uploading"></div>	
+		</div>
+	</div>
+	<div class="main">
+		<div class="title">
+			<p>发表新文章</p>
+		</div>
+	</div>
+	<hr style="background-color: #e6e6e6;height: 1px;border:none;">
+	<div class="main" style="flex:1;display: flex;flex-direction: column;">
+		<div class="titlefield">
+			<input type="text" placeholder="标题" id="title" value="" disabled="disabled">
+			<select id="tags" disabled="disabled">
+				{% for tag in tags %}
+				<option>{{tag["tag_name"]}}</option>
+				{% endfor %}
+			</select>
+			<form enctype="multipart/form-data">
+				<input type="file" id="file" name="filecontent" accept="image/png, image/jpeg, image/jpg, image/gif ,video/avi ,video/wmv, video/mp4" style="display: none;">
+			</form>
+		</div>
+		<div class="styleselect">
+			<div class="stylemenu_wrapper">
+				<div class="stylemenu">
+					<i id='h1' class="iconfont icon-h1"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='h2' class="iconfont icon-h2"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='table' class="iconfont icon-table"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='quote' class="iconfont icon-quote"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='code' class="iconfont icon-code"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='list' class="iconfont icon-list"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='link' class="iconfont icon-link"></i>
+				</div>
+				<div class="stylemenu">
+					<label id="picture" class="iconfont icon-picture" for="file"></label>
+					<!--使用for属性将label标签和表单关联-->
+				</div>
+				<div class="stylemenu">
+					<label id="video" class="iconfont icon-video" for="file"></label>
+				</div>
+				<div class="stylemenu">
+					<i id='rowfront' class="iconfont icon-insert_table_row_front"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='rowbehind' class="iconfont icon-insert_table_row_behind"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='colfront' class="iconfont icon-insert_table_col_front"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='colbehind' class="iconfont icon-insert_table_col_behind"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='removerow' class="iconfont icon-remove_table_row"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='removecol' class="iconfont icon-remove_table_col"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='justifyleft' class="iconfont icon-justify_left"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='justifycenter' class="iconfont icon-justify_center"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='draft' class="iconfont icon-draft"></i>
+				</div>
+				<div class="stylemenu">
+					<i id='cutline' class="iconfont icon-cutline"></i>
+				</div>
+			</div>
+			<div class="stylemenu code_status">
+				<i id='codeing' class="iconfont icon-code"></i>
+			</div>	
+		</div>
+		<div id="linkedit" data-show='false' class="suspended">
+			<div class="desc">插入链接</div>
+			<textarea id="linkhref" class="linkarea" placeholder="please enter href"></textarea>
+			<textarea class="linkarea" id="linkname" placeholder="name of href"></textarea>
+			<button id="insertL">插入</button>
+		</div>
+	    <div id="editor" contenteditable="false" data-id="" style="flex:1;"></div>
+
+		<div style="margin-bottom: 12px;">
+			<input type="button" id="submit" value="发表" class="submitbutton"/>
+			<a href="/"><input type="button" value="返回主页" class="back"/></a>
+		</div>
+	</div>
+	<script type="text/javascript" src="./static/js/myajax.js"></script>
+	<script type="text/javascript" src="../static/js/utils/time.js"></script>
+	<script type="text/javascript" src="./static/js/myeditor/editor.js"></script>
+	<script type="text/javascript" src="./static/js/myeditor/cmd.js"></script>
+	<script type="text/javascript" src="./static/js/myeditor/editorcursor.js"></script>
+	<script type="text/javascript" src="./static/js/myeditor/editorkeycontrol.js"></script>
+	<script type="text/javascript" src="./static/js/utils/systeminfo.js"></script>
+</body>
+</html>
+
+
+

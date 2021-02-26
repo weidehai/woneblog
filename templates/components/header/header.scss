@@ -1,0 +1,107 @@
+.clearfloat:after {
+    display:block;
+    content:"";
+    clear:both;
+    line-height:0;
+    font-size:0;
+}
+
+#header{
+    margin-bottom: 3rem;
+    min-height: 3.125rem;
+    position:relative;
+    .left {
+        float: left;
+        #logo {
+            height: 3.125rem;
+            width: 3.125rem;
+            border-radius: 50%;
+            background-repeat: no-repeat;
+            background-size: 3.125rem 3.125rem;
+            filter: grayscale(100%);
+            &:hover {
+                filter: grayscale(0%);
+            }
+        }
+    }
+    .right{
+        position:absolute;
+        top:50%;
+        transform:translate(0,-50%);
+        left:4.375rem;
+        #wone {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+        #nav {
+            font-size: .8rem;
+            color: #2bbc8a;
+            letter-spacing:.01rem;
+            margin-top:.2rem;
+            &.responsive{
+                display:block;
+                ul {
+                    li {
+                        display: inline-block;
+                        margin-right: 1rem;
+                        border-right: 1px dotted #2bbc8a;
+                        padding-right:1rem;
+                    }
+                }
+            }
+        }
+    }
+    .nav-icon {
+        display: none;
+        i {
+            color: #2bbc8a;
+            cursor: pointer;
+        }
+        .i-2x {
+            font-size: 2rem;
+        }
+    }
+}
+
+
+
+@media screen and (max-width: 480px) {
+    #header{
+        position:static;
+        .right{
+            position:static;
+            transform:translate(0,0);
+            #wone{
+                height:3.125rem;
+                line-height:3.125rem;
+                margin-left:1.25rem;
+            }
+            #nav{
+                margin-top:0;
+                &.responsive{
+                    display:none;
+                    li {
+                        display: block !important;
+                        font-size: 1rem;
+                        border: none;
+                        padding: 0 0 0 4.375rem;
+                        margin:0;
+                        &:not(:first-child){
+                            padding-top: 1rem;
+                        }
+                    }
+                }
+            }
+        }
+        .nav-icon {
+            display: inline-block;
+            position: absolute;
+            top:1.7rem;
+            right: 2rem;
+            border: none;
+            margin-right: 0px;
+            padding-right: 0px;
+        }
+    }
+}

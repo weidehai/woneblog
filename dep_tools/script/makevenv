@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+import sys,subprocess,os,shutil
+
+def get_python_version():
+    return sys.version_info.major
+
+def get_python_path():
+    return sys.executable
+
+def makevenv():
+    if get_python_version()==3:
+        dir_name = sys.argv[1]
+        if not dir_name:
+            print("expect a absolute path")
+        if not os.path.isabs(dir_name):
+            print('expect a absolute path')
+            return
+        if os.path.exists(dir_name):
+            shutil.rmtree(dir_name)
+        try:
+            subprocess.call('%s -m venv %s' % (get_python_path(),dir_name),shell=True)
+            print("create success,dir location:%s" % dir_name)
+        except Exception as e:
+            print(e)
+    else:
+        print("only support python3")
+        return
+
+if __name__ == '__main__':
+    makevenv()

@@ -1,0 +1,166 @@
+#header-post {
+	position: fixed;
+	top: 2rem;
+	right: 2rem;
+	color: #2bbc8a;
+	white-space: nowrap;
+}
+
+#bottom_convenient{
+	position: fixed;
+	right: 2rem;
+	bottom: 2rem;
+}
+#bottom_convenient div{
+	height: 30px;
+	width: 30px;
+	line-height: 30px;
+	text-align: center;
+	color: #c9cacc;
+	background: gray;
+	margin-bottom: 3px;
+}
+#nav li {
+	display: inline-block;
+	border-right: 1px dotted #2bbc8a;
+	line-height: 15px;
+
+}
+#nav li:last-child {
+	border-right: none;
+}
+#nav li a {
+	margin-right: 10px;
+	margin-left: 10px;
+}
+#nav li:last-child a{
+	margin-right: 0;
+	margin-left: 10px;
+}
+
+#nav {
+	margin-bottom:2.5rem; 
+	font-size: .8rem
+}
+
+#action {
+	color: #c9cacc;
+	text-align: right;
+	user-select: none;
+}
+#action ul li{
+	display: inline-block;
+	margin-right: 16px;
+
+}
+#action ul li:last-child{
+	margin-right: 0px;
+}
+#postbtn-tips{
+	text-align: right;
+	line-height: 1em;
+	height: 1em;
+	color: #c9cacc;	
+}
+
+/*从第五个元素开始选取*/
+#action li:nth-child(n+5):hover {
+	color: #2bbc8a;
+	cursor: pointer;
+}
+
+#toc {
+	text-align: right;
+	padding-top: 1rem;
+	font-size: 0.8rem;
+	max-width: 200px;
+	float: right;
+}
+
+#lableOfContent li {
+	color: #c9cacc;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+#lableOfContent li a:hover {
+	color: #2bbc8a;
+}
+
+#lableOfContent li:before {
+	content: "#";
+	color:#2bbc8a;
+}
+
+.top-title{
+	font-size: 0.9rem;
+}
+.sec-title{
+	font-size: 0.8rem;
+}
+
+.my3 {
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+}
+
+.post h1 {
+	color: #2bbc8a;
+	font-size: 1.5em;
+	word-break: break-all;
+	line-height: 23px;
+	min-height: 23px;
+}
+
+img {
+	width: 100%;
+	display: block;
+}
+
+a:link {color: inherit;} 
+a:visited {color: inherit;} 
+a:hover {color: inherit;} 
+a:active {color: inherit;} 
+
+#wrapper{
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	overflow: hidden;
+}
+.post{
+	flex: 1;
+}
+.article_detail{
+	display: flex;
+	flex-direction: column;
+}
+
+@media screen and (max-width: 1250px) {
+	#nav {
+		display: none !important;
+	}	
+	.bottom_icon_home{
+		display: block !important;
+	}
+}
+@media screen and (max-width: 1190px) {
+	#toc{
+		display: none;
+	}
+	#action{
+		display: none;
+	}
+	.bottom_icon_up{
+		display: block !important;
+	}
+}
+@media screen and (max-width: 900px) {
+	#header-post {
+		display: none;
+	}
+}
+@media screen and (min-width: 480px) {
+	.detail p {
+		text-align: justify;
+	}
+}

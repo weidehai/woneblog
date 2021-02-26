@@ -1,0 +1,90 @@
+#home {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+#home #about .welcome-message {
+  font-size: 1rem;
+}
+#home #about p {
+  height: 1rem;
+}
+#home #about p .watch {
+  padding-left: 0.5rem;
+  padding-right: 0.65rem;
+  display: inline-block;
+  border-right: 2px solid;
+  height: 1rem;
+}
+#home #about p .Find {
+  padding-right: 0.5rem;
+  padding-left: 0.65rem;
+  display: inline-block;
+  height: 1rem;
+}
+#home #about .icon-github:hover {
+  color: #2bbc8a;
+}
+#home #about p .iconfont {
+  font-size: 0.95rem;
+}
+#home .list .title {
+  letter-spacing: 0.01rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2bbc8a;
+  margin-top: 2rem;
+  display: inline-block;
+}
+#home .list .title i {
+  font-size: 1rem;
+}
+#home .list .recently, #home .list .tap {
+  cursor: pointer;
+}
+#home .list .recently:hover:after, #home .list .tap:hover:after {
+  color: darkgray;
+  font-size: 0.8em;
+  margin-left: 5px;
+  content: attr(tips);
+}
+#home .list .item p time {
+  margin-right: 1rem;
+}
+#home .list .item p a:hover {
+  color: #2bbc8a;
+}
+
+#wk {
+  width: 200px;
+  height: 180px;
+  background-image: url("../img/wk.png");
+  -webkit-animation: wkzou 1s steps(8) infinite;
+  animation: wkzou 1s steps(8) infinite;
+  position: fixed;
+  right: 0px;
+  bottom: 0px;
+  z-index: -2;
+}
+
+@-webkit-keyframes wkzou {
+  to {
+    background-position: -1600px 0;
+  }
+}
+
+@keyframes wkzou {
+  to {
+    background-position: -1600px 0;
+  }
+}
+@media screen and (max-width: 1200px) {
+  #wk {
+    display: none;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .recently:hover:after, .tap:hover:after {
+    content: "";
+  }
+}
