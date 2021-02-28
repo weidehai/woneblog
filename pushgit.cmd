@@ -1,7 +1,9 @@
 @echo off
 SETLOCAL disabledelayedexpansion
-call:autoPush %1
+for /f "delims=" %%i in ('git name-rev --name-only HEAD') do (set current_branch=%%i)
+call:autoPush %1 %current_branch%
 pause
+ENDLOCAL
 goto:eof
 
 
@@ -19,7 +21,7 @@ if %startwith%%endwith%=="" (
     git config --local user.email 243395655@qq.com
     git add .
     git commit -m "%~1"
-    git push origin HEAD:weidehai-patch-1
+    git push origin %2 && echo "success" || git reset HEAD~ && echo "push fail and reset commit"
 ) else (
     call:error
 )

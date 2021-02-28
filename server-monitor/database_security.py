@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
-engine = sqlalchemy.create_engine("mysql+pymysql://xxxxxx:xxx@localhost/server_monitor")
+engine = sqlalchemy.create_engine("mysql+pymysql://xxxxxx:xxx@localhost/server-monitor")
 Session = sessionmaker(bind=engine)
 Session.configure(bind=engine)
 session = Session()

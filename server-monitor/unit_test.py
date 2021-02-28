@@ -15,7 +15,7 @@ from sqlalchemy.orm import sessionmaker
 Base = declarative_base()
 
 
-engine = sqlalchemy.create_engine("mysql+pymysql://root:weidehai123@localhost/server_monitor")
+engine = sqlalchemy.create_engine("mysql+pymysql://root:weidehai123@localhost/server-monitor")
 Session = sessionmaker(bind=engine)
 session = Session()
 

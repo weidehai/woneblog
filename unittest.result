@@ -1,6 +1,7 @@
 test_admin (test.test_model.ModelTestCase) ... ok
+test_articles_api (test.test_blog_api.BlogApiTestCase) ... ok
 
 ----------------------------------------------------------------------
-Ran 1 test in 0.102s
+Ran 2 tests in 0.162s
 
 OK

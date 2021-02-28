@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block css_link %}
-<link rel="stylesheet" type="text/css" href="../static/css/article_detail.css">
-<link rel="stylesheet" type="text/css" href="../static/css/content.css">
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/autoprefixer/article-detail.css')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/autoprefixer/content.css')}}">
 {% endblock %}
 
 {% block content %}

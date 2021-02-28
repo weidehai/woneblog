@@ -1,0 +1,1 @@
+tsc -p %wone_depdir%script/complie-ts/ -w

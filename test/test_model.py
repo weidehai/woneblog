@@ -6,14 +6,17 @@ from flask import Flask
 
 class ModelTestCase(BaseTestCase):
     def setUp(self):
-        app = Flask(__name__)
-        app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://woneread@127.0.0.1:3306/woneblog'
-        db.init_app(app)
-        app.app_context().push()
+        self.app = Flask(__name__)
+        self.app.config['TESTING'] = True
+        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://woneread@127.0.0.1:3306/woneblog'
+        self.app_context = self.app.app_context()
+        db.init_app(self.app)
+        self.app_context.push()
+
 
     def tearDown(self):
         db.session.remove()
+        self.app_context.pop()
 
     def test_admin(self):
         admin = Admin.query.first()

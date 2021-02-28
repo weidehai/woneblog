@@ -5,14 +5,13 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>{% block title %}{% endblock %}</title>
 	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/base/dist/normalize.css')}}">
-	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/root/dist/root.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/autoprefixer/root.css')}}">
 	<script type="text/javascript" src="{{url_for('static',filename='js/thirdpart/loglevel.min.js')}}"></script>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<style>
 		html body{
 			background-color: white;
 			color: black;
-			min-height: 100vh;
 		}
 		p{
 			margin: 0;

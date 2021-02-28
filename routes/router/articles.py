@@ -51,7 +51,7 @@ class ArticlesDetail:
                     self.cache.set(article_id, cache_data)
                 except Exception:
                     print("cache has some error")
-                resp = Response(render_template('article_detail.html',
+                resp = Response(render_template('article-detail.html',
                                                 article=data,
                                                 previous=previous_article and previous_article[0]['post_key'] or 0,
                                                 next=next_article and next_article[0]['post_key'] or 0))
@@ -60,7 +60,7 @@ class ArticlesDetail:
                 return resp
             else:
                 print("get from cache.....")
-                return render_template('article_detail.html',
+                return render_template('article-detail.html',
                                        article=has_cache_data['data'],
                                        previous=has_cache_data['previous'] and has_cache_data['previous'][0]['post_key'] or 0,
                                        next=has_cache_data['next'] and has_cache_data['next'][0]['post_key'] or 0)

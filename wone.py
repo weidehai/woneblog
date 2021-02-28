@@ -1,6 +1,5 @@
 from flask import Flask,render_template
-from routes import blogguest
-from routes import blogadmin
+from routes import blogguest,blogadmin,blogapi
 from config import flask_config
 import extension
 import logging,logging.config
@@ -30,6 +29,7 @@ class Wone:
     def register_route():
         Wone.server.register_blueprint(blogguest)
         Wone.server.register_blueprint(blogadmin)
+        Wone.server.register_blueprint(blogapi)
 
     @staticmethod
     def register_extension():
@@ -46,7 +46,7 @@ class Wone:
 
 
 def before_create():
-    def init_log(default_path='./config/logconfig.yaml', default_level=logging.INFO):
+    def init_log(default_path='./config/log-config.yaml', default_level=logging.INFO):
         if os.path.exists(default_path):
             with open(default_path,'r',encoding='utf-8') as f:
                 logging.config.dictConfig(yaml.load(f,Loader=yaml.SafeLoader))

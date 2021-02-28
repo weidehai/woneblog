@@ -1,5 +1,6 @@
 # coding=utf-8
 from extension import db
+import logging
 
 class Articles(db.Model):
     __tablename__ = 'articles'

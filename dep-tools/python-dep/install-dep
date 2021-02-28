@@ -10,6 +10,6 @@ def install_python_dep():
 
 if __name__ == '__main__':
     if len(sys.argv) <= 1:
-        print("please specify python virtual enviroment path[e.g. install_dep /home/venv/bin]")
+        print("please specify python virtual enviroment path[e.g. install-dep /home/venv/bin]")
         exit()
     install_python_dep()

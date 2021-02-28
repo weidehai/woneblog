@@ -5,9 +5,9 @@ __pycache__
 /config/.idea
 /routes/__pycache__
 /config/dbconfig.py
-/server_monitor/database.py
-/server_monitor/ssh_connect.py
+/server-monitor/database.py
+/server-monitor/ssh_connect.py
 jobs.sqlite
 /pyvenv_woneblog
-/dep_tools/extension_tools/node_modules
+/dep-tools/extension-tools/node_modules
 /log

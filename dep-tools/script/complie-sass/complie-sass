@@ -4,10 +4,10 @@ import json
 
 def get_sass_path():
     wone_depdir = os.environ.get("wone_depdir")
-    return os.path.join(wone_depdir,'extension_tools/node_modules/.bin/sass')
+    return os.path.join(wone_depdir,'extension-tools/node_modules/.bin/sass')
 
 def parse_complie_map():
-    with open(os.path.join(os.path.dirname(__file__),"complie_map.json"),'r') as cm:
+    with open(os.path.join(os.path.dirname(__file__), "complie-map.json"), 'r') as cm:
         return json.load(cm)
 
 def complie_sass():
