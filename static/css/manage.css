@@ -4,11 +4,14 @@
   margin: 1rem auto;
 }
 #manage #artilces-manage .post-list table {
+  table-layout: fixed;
   width: 100%;
   height: 2.2rem;
   line-height: 2.2rem;
   text-align: center;
   border-collapse: collapse;
+}
+#manage #artilces-manage .post-list table tr {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -18,22 +21,48 @@
 }
 #manage #artilces-manage .post-list table tr td {
   border: 1px black solid;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-#manage #artilces-manage #page {
-  display: none;
-}
-#manage #artilces-manage button:nth-child(1) {
-  margin-right: 5px;
-}
-#manage #artilces-manage button {
+#manage #artilces-manage .post-list table tr td button {
   border: none;
   outline: none;
   text-align: right;
   color: blue;
   -webkit-tap-highlight-color: transparent;
 }
-#manage #artilces-manage button:active {
+#manage #artilces-manage .post-list table tr td button:nth-child(1) {
+  margin-right: 5px;
+}
+#manage #artilces-manage .post-list table tr td button:active {
   color: black;
+}
+#manage #artilces-manage #page-selector {
+  display: none;
+  justify-content: center;
+  margin-bottom: 1rem;
+  -webkit-tap-highlight-color: transparent;
+}
+#manage #artilces-manage #page-selector div {
+  width: 2rem;
+  height: 2rem;
+  background-color: #409eff;
+  text-align: center;
+  display: inline-block;
+  margin-right: 8px;
+  line-height: 2rem;
+  color: #fff;
+  border-radius: 2px;
+  cursor: pointer;
+}
+#manage #artilces-manage #page-selector div:last-child {
+  margin-right: 0;
+}
+#manage #artilces-manage #page-selector div[id=pagination] {
+  width: auto;
+  background-color: transparent;
+  cursor: auto;
 }
 #manage #tags-manage {
   display: none;
@@ -143,26 +172,4 @@
 }
 
 
-#page{
-	display: none;
-	justify-content: center;
-	margin-bottom:15px;
-	-webkit-tap-highlight-color:transparent;
-}
-
-#page div{
-	width: 2rem;
-	height: 2rem;
-	background-color: #409eff;
-	text-align: center;
-	display: inline-block;
-	margin-right:8px;
-	line-height: 2rem;
-	color: #fff;
-	border-radius: 2px;
-	cursor: pointer;
-}
-
-#page>#previous_page{
-	background-color: gray;
-}*/
+*/

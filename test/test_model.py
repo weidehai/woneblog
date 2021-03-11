@@ -1,6 +1,5 @@
 from .base import BaseTestCase
-from model.woneblog import ArticleTags
-from model.woneblog import Admin
+from model.woneblog import ArticleTags,WoneArticles,Admin
 from extension import db
 from flask import Flask
 
@@ -21,3 +20,8 @@ class ModelTestCase(BaseTestCase):
     def test_admin(self):
         admin = Admin.query.first()
         self.assertIsNotNone(admin)
+
+    def test_articles(self):
+        article_time, = db.session.query(WoneArticles.article_time).first()
+        print(article_time)
+        self.assertIsNotNone(article_time)

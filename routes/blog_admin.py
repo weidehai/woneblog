@@ -1,10 +1,10 @@
 from flask import Blueprint,render_template,redirect,url_for
-from model.woneblog import ArticleTags
-from model.woneblog import Admin
+from model.woneblog import ArticleTags,Admin,WoneArticles
 from form.loginform import LoginForm
 from flask_login import login_user, login_required, current_user
-from flask import flash
+from flask import flash,request
 from utils.utils import redirect_back
+from extension import db
 import logging
 
 blogadmin = Blueprint('blogadmin', __name__)
@@ -34,10 +34,15 @@ def login():
 @login_required
 def manage():
     tags = ArticleTags.query.all()
-    logging.info(tags)
-    return render_template("admin/manage/manage.html",tags=tags)
+    article_total, = db.session.query(Admin.article_total).first()
+    return render_template("admin/manage/manage.html",tags=tags,article_total=article_total)
 
 
-@blogadmin.route("/adminpublish")
-def publish():
-    return render_template("admin/publish/publish.html")
+@blogadmin.route("/adminpublish/<string:behavior>")
+def publish(behavior):
+    tags = ArticleTags.query.all()
+    if behavior=='new':
+        return render_template("admin/publish/publish.html",tags=tags)
+    if behavior=='modify':
+        article_detail = WoneArticles.query.get_or_404(request.args.get('article_id'))
+        return render_template("admin/publish/publish.html",tags=tags,article_detail=article_detail)

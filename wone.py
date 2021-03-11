@@ -1,6 +1,8 @@
 from flask import Flask,render_template
 from routes import blogguest,blogadmin,blogapi
 from config import flask_config
+from flask.json import JSONEncoder
+import datetime
 import extension
 import logging,logging.config
 import yaml
@@ -52,7 +54,15 @@ def before_create():
                 logging.config.dictConfig(yaml.load(f,Loader=yaml.SafeLoader))
         else:
             logging.basicConfig(level=default_level)
+    def set_josn_encoder():
+        class MyJSONEncoder(JSONEncoder):
+            def default(self, o):
+                if isinstance(o, datetime.datetime):
+                    return o.isoformat()
+                return super().default(o)
+        Flask.json_encoder = MyJSONEncoder
     init_log()
+    set_josn_encoder()
 
 
 

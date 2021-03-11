@@ -1,7 +1,7 @@
 from flask import Blueprint,render_template,send_from_directory,request,current_app,jsonify
-from model.woneblog import Articles
-from model.woneblog import ArticleTags
-from utils.utils import convert_model_to_dict
+from model.woneblog import WoneArticles,Admin
+from utils.utils import convert_tuple_to_dict
+from extension import db
 import logging
 import os
 
@@ -15,9 +15,14 @@ def api():
 
 @blogapi.route("/api/articles")
 def api_articles():
-    page,pre_page=(request.args.get('page', 1, type=int),current_app.config['BLUELOG_MANAGE_POST_PER_PAGE'])
-    pagination = Articles.query.paginate(page,pre_page)
-    return jsonify(convert_model_to_dict(pagination.items))
+    page,limit=(request.args.get('page', 1, type=int),request.args.get('limit',10,type=int))
+    logging.info("page:%s limit:%s" % (page,limit))
+    pagination = db.session.query(WoneArticles.article_id,
+                                  WoneArticles.article_title,
+                                  WoneArticles.article_time,
+                                  WoneArticles.article_tag).offset((page-1)*limit).limit(limit).all()
+    logging.info(pagination)
+    return jsonify(convert_tuple_to_dict(['article_id','article_title','article_time','article_tag'],pagination))
 
 
 

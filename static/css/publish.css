@@ -28,6 +28,7 @@ html body {
   height: 35px;
   margin: 20px 0px 20px 0px;
   padding: 0 9px;
+  box-sizing: border-box;
 }
 #publish .main .tagfield {
   border-bottom: 1px solid #e6e6e6;
@@ -46,11 +47,25 @@ html body {
   background: #f1f1f1;
   line-height: 40px;
   border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+#publish .main .menus::-webkit-scrollbar {
+  display: none;
 }
 #publish .main .menus .menu {
   display: inline-block;
   height: 40px;
   margin-left: 10px;
+}
+#publish .main .menus .menu .iconfont {
+  font-size: 1.2rem;
+  color: #999;
+  cursor: pointer;
+}
+#publish .main .menus .menu .iconfont:hover {
+  color: black;
 }
 #publish .main #editor {
   background: white;
@@ -88,4 +103,15 @@ html body {
 }
 #publish .suspension {
   display: none;
+}
+
+@media screen and (max-width: 900px) {
+  #publish .title {
+    width: 90%;
+  }
+  #publish .main {
+    position: relative;
+    width: 90%;
+    margin: auto;
+  }
 }

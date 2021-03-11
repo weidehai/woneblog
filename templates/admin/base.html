@@ -6,8 +6,35 @@
     <title>{% block title %}{% endblock %}</title>
 	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/base/dist/normalize.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/autoprefixer/root.css')}}">
+	<link rel="icon" type="image/x-icon" href="../static/img/wone.ico">
 	<script type="text/javascript" src="{{url_for('static',filename='js/thirdpart/loglevel.min.js')}}"></script>
-	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script type="text/javascript" src="{{url_for('static',filename='js/util/util.js')}}"></script>
+	<script src="{{url_for('static',filename='js/thirdpart/axios.js')}}"></script>
+	<script>
+		(function (arr) {
+			arr.forEach(function (item) {
+				if (item.hasOwnProperty('append')) {
+					return;
+				}
+				Object.defineProperty(item, 'append', {
+					configurable: true,
+					enumerable: true,
+					writable: true,
+					value: function append() {
+						var argArr = Array.prototype.slice.call(arguments),
+								docFrag = document.createDocumentFragment();
+
+						argArr.forEach(function (argItem) {
+							var isNode = argItem instanceof Node;
+							docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
+						});
+
+						this.appendChild(docFrag);
+					}
+				});
+			});
+		})([Element.prototype, Document.prototype, DocumentFragment.prototype]);
+	</script>
 	<style>
 		html body{
 			background-color: white;
@@ -24,7 +51,6 @@
 	</style>
     {% block css_link %}{% endblock %}
 	{% block js_link %}{% endblock %}
-	<link rel="icon" type="image/x-icon" href="../static/img/wone.ico">
 </head>
 <body>
 	{% block content %}{% endblock %}

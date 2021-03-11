@@ -11,12 +11,13 @@ class BlogApiTestCase(BaseTestCase):
     def tearDown(self):
         pass
 
-    def test_articles_api(self):
+    def test_manager_articles_api(self):
         with self.client as client:
             rv = self.client.get('/api/articles?page=1')
             assert rv is not None
             assert rv.data is not None
             assert isinstance(rv.data,bytes)
-            assert b'article_content' in rv.data
+            assert b'article_title' in rv.data
+            assert b'article_content' not in rv.data
             assert isinstance(json.loads(rv.data),list)
             assert request.args['page'] == '1'

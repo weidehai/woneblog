@@ -6,10 +6,11 @@ from werkzeug.security import generate_password_hash,check_password_hash
 class Admin(db.Model, UserMixin):
     __tablename__ = 'admin'
     admin_id = db.Column(db.Integer, primary_key=True)
-    admin_name = db.Column(db.String(15))
-    admin_password = db.Column(db.String(15))
-    article_total = db.Column(db.Integer)
-    visited_total = db.Column(db.Integer)
+    admin_name = db.Column(db.String(15), unique=True,nullable=False)
+    admin_password = db.Column(db.String(128),nullable=False)
+    article_total = db.Column(db.Integer,nullable=False)
+    draft_total = db.Column(db.Integer,nullable=False)
+    visited_total = db.Column(db.Integer,nullable=False)
     mood = db.Column(db.String(50))
 
     def validate_password(self, password):
@@ -28,5 +29,6 @@ class Admin(db.Model, UserMixin):
                "admin_name='%s'," \
                "admin_password='%s'," \
                "article_total='%s'," \
+               "draft_total='%s'," \
                "visited_total='%s'," \
-               "mood='%s' )>" % (self.id,self.admin_name,self.admin_password,self.article_total,self.visited_total,self.mood)
+               "mood='%s' )>" % (self.id,self.admin_name,self.admin_password,self.article_total,self.draft_total,self.visited_total,self.mood)

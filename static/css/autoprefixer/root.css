@@ -107,5 +107,5 @@ button {
 @font-face {
   font-family: "Meslo LG";
   font-style: normal;
-  src: url("../../../font/MesloLGS-Regular.woff") format("woff");
+  src: url("../../font/MesloLGS-Regular.woff") format("woff");
 }
