@@ -1,0 +1,9 @@
+test_admin (test.test_model.ModelTestCase) ... ok
+test_articles (test.test_model.ModelTestCase) ... ok
+test_manager_articles_api (test.test_blog_api.BlogApiTestCase) ... ok
+test_manage (test.test_blog_admin.BlogAdminTestCase) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.190s
+
+OK

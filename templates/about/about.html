@@ -1,0 +1,59 @@
+﻿{% extends 'base.html' %}
+
+{% block css_link %}
+<link rel="stylesheet" type="text/css" href="../static/css/content.css">
+<link rel="stylesheet" type="text/css" href="../static/css/about.css">
+{% endblock %}
+
+{% block content %}
+{% include "./components/header/header.html" ignore missing %}
+<div id="about">
+	<div class="main-content">
+		<img src="../static/img/about.png" width="100%">
+		<h1>Wone的博客小站</h1>
+		<q>猛兽总是独行，牛羊才成群结队<br>——周树人</q>
+		<h1>联系方式</h1>
+		<ul>
+			<li>Email:243395655@qq.com</li>
+		</ul>
+		<h1>个人信息</h1>
+		<ul>
+			<li>Wone</li>
+			<li>职业：chrome嵌入式开发</li>
+			<li>城市：深圳</li>
+		</ul>
+		<h1>期许</h1>
+		<p>但行好事 莫问前程</p>
+		<h1>FAQ</h1>
+		<h2>博客是基于什么做的?</h2>
+		<p>前端：css3 + html5 + 原生javascript</p>
+		<p>后端：flask + sqlachemy + jinja2</p>
+		<p>数据库：mysql+redis缓存</p>
+		<h1>友情链接</h1>
+		<ul>
+			<li><a href="#">空缺中..........</a></li>
+			<li><a href="#">空缺中..........</a></li>
+			<li><a href="#">空缺中..........</a></li>
+		</ul>
+		<a href="/timelines"><h1>时间线</h1></a>
+	</div>
+
+</div>
+{% include './components/footer/footer.html' ignore missing %}
+<script type="text/javascript">
+	window.onload = function () {
+		var i = document.getElementsByClassName('navicon')[0].getElementsByTagName('i')
+		i[0].addEventListener('click',function() {
+			var nav = document.getElementById('nav')
+			var ul = document.getElementsByTagName('ul')
+			if (ul[0].getAttribute('class')) {
+				ul[0].setAttribute('class','')
+			}else {
+				ul[0].setAttribute('class','responsive')
+			}
+		})
+	}
+</script>
+{% endblock %}
+
+

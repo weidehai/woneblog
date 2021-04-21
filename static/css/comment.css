@@ -1,0 +1,121 @@
+@charset "UTF-8";
+#comment-area {
+  font-size: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem; }
+  #comment-area * {
+    transition: all 0.3s ease; }
+  #comment-area #comment-editor {
+    background-color: #2a2c2f;
+    padding: 0.6rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.6rem; }
+    #comment-area #comment-editor .commentor {
+      display: flex; }
+      #comment-area #comment-editor .commentor input {
+        border: none;
+        background-color: transparent;
+        /*outline设置input获取焦点时淡蓝色的编辑外框线*/
+        outline: none;
+        color: #c9cacc;
+        flex: 1;
+        padding: 0.6rem 0.32rem;
+        border-bottom: 1px #dedede double;
+        font-size: 0.85rem; }
+        #comment-area #comment-editor .commentor input:focus {
+          border-bottom: 1px #FF5722 double; }
+    #comment-area #comment-editor .comment-main {
+      margin-top: 0.6rem; }
+      #comment-area #comment-editor .comment-main textarea {
+        border: none;
+        width: 100%;
+        outline: none;
+        background-color: transparent;
+        color: #c9cacc;
+        padding: 0.6rem 0;
+        min-height: 8.75rem;
+        resize: vertical;
+        font-size: 0.875em; }
+    #comment-area #comment-editor .function {
+      text-align: right;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none; }
+      #comment-area #comment-editor .function > span {
+        cursor: pointer; }
+      #comment-area #comment-editor .function .emoji-list {
+        max-height: 145px;
+        font-size: 1rem;
+        overflow: auto;
+        margin-top: 1rem;
+        border: 1px #c9cacc solid;
+        justify-content: space-between;
+        grid-template-columns: repeat(auto-fill, 2.45rem);
+        padding: 0 0.5rem; }
+        #comment-area #comment-editor .function .emoji-list i {
+          padding: 0.5rem 0;
+          text-align: center;
+          display: inline-block;
+          font-style: normal;
+          cursor: pointer; }
+      #comment-area #comment-editor .function .markdown {
+        display: inline-block;
+        float: left;
+        padding: .35rem 0; }
+        #comment-area #comment-editor .function .markdown i {
+          border-bottom: 0.15rem solid darkgray;
+          position: relative;
+          display: inline-block;
+          font-size: 1.5rem; }
+          #comment-area #comment-editor .function .markdown i:after {
+            content: "";
+            position: absolute;
+            width: 0;
+            right: 0;
+            bottom: -0.15rem;
+            height: 0.15rem;
+            background: #1abc9c;
+            transition: width 0.3s ease; }
+          #comment-area #comment-editor .function .markdown i:hover:after {
+            -webkit-animation: Amarkdown 0.3s ease;
+            animation: Amarkdown 0.3s ease;
+            width: 100%; }
+      #comment-area #comment-editor .function .commit-comment {
+        display: inline-block;
+        text-align: center;
+        color: #313131;
+        border: 1px #ededed solid;
+        border-radius: 0.3rem;
+        background-color: #ededed;
+        padding: .5rem 1.25rem;
+        cursor: pointer; }
+        #comment-area #comment-editor .function .commit-comment:hover {
+          border: 1px #87CEFA solid;
+          color: #87CEFA; }
+  #comment-area #comment-text .empty {
+    text-align: center; }
+
+@-webkit-keyframes Amarkdown {
+  from {
+    left: 0;
+    width: 0; }
+  to {
+    left: 0;
+    width: 100%; } }
+
+@keyframes Amarkdown {
+  from {
+    left: 0;
+    width: 0; }
+  to {
+    left: 0;
+    width: 100%; } }
+
+@media screen and (max-width: 600px) {
+  .commentor {
+    display: block; }
+  .commentor input {
+    width: 100%; }
+  .sysinfo {
+    display: none; } }

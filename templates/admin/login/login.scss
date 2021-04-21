@@ -1,0 +1,85 @@
+#login {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border: 1px #FFB6C1 solid;
+  background-color: rgb(67, 57, 94);
+  border-radius: 4px;
+  width: 450px;
+  transform: translate(-50%, -50%);
+  padding: 1.25rem;
+  .title {
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid;
+    font-size: 1rem;
+  }
+  .date{
+    height: 2rem;
+    text-align: center;
+    margin-top: 0.8rem;
+  }
+  #auth {
+    padding: 2rem 1rem;
+    text-align: center;
+    position: relative;
+    .username, .password {
+      label {
+        display: inline-block;
+        width:5rem;
+        margin-right: 0.75rem;
+        text-align: left;
+      }
+      input {
+        border: none;
+        outline: none;
+        padding: 0.5rem;
+        width: 200px;
+      }
+    }
+    #submit {
+      margin-top: 3rem;
+      padding: 0.75rem;
+      background-color: rgb(58, 150, 215);
+      border: none;
+      color: inherit;
+      border-radius: 4px;
+      width: calc(5rem + 0.75rem + 1rem + 200px);
+      &:active {
+        opacity: 0.5;
+      }
+    }
+    .alert{
+      margin-top: 1rem;
+      color: red;
+    }
+  }
+}
+
+
+@media screen and (max-width: 900px) {
+  #login {
+    width: 85%;
+    #auth {
+      margin-top: 2rem;
+      padding: 0;
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #auth {
+    .username, .password {
+      label {
+        width: 20%;
+        margin: 0;
+      }
+      input {
+        width: 70%;
+      }
+      button {
+        width: 90%;
+      }
+    }
+  }
+}

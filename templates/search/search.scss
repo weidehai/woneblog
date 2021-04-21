@@ -1,0 +1,36 @@
+#search{
+  flex: 1;
+  #app{
+    position: relative;
+    margin-bottom: 1rem;
+    .keyword-input-box{
+      border-bottom: 1px solid #dedede;
+      transition: all 0.3s ease;
+      width: 80%;
+      *{
+        transition: all 0.3s ease;
+      }
+      input{
+        border:none;
+        outline: none;
+        background: transparent;
+        width: 80%;
+        color: #c9cacc;
+        font-size: 14px;
+        padding-left: 3px;
+      }
+    }
+    .dosearch{
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      width: 18%;
+      color: #313131;
+      background-color: seashell;
+      border: 1px #ededed solid;
+      height: 25px;
+      border-radius: 0.3em;
+      -webkit-appearance: none;
+    }
+  }
+}

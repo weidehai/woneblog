@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block css_link %}
+<link rel="stylesheet" type="text/css" href="../static/css/archives.css">
+{% endblock %}
+
+
+{% block content %}
+{% include "./components/header/header.html" ignore missing %}
+<div id="archives">
+	<div id="theme-tag">
+		{% for tag in tags %}
+		<a data-src='{{tag["tag_name"]}}'>{{tag["tag_name"]}}</a>
+		{% endfor %}
+	</div>
+	<section id="post-list">
+		<div id="archive"></div>
+	</section>
+</div>
+{% include './components/footer/footer.html' ignore missing %}
+{% endblock %}
+{% block javascript_link %}
+<script type="text/javascript" src="{{url_for('static',filename='js/archives.bundle.js')}}"></script>
+{% endblock %}
+

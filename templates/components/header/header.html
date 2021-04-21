@@ -1,0 +1,38 @@
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/header.css')}}">
+<header id="header">
+	<div class="left clearfloat">
+		<a href="/">
+			<div id="logo" style="background-image: url({{url_for('static',filename='img/avatar.jpg')}})"></div>
+		</a>
+	</div>
+	<div class="right">
+		<div id="wone">
+			<a href="/">Wone</a>
+		</div>
+		<div id="nav" class="responsive">
+			<ul>
+				<li>
+					<a href="/">Home</a>
+				</li>
+				<li>
+					<a href="/archives">Archives</a>
+				</li>
+				<li>
+					<a href="/about">About</a>
+				</li>
+				<li>
+					<a href="/search">Search</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="nav-icon">
+		<i class="iconfont icon-navlist i-2x"></i>
+	</div>
+</header>
+<script>
+	document.getElementsByClassName("nav-icon")[0].onclick=function(){
+		display = document.getElementsByClassName("responsive")[0].style.display
+		document.getElementsByClassName("responsive")[0].style.display=display=="block"?"none":"block"
+	}
+</script>

@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block css_link %}
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/article_detail.css')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/content.css')}}">
+{% endblock %}
+
+{% block content %}
+<div id="main">
+    <aside>
+        <div id="nav-aside">
+            <ul>
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/archives">Archives</a>
+                </li>
+                <li>
+                    <a href="/about">About</a>
+                </li>
+                <li>
+                    <a href="/search">Search</a>
+                </li>
+            </ul>
+        </div>
+        <div id="toolbar-aside">
+            <ul>
+                <li tips="{{'previous post' if previous else 'no any previous'}}">
+                    <a href="/article_detail/{{previous or 0}}" style="pointer-events:{{ 'auto' if previous else 'none'}}" ><i class="iconfont icon-previous"></i></a>
+                </li>
+                <li tips="{{'next post' if next else 'no any next'}}">
+                    <a href="/article_detail/{{next or 0}}" style="pointer-events:{{ 'auto' if next else 'none'}}"><i class="iconfont icon-next"></i></a>
+                </li>
+                <li tips="back to top">
+                    <i class="iconfont icon-up" onclick="back_to_up()"></i>
+                </li>
+                <li tips="show catalog">
+                    <i class="iconfont icon-bills"></i>
+                </li>
+            </ul>
+            <div id="catalog"></div>
+        </div>
+        <div id="shortcut">
+            <div style="display: none;" class="shortcut_top"><i class="iconfont icon-up" onclick="back_to_up()"></i></div>
+            <a href="/" class="shortcut_home" style="display: none;"><div><i class="iconfont icon-home"></i></div></a>
+        </div>
+    </aside>
+
+    <article>
+        <div class="title">
+            <h1>{{article_detail['article_title']}}</h1>
+        </div>
+        <div class="attribute">
+            <div class="postdate">
+                <time>{{article_detail['article_time']}}</time>
+            </div><div class="watch">
+                <i class="iconfont icon-glance"><span>{{article_detail['article_read']}}</span></i>
+            </div><div class="lable">
+                <i class="iconfont icon-lable"><a href='/archives?article_tag="{{article_detail["article_tag"]}}"'><span>{{article_detail['article_tag']}}</span></a></i>
+            </div>
+            <div class="update">
+                {% if article_detail['update_time'] %}
+                    本文最后更新于{{article_detail['update_time']}}
+                {% else %}
+                    本文最后更新于{{article_detail['article_time']}}
+                {% endif %}
+            </div>
+        </div>
+        <div class="main-content" data-id="{{article_detail['post_key']}}">{{article_detail['article_content'] | safe}}</div>
+    </article>
+</div>
+{% include './components/comment/comment.html' ignore missing %}
+{% include './components/footer/footer.html' ignore missing %}
+{% endblock %}
+
+
+{% block javascript_link %}
+<script>
+    nav_aside = document.getElementById("nav-aside")
+    window.addEventListener("scroll",function(){
+        if (document.documentElement.scrollTop===0) {
+            nav_aside.style.display = "block"
+        }else{
+            nav_aside.style.display = "none"
+        }
+    })
+    function back_to_up(){
+        let top = document.documentElement.scrollTop
+        let speed = top/4
+        if (top!=0) {
+            document.documentElement.scrollTop -=speed
+            window.requestAnimationFrame(back_to_up)
+        }
+    }
+    function filter_time(time_dom){
+        let [day,time] = time_dom.innerText.split(" ")
+        if(time==="00:00:00") time_dom.innerText = day
+    }
+    filter_time(document.getElementsByClassName("update")[0])
+    filter_time(document.getElementsByTagName("time")[0])
+</script>
+{% endblock %}
+
+
+<!--<div id="header-post">-->
+<!--        <div id="postbtn-tips"></div>-->
+<!--        <div id="toc" data-show='true'>-->
+<!--	        <nav id="lableOfContent">-->
+<!--	            <ul id="lablelist">-->
+<!--	            </ul>-->
+<!--	        </nav>-->
+<!--    	</div>-->
+<!--    </div>-->
+
+
+

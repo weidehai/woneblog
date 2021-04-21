@@ -1,0 +1,166 @@
+@charset "UTF-8";
+#manage #artilces-manage .post-list {
+  position: relative;
+  width: 75%;
+  margin: 1rem auto; }
+  #manage #artilces-manage .post-list table {
+    table-layout: fixed;
+    width: 100%;
+    height: 2.2rem;
+    line-height: 2.2rem;
+    text-align: center;
+    border-collapse: collapse; }
+    #manage #artilces-manage .post-list table tr {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+      #manage #artilces-manage .post-list table tr th {
+        border: 1px black solid; }
+      #manage #artilces-manage .post-list table tr td {
+        border: 1px black solid;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; }
+        #manage #artilces-manage .post-list table tr td button {
+          border: none;
+          outline: none;
+          text-align: right;
+          color: blue;
+          -webkit-tap-highlight-color: transparent; }
+          #manage #artilces-manage .post-list table tr td button:nth-child(1) {
+            margin-right: 5px; }
+          #manage #artilces-manage .post-list table tr td button:active {
+            color: black; }
+
+#manage #artilces-manage #page-selector {
+  display: none;
+  justify-content: center;
+  margin-bottom: 1rem;
+  -webkit-tap-highlight-color: transparent; }
+  #manage #artilces-manage #page-selector .disabled {
+    background-color: gray; }
+  #manage #artilces-manage #page-selector .enable {
+    background-color: #409eff; }
+  #manage #artilces-manage #page-selector div {
+    width: 2rem;
+    height: 2rem;
+    background-color: #409eff;
+    text-align: center;
+    display: inline-block;
+    margin-right: 8px;
+    line-height: 2rem;
+    color: #fff;
+    border-radius: 2px;
+    cursor: pointer; }
+    #manage #artilces-manage #page-selector div:last-child {
+      margin-right: 0; }
+  #manage #artilces-manage #page-selector div[id='pagination'] {
+    width: auto;
+    background-color: transparent;
+    cursor: auto; }
+    #manage #artilces-manage #page-selector div[id='pagination'] .active {
+      background-color: gray; }
+    #manage #artilces-manage #page-selector div[id='pagination'] .deactive {
+      background-color: #409eff; }
+
+#manage #tags-manage {
+  display: none;
+  width: 95%;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column; }
+  #manage #tags-manage div {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+    align-items: center; }
+  #manage #tags-manage select {
+    border: 1px black solid;
+    padding: 5px;
+    max-width: 500px;
+    height: 2rem;
+    flex: 1; }
+    #manage #tags-manage select option {
+      font-size: 1rem; }
+
+#manage #mood-manage {
+  display: none;
+  width: 95%; }
+  #manage #mood-manage div {
+    display: flex;
+    justify-content: center; }
+    #manage #mood-manage div input {
+      padding: 0.3125rem;
+      max-width: 500px;
+      border-radius: 0.125rem;
+      border: 1px solid #8bc34a;
+      height: 1.5rem; }
+
+#manage #suspende-menu {
+  /*消除移动端点击黑色背景*/
+  -webkit-tap-highlight-color: transparent;
+  position: fixed;
+  left: 0.5rem;
+  top: 1rem;
+  cursor: pointer;
+  height: 1.5rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow: hidden; }
+  #manage #suspende-menu button {
+    font-size: 1.5rem;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    background: transparent; }
+    #manage #suspende-menu button i {
+      font-size: 1.5rem;
+      margin-right: 3px; }
+  #manage #suspende-menu ul li {
+    padding: 5px 5px 5px 5px;
+    background-color: #00bcd4; }
+    #manage #suspende-menu ul li:hover {
+      background-color: #0094d4; }
+
+#manage .vhcenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); }
+
+@media screen and (max-width: 900px) {
+  #manage #artilces-manage .post-list {
+    width: 90%; } }
+
+/*
+.wrapper ul:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+
+
+
+
+#menu_2 div{
+	display: flex;
+	justify-content: center;
+	margin-bottom: 15px;
+	align-items: center;
+}
+
+
+
+
+
+#new_tag{
+	padding: 5px;
+	max-width: 488px;
+	border-radius:2px;
+	border:1px solid #8bc34a;
+	height: 22px;
+}
+
+
+*/

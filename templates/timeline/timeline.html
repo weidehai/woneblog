@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../static/layui-v2.5.6/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../static/font/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/loading.css">
+    <link rel="icon" type="image/x-icon" href="../static/img/wone.ico">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html{
+            background-color: #1d1f21;
+        }
+        .wrapper{
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            padding-top: 30px;
+            min-width: 600px;
+        }
+        /*触底留白区域*/
+        .wrapper::after{
+            content: "";
+            height: 30px;
+            display: block;
+        }
+        /*.operation{
+            margin-top: -10px;
+        }*/
+        .operation .layui-icon{
+            padding-right: 8px;
+            cursor: pointer;
+        }
+        .operation .layui-icon:hover{
+            color: #00FF00;
+        }
+        .layui-fixbar li{
+            font-size: 25px !important;
+            line-height: 30px;
+            width: 30px;
+            height: 30px;
+        }
+        .layui-timeline-title{
+            color: #33FF99 !important;
+            font-size: 14px !important;
+            margin-right: 15px;
+        }
+        .layui-timeline-item:last-child::before{
+            display: none !important
+        }
+        .content{
+            color: #33FFCC;
+            overflow: hidden;
+        }
+        .layui-icon-loading{
+            animation: animation_loading 1s infinite;
+            animation-timing-function: linear;
+            display: inline-block;
+            margin-left: 10px;
+            color: #00F7DE;
+            float: left;
+        }
+        .icon-fold{
+            cursor: pointer;
+        }
+        .icon-fold:hover{
+            color: #00FF00;
+        }
+        @media screen and (max-width: 650px){
+            .wrapper{
+                min-width: 90%;
+
+            }
+        }
+        @keyframes animation_loading {
+            to{
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper" >
+        <ul class="layui-timeline">
+            <li class="layui-timeline-item" id="tail">
+                <i class="layui-icon layui-timeline-axis" style="background-color: #2E2D3C">&#xe63f;</i>
+                <div class="layui-timeline-content layui-text">
+                    <h3 class="layui-timeline-title" id="loading_tips" style="display: inline-block;float: left">正在加载中.....</h3>
+                    <i class="layui-icon layui-icon-loading" id="loading"></i>
+                </div>
+            </li>
+        </ul>
+    </div>
+    
+    <script type="text/javascript" src="../static/layui-v2.5.6/layui/layui.js"></script>
+    <script type="text/javascript" src="../static/js/myajax.js"></script>
+    <script type="text/javascript" src="../static/js/flush/laflush.js"></script>
+    <script>
+        let admin = {{ admin }}
+        layui.use('util', function(){
+            let util = layui.util;
+            //执行
+            util.fixbar({
+                {% if admin=="true" %}
+                bar1: '&#xe654',
+                {% endif %}
+                bar2: "&#xe68e",
+                click: function(type){
+                    switch(type){
+                        case 'bar1':
+                            addTimeline();
+                            break;
+                        case "bar2":
+                            window.location.href="https://www.haiblog.cn";
+                            break;
+                    }
+                },
+            });
+        });
+
+
+        let all_data_geted=false;
+        let ready_to_fresh=false;
+        let modify = false;
+        let offset=0,timeline_data=[],content_height=0,client_height=document.documentElement.clientHeight;
+        let document_fragment = document.createDocumentFragment()
+        let ul, tail
+        function addTimeline() {
+            render({
+                time:"在这里输入时间",
+                content: "在这里输入内容"
+            },true)
+        }
+        function loading_show(){
+            document.getElementById('loading').style.display = 'inline-block'
+        }
+        function loading_hidden(message){
+            document.getElementById('loading_tips').innerText = message
+            document.getElementById('loading').style.display = 'none'
+        }
+        function firstGet(){
+            Interactive.XHRApart("timeline","timeline_id,time,content","time",offset,10,function(result){
+                timeline_data = result;
+                for (let item of timeline_data){
+                    render(item)
+                }
+                ul.insertBefore(document_fragment,tail);
+                document_fragment = document.createDocumentFragment();
+                if (result.length<10) {
+                    all_data_geted = true
+                    loading_hidden("没有更多了")
+                    return
+                }
+                offset = offset + 10
+                content_height = document.documentElement.scrollHeight || document.body.scrollHeight
+                if (content_height<client_height) {
+                    firstGet()
+                }else{
+                    loading_hidden("下拉加载更多")
+                    laflush.ready_to_flush=true
+                    laflush.eventlistener()
+                    laflush.content_height = content_height
+                    laflush.flush = layz_get
+                }
+            })
+        }
+        function layz_get(){
+            loading_show()
+            Interactive.XHRApart("timeline","timeline_id,time,content","time",offset,10,function(result){
+                timeline_data = result;
+                console.log(timeline_data)
+                for (let item of timeline_data){
+                    render(item)
+                }
+                ul.insertBefore(document_fragment,tail);
+                document_fragment = document.createDocumentFragment();
+                laflush.content_height = document.documentElement.scrollHeight
+                if (result.length<10) {
+                    all_data_geted = true
+                    loading_hidden("没有更多了")
+                    laflush.removelistener()
+                    return
+                }
+                loading_hidden("下拉加载更多")
+                laflush.ready_to_flush=true
+                offset = offset + 10
+            })
+        }
+        function delTimeline(id) {
+            Interactive.XHRDel("timeline",id,function(result){
+                console.log(result)
+            })
+        }
+        function postTimeline(time,content,cb){
+            data={
+                time,
+                content,
+                table: "timeline"
+            }
+            Interactive.XHRSave(data,"post",false,function(){
+                console.log('success')
+                cb()
+            })
+        }
+        function modifyTimeline(time,content,key,cb){
+            data={
+                time,
+                content,
+                table: "timeline",
+                post_key:key
+            }
+            Interactive.XHRUpdate(data,function(){
+                console.log('success')
+                cb()
+            })
+        }
+        function render(data_obj,focus=false) {
+            let li = document.createElement("li");
+            li.setAttribute("class",'layui-timeline-item');
+            let i1 = document.createElement("i");
+            i1.setAttribute("class","layui-icon layui-timeline-axis layui-icon-circle");
+            i1.style.backgroundColor='#2E2D3C';
+            let div1 = document.createElement('div');
+            div1.setAttribute('class','layui-timeline-content layui-text');
+            let h3 = document.createElement("h3");
+            let fold_i = document.createElement('i')
+            let div_head = document.createElement('div')
+            let p = document.createElement('p');
+            p.setAttribute('class','content');
+            //p.style.transition = 'all 2s'
+            div_head.style.marginBottom = '5px'
+            div_head.style.height = '18px'
+            div_head.style.lineHeight = '18px'
+            h3.style.display = 'inline-block'
+            fold_i.setAttribute("class","iconfont icon-fold")
+            fold_i.addEventListener('click',()=>{
+                if (p.style.height==='0px') {
+                    p.style.height = 'auto'
+                    fold_i.style.color = "inherit"
+                }else{
+                    p.style.height = 0;
+                    fold_i.style.color = "#00FF00"
+                }
+            })
+            h3.setAttribute('class','layui-timeline-title');
+            div_head.appendChild(h3);
+            div_head.appendChild(fold_i);
+            div1.appendChild(div_head);
+            li.appendChild(i1);
+            li.appendChild(div1);
+            h3.innerText=data_obj.time;
+            p.innerText = data_obj.content
+            if(admin){
+                let div2 = document.createElement('div');
+                div2.setAttribute('class',"operation");
+                let i2=document.createElement('i');
+                let i3=document.createElement('i');
+                let i5=document.createElement('i');
+                i5.setAttribute('class','layui-icon layui-icon-release');
+                i2.setAttribute('class','layui-icon layui-icon-edit');
+                i3.setAttribute('class','layui-icon layui-icon-delete');
+                i2.addEventListener('click',function () {
+                    p.contentEditable=true;
+                    h3.contentEditable=true;
+                    //h3.focus();
+                    i5.style.display='inline'
+                    modify=true;
+                });
+                i3.addEventListener('click',function(){
+                    delTimeline(data_obj['timeline_id'])
+                    ul.removeChild(li)
+                })
+                i5.addEventListener('click',function (e) {
+                    let classname = i5.className
+                    i5.className += " color_switch_loading"
+                    p.contentEditable=false;
+                    h3.contentEditable=false;
+                    time = e.target.parentElement.parentElement.querySelector('h3').innerText;
+                    content = e.target.parentElement.parentElement.querySelector('p').innerText;
+                    if (modify) {
+                        modifyTimeline(time,content,data_obj['timeline_id'],()=>{
+                            i5.style.display = 'none'
+                            i5.className = classname
+                        })
+                    }else{
+                        postTimeline(time,content,()=>{
+                            //i5.style.display = 'none'
+                            //i5.className = classname
+                            window.location.reload()
+                        });
+                    }
+                });
+                div2.appendChild(i2);
+                div2.appendChild(i3);
+                div2.appendChild(i5);
+                
+                i5.style.display='none';
+                div1.appendChild(div2);
+                if (focus){
+                    i5.style.display='inline'
+                }
+            }
+            div1.appendChild(p);
+            if (focus) {
+                ul.insertBefore(li,ul.firstElementChild);
+                p.contentEditable=true;
+                h3.contentEditable=true;
+                h3.focus()
+            }else{
+                document_fragment.appendChild(li)    
+            }
+        }
+        window.onload=function () {
+            firstGet()
+            ul = document.querySelector('ul');
+            tail = document.getElementById('tail');
+        };
+    </script>
+</body>
+</html>

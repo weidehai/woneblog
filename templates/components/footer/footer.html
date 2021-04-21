@@ -1,0 +1,17 @@
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/footer.css')}}">
+<footer id="footer">
+	<div class="footer-left">Copyright © 2021 Wone <a href="http://www.beian.miit.gov.cn" target="_blank">琼ICP备19001364号</a></div>
+	<div class="footer-right">
+		<nav>
+			<ul>
+				<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li><li><a href="/about">About</a></li><li><a href="/search">Search</a></li>
+			</ul>
+		</nav>
+	</div>
+</footer>
+<script>
+	let info = new Browser();
+	if(info.browser==='IE'){
+		document.getElementsByClassName('flex-content')[0].style.display='block'
+	}
+</script>

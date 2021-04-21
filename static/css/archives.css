@@ -1,0 +1,25 @@
+#archives {
+  flex: 1; }
+  #archives #theme-tag {
+    margin-bottom: 1rem; }
+    #archives #theme-tag a:hover {
+      color: #2bbc8a;
+      cursor: pointer; }
+  #archives .post-list .item {
+    margin-bottom: 14px; }
+    #archives .post-list .item p time {
+      margin-right: 1rem; }
+    #archives .post-list .item p a {
+      display: inline-block;
+      background-repeat: repeat-x;
+      background-position: bottom;
+      background-size: 100% 6px;
+      background-image: linear-gradient(transparent, transparent 5px, #c9cacc 5px, #c9cacc); }
+      #archives .post-list .item p a:hover {
+        color: #2bbc8a; }
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%); }

@@ -1,0 +1,23 @@
+﻿{% extends 'base.html' %}
+
+{% block css_link %}
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/404error.css')}}">
+{% endblock %}
+
+{% block content %}
+{% include "./components/header/header.html" ignore missing %}
+<div id="error404">
+	<section id="wrapper" class="home">
+		<article class="post">
+			<p>> LINK IS DEAD.</p>
+			<p>> It's so trrible that the server return a 404 page.</p>
+			<p>> you possible visit a not exist page.</p>
+			<p>> You can come back from the navigation bar.</p>
+			<p>> That all,wish you have a good day.</p>
+		</article>
+	</section>
+</div>
+{% include './components/footer/footer.html' ignore missing %}
+<script type="text/javascript">
+</script>
+{% endblock %}

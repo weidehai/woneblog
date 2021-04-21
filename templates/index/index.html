@@ -1,0 +1,62 @@
+﻿{% extends 'base.html' %}
+{% block css_link %}
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/index.css')}}">
+{% endblock %}
+
+{% block content %}
+{% include "./components/header/header.html" ignore missing %}
+<div id="home" class="wrapper">
+	<section id="about">
+		<div class="description">
+			<span class="welcome-message">{{mood or "这个人很懒，什么也没写下"}}</span>
+		</div>
+		<p><i class="iconfont icon-read"></i><span class="watch">{{visited_total or 0}}</span><span class="Find">Find me on</span><a href="https://github.com/" id="github"><i class="iconfont icon-github"></i></a></p>
+	</section>
+	<section id="postlist" class="list">
+		<div class="title">
+			<a href="/archives">Archives</a>
+			<i class="iconfont icon-recently recently" tips="最新发表" recently="false"></i>
+		</div>
+		<div>
+			<ul class="post-list">
+				{% for item in articles %}
+				<li class="item">
+					<p class="ellipsis"><time>{{item['article_time']}}</time><a href="/article_detail/{{item['article_id']}}">{{item['article_title']}}</a></p>
+				</li>
+				{% else %}
+				<li class="item">
+					<p class="ellipsis">没有任何内容😅😅😅😅😅😅😅</p>
+				</li>
+				{% endfor %}
+			</ul>	
+		</div>
+	</section>
+	<section id="projects" class="list">
+		<div class="title">
+			<a href="https://project.haiblog.cn" target="_blank">Projects</a>
+			<i class="iconfont icon-tap tap" tips="project_demo"></i>
+		</div>
+		<div>
+			<ul class="project-list">
+				{% for item in projects %}
+				<li class="item">
+					<p class="ellipsis"><time>{{item["project_time"]}}</time><a href="http://project.haiblog.cn{{item['project_url']}}">{{item["project_title"]}}</a></p>
+				</li>
+				{% else %}
+				<li class="item">
+					<p class="ellipsis">没有任何内容😅😅😅😅😅😅😅</p>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</section>
+</div>
+<div id='wk'></div>
+{% include './components/footer/footer.html' ignore missing %}
+{% endblock %}
+
+
+
+	
+		
+

@@ -1,0 +1,38 @@
+{% extends "base.html" %} {% block title %}管理员登陆{% endblock %} {% block
+css_link %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{url_for('static',filename='css/login.css')}}"
+/>
+{% endblock %} {% block content %}
+<div id="login">
+  <div class="title">
+    <span>Wone博客管理系统</span>
+  </div>
+  <div class="date"></div>
+  <div id="auth">
+    <form method="POST">
+      {{ loginform.csrf_token }}
+      <div class="username" style="margin-bottom: 3rem">
+        {{ loginform.username.label }}{{ loginform.username() }}
+      </div>
+      <div class="password">
+        {{ loginform.password.label }}{{ loginform.password() }}
+      </div>
+      {{ loginform.submit() }}
+    </form>
+    {% for message in get_flashed_messages() %}
+    <div class="alert">{{ message }}</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %} {% block javascript_link %}
+<script>
+  !(function showDate() {
+    moment.locale('zh-cn'); 
+    const date_dom = document.getElementsByClassName("date")[0];
+    date_dom.innerText = moment().format('LLLL');
+  })()
+</script>
+{% endblock %}
