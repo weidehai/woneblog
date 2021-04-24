@@ -5,26 +5,11 @@
 {% endblock %}
 {% block js_link %}
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.21/lodash.core.js"></script>
 {% endblock %}
 {% block content %}
 <div id="manage">
-	<div id="artilces-manage">
-		<div class="post-list">
-			<table>
-				<tr>
-					<th style="width: 52%">标题</th>
-					<th style="width: 16%">分类</th>
-					<th style="width: 16%">时间</th>
-					<th style="width: 5rem">操作</th>
-				</tr>
-			</table>
-		</div>
-		<div id="page-selector" data-article-total="{{article_total}}" data-draft-total="{{draft_total}}">
-			<div id="previous-page"><i class="iconfont icon-previous"></i></div>
-			<div id="pagination"></div>
-			<div id="next-page"><i class="iconfont icon-next"></i></div>
-		</div>
-	</div>
+	
 	<div id="tags-manage" class="vhcenter">
 		<div>
 			<select id="tag_list">
@@ -60,7 +45,7 @@
 	<div id="suspende-menu">
 		<button><i class="iconfont icon-navlist"></i>菜单</button>
 		<ul id="menus">
-			<a href="/adminpublish"><li id="write">写文章</li></a>
+			<a href="/adminpublish/new"><li id="write">写文章</li></a>
 			<li id="articles">博客列表</li>
 			<li id="tags">标签管理</li>
 			<li id="mood">心情</li>

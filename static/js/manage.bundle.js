@@ -9985,7 +9985,7 @@ $({
 
 /***/ }),
 
-/***/ 79:
+/***/ 2305:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 var $ = __webpack_require__(7309);
@@ -14778,7 +14778,7 @@ var es_string_pad_start = __webpack_require__(7599);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.raw.js
 var es_string_raw = __webpack_require__(7138);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.repeat.js
-var es_string_repeat = __webpack_require__(79);
+var es_string_repeat = __webpack_require__(2305);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
 var es_string_replace = __webpack_require__(8494);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.search.js
@@ -14910,150 +14910,141 @@ var runtime = __webpack_require__(6760);
 ;// CONCATENATED MODULE: external "axios"
 var external_axios_namespaceObject = axios;
 var external_axios_default = /*#__PURE__*/__webpack_require__.n(external_axios_namespaceObject);
-;// CONCATENATED MODULE: ./templates/admin/manage/service.js
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
+;// CONCATENATED MODULE: ./templates/service.js
 
 var api = {
-  getArticles: "/api/articles"
+  getArticles: "/api/articles",
+  upload: "/api/upload"
+};
+var Network = {
+  fetch: function fetch(url, config) {
+    return new Promise(function (resolve, reject) {
+      external_axios_default().get(url, config).then(function (res) {
+        resolve(res.data);
+      }).catch(function (err) {
+        reject(err);
+      });
+    });
+  },
+  put: function put(url, data, config) {
+    return new Promise(function (resolve, reject) {
+      external_axios_default().put(url, data, config).then(function (res) {
+        resolve(res.data);
+      }).catch(function (err) {
+        reject(err);
+      });
+    });
+  },
+  post: function post(url, config) {
+    return new Promise(function (resolve, reject) {
+      external_axios_default().get(url, config).then(function (res) {
+        resolve(res);
+      }).catch(function (err) {
+        reject(err);
+      });
+    });
+  },
+  delete: function _delete(url, config) {
+    return new Promise(function (resolve, reject) {
+      external_axios_default().delete(url, config).then(function (res) {
+        resolve(res);
+      }).catch(function (err) {
+        reject(err);
+      });
+    });
+  }
+};
+var Service = Object.create(Network);
+
+Service.getArticles = function (config) {
+  return this.fetch(api.getArticles, config);
 };
 
-var netWork = /*#__PURE__*/function () {
-  function netWork() {
-    _classCallCheck(this, netWork);
-  }
+Service.getArticlesByTagAndYear = function (tag, year, config) {
+  return this.fetch("".concat(api.getArticles, "/").concat(tag, "/").concat(year), config);
+};
 
-  _createClass(netWork, [{
-    key: "fetch",
-    value: function fetch(url, params) {
-      return new Promise(function (resolve, reject) {
-        external_axios_default().get(url, {
-          params: params
-        }).then(function (res) {
-          resolve(res);
-        }).catch(function (err) {
-          reject(err);
-        });
-      });
-    }
-  }, {
-    key: "put",
-    value: function put(url, params, data) {
-      return new Promise(function (resolve, reject) {
-        external_axios_default().put(url, {
-          params: params,
-          data: data
-        }).then(function (res) {
-          resolve(res);
-        }).catch(function (err) {
-          reject(err);
-        });
-      });
-    }
-  }, {
-    key: "post",
-    value: function post(url, params, data) {
-      return new Promise(function (resolve, reject) {
-        external_axios_default().get(url, {
-          params: params,
-          data: data
-        }).then(function (res) {
-          resolve(res);
-        }).catch(function (err) {
-          reject(err);
-        });
-      });
-    }
-  }, {
-    key: "delete",
-    value: function _delete(url, params) {
-      return new Promise(function (resolve, reject) {
-        external_axios_default().delete(url, {
-          params: params
-        }).then(function (res) {
-          resolve(res);
-        }).catch(function (err) {
-          reject(err);
-        });
-      });
-    }
-  }]);
+Service.getArticlesByYear = function (year, config) {
+  return this.fetch("".concat(api.getArticles, "/").concat(year), config);
+};
 
-  return netWork;
-}();
+Service.upload = function (data, config) {
+  return this.put(api.upload, data, config);
+};
 
-var Service = /*#__PURE__*/function (_netWork) {
-  _inherits(Service, _netWork);
-
-  var _super = _createSuper(Service);
-
-  function Service() {
-    _classCallCheck(this, Service);
-
-    return _super.apply(this, arguments);
-  }
-
-  _createClass(Service, [{
-    key: "getArticles",
-    value: function getArticles(offset, limit) {
-      return this.fetch(api.getArticles, {
-        offset: offset,
-        limit: limit
-      });
-    }
-  }]);
-
-  return Service;
-}(netWork);
-
-/* harmony default export */ var service = (new Service());
+/* harmony default export */ var service = (Service);
+;// CONCATENATED MODULE: external "_"
+var external_namespaceObject = _;
+var external_default = /*#__PURE__*/__webpack_require__.n(external_namespaceObject);
 ;// CONCATENATED MODULE: ./templates/admin/manage/model.js
-function model_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-function model_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function model_createClass(Constructor, protoProps, staticProps) { if (protoProps) model_defineProperties(Constructor.prototype, protoProps); if (staticProps) model_defineProperties(Constructor, staticProps); return Constructor; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var Model = /*#__PURE__*/function () {
-  function Model() {
-    model_classCallCheck(this, Model);
+var INVALIDTIME = "00:00:00";
+var Model = {
+  modelData: [],
+  initArticles: function initArticles(config) {
+    return service.getArticles.apply(service, arguments);
+  },
+  formatData: function formatData(data) {
+    if (!external_default().isArray(data)) return;
+    data.forEach(function (value, index, arr) {
+      var _data$index$article_t = data[index].article_time.split('T'),
+          _data$index$article_t2 = _slicedToArray(_data$index$article_t, 2),
+          day = _data$index$article_t2[0],
+          time = _data$index$article_t2[1];
 
-    this.modelData = null;
+      data[index].article_time = time === INVALIDTIME ? day : "".concat(day, " ").concat(time);
+    });
+    return data;
+  }
+};
+/* harmony default export */ var model = (Model);
+;// CONCATENATED MODULE: ./templates/admin/manage/view.js
+var articleManage = "\n<div id=\"artilces-manage\">\n  <div class=\"post-list\">\n    <table>\n      <thead>\n        <tr>\n          <th style=\"width: 52%\">\u6807\u9898</th>\n          <th style=\"width: 16%\">\u5206\u7C7B</th>\n          <th style=\"width: 16%\">\u65F6\u95F4</th>\n          <th style=\"width: 5rem\">\u64CD\u4F5C</th>\n        </tr>\n      </thead>\n      <tbody>tbodytodo</tbody>\n    </table>\n  </div>\n</div>";
+var pagination = "\n<div id=\"page-selector\">\n  <div id=\"previous-page\" action=\"previous\" class=\"disabled iconfont icon-previous\"></div>\n  <div id=\"pagination\">todo</div>\n  <div id=\"next-page\" action=\"next\" class=\"enable iconfont icon-next\"></div>\n</div>\n";
+
+;// CONCATENATED MODULE: external "$"
+var external_$_namespaceObject = $;
+var external_$_default = /*#__PURE__*/__webpack_require__.n(external_$_namespaceObject);
+;// CONCATENATED MODULE: ./templates/utils.js
+function getOneViewportHeigh() {
+  return document.documentElement.clientHeight + "px";
+}
+
+function getElementComputedProperty(element, property) {
+  if (window.getComputedStyle) return property ? window.getComputedStyle(element, null)[property] : null;
+  if (element.currentStyle) return element.currentStyle[property];
+}
+
+function clearInnerhtml(element) {
+  var _this = this;
+
+  if (element instanceof Array) {
+    element.forEach(function (ele) {
+      _this.clearInnerhtml(ele);
+    });
   }
 
-  model_createClass(Model, [{
-    key: "init",
-    value: function init() {
-      return service.getArticles(0, 10);
-    }
-  }]);
+  element.innerHTML = "";
+}
 
-  return Model;
-}();
+function isExsitDom(selector) {
+  return $(selector).length > 0;
+}
 
-/* harmony default export */ var model = (new Model());
+
 ;// CONCATENATED MODULE: ./templates/admin/manage/manageArticles.js
 
 
@@ -15240,18 +15231,136 @@ var Model = /*#__PURE__*/function () {
 
 
 
+
+
+
 (function () {
-  function initModel() {
-    model.init().then(function (res) {
-      model.modelData = res.data;
+  var offset = 0;
+  var limit = 10;
+  var total = 0;
+  var totalPage = 0;
+  var currentPage = 1;
+  var lastPage = 1;
+
+  function initArticleModel() {
+    model.initArticles({
+      params: {
+        offset: offset,
+        limit: limit
+      }
+    }).then(function (res) {
+      if (!res.result) return;
+      total = res.total;
+      console.log(res);
+      model.modelData.concat(model.formatData(res.data));
+
+      if (isExsitDom('#artilces-manage tbody')) {
+        external_$_default()('#artilces-manage tbody').append(renderTable(res.data));
+      }
+
+      if (!isExsitDom('#artilces-manage tbody')) {
+        external_$_default()('#manage').append(articleManage.replace('tbodytodo', renderTable(res.data)));
+      }
+
+      if (!isExsitDom('#page-selector')) offset += limit;
+      if (!isEnoughOneViewPortY() && !isExsitDom('#page-selector')) initArticleModel();
+
+      if (isEnoughOneViewPortY() && !isExsitDom('#page-selector')) {
+        limit = offset, offset = 0;
+        external_$_default()('#artilces-manage').append(pagination.replace('todo', renderPagination()));
+        external_$_default()('#page-selector').on('click', function (e) {
+          var action = e.target.getAttribute('action');
+          lastPage = currentPage;
+
+          switch (action) {
+            case 'next':
+              if (currentPage >= totalPage) return;
+              offset += limit;
+              currentPage++;
+              clearInnerhtml(external_$_default()('#artilces-manage tbody')[0]);
+              initArticleModel();
+              break;
+
+            case 'previous':
+              if (currentPage <= 1) return;
+              offset -= limit;
+              currentPage--;
+              clearInnerhtml(external_$_default()('#artilces-manage tbody')[0]);
+              initArticleModel();
+              break;
+
+            default:
+              if (!action) return;
+              if (currentPage == action) return;
+              offset = (action - 1) * limit;
+              currentPage = action;
+              clearInnerhtml(external_$_default()('#artilces-manage tbody')[0]);
+              initArticleModel();
+              break;
+          }
+
+          onPageChange();
+        });
+      }
     });
   }
 
-  function renderTable(data) {
-    "<tr>\n      <td>".concat(data.article_title, "<td>\n      <td>").concat(data.article_tag, "<td>\n      <td>").concat(data.article_time, "<td>\n      <td><button onclick=\"\">\u7F16\u8F91</button><button onclick=\"\">\u5220\u9664</button><td>\n     <tr>");
+  function onPageChange() {
+    console.log(currentPage, totalPage, currentPage === totalPage);
+    currentPage == totalPage ? external_$_default()('#next-page').removeClass('enable').addClass('disabled') : external_$_default()('#next-page').removeClass('disabled').addClass('enable');
+    currentPage == 1 ? external_$_default()('#previous-page').removeClass('enable').addClass('disabled') : external_$_default()('#previous-page').removeClass('disabled').addClass('enable');
+    external_$_default()("div[action=".concat(currentPage, "]")).removeClass('enable').addClass('disabled');
+    external_$_default()("div[action=".concat(lastPage, "]")).removeClass('disabled').addClass('enable');
   }
 
-  initModel(); // const manage_articles: manage_articles = {
+  function renderTable(data) {
+    var dom = '';
+    data.forEach(function (value, index, arr) {
+      dom += "<tr><td>".concat(value.article_title, "</td><td>").concat(value.article_tag, "</td><td>").concat(value.article_time, "</td><td><button action=\"modify\" id=\"").concat(value.article_id, "\">\u7F16\u8F91</button><button action=\"delete\" id=\"").concat(value.article_id, "\">\u5220\u9664</button></td></tr>");
+    });
+    return dom;
+  }
+
+  function renderPagination() {
+    var dom = [];
+    var page = Math.ceil(total / limit);
+    totalPage = page;
+    currentPage = 1;
+
+    while (page) {
+      if (page == 1) {
+        dom.unshift("<div action=\"".concat(page, "\" class='disabled'>").concat(page, "</div>"));
+      } else {
+        dom.unshift("<div action=\"".concat(page, "\">").concat(page, "</div>"));
+      }
+
+      page--;
+    }
+
+    return dom.join('');
+  }
+
+  function isEnoughOneViewPortY() {
+    return document.documentElement.offsetHeight >= window.innerHeight + 50;
+  }
+
+  (function init() {
+    external_$_default()('#manage').on('click', function (e) {
+      var action = e.target.getAttribute('action');
+      var id = e.target.getAttribute('id');
+
+      switch (action) {
+        case 'modify':
+          window.location = "/adminpublish/modify?article_id=".concat(id);
+          break;
+
+        case 'modify':
+          //window.location = `/adminpublish/modify?article_id=${id}`
+          break;
+      }
+    });
+    initArticleModel();
+  })(); // const manage_articles: manage_articles = {
   //   compute_pageinfo() {
   //     if (this.state.isfirst) {
   //       this.state.pre_page = this.state.current_page * this.state.pre_page;
@@ -15379,6 +15488,7 @@ var Model = /*#__PURE__*/function () {
   //   },
   // };
   // manage_articles.get_articles(++manage_articles.state.current_page);
+
 })();
 }();
 /******/ })()

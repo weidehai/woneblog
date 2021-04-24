@@ -1,14 +1,113 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
+/******/ 	// The require scope
+/******/ 	var __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
 
 ;// CONCATENATED MODULE: external "moment"
 var external_moment_namespaceObject = moment;
-;// CONCATENATED MODULE: external "log"
-var external_log_namespaceObject = log;
-;// CONCATENATED MODULE: ./templates/archives/archives.js
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+;// CONCATENATED MODULE: external "axios"
+var external_axios_namespaceObject = axios;
+var external_axios_default = /*#__PURE__*/__webpack_require__.n(external_axios_namespaceObject);
+;// CONCATENATED MODULE: ./templates/service.js
 
+var api = {
+  getArticles: "/api/articles",
+  upload: "/api/upload"
+};
+var Network = {
+  fetch: function fetch(url, config) {
+    return new Promise(function (resolve, reject) {
+      external_axios_default().get(url, config).then(function (res) {
+        resolve(res.data);
+      }).catch(function (err) {
+        reject(err);
+      });
+    });
+  },
+  put: function put(url, data, config) {
+    return new Promise(function (resolve, reject) {
+      external_axios_default().put(url, data, config).then(function (res) {
+        resolve(res.data);
+      }).catch(function (err) {
+        reject(err);
+      });
+    });
+  },
+  post: function post(url, config) {
+    return new Promise(function (resolve, reject) {
+      external_axios_default().get(url, config).then(function (res) {
+        resolve(res);
+      }).catch(function (err) {
+        reject(err);
+      });
+    });
+  },
+  delete: function _delete(url, config) {
+    return new Promise(function (resolve, reject) {
+      external_axios_default().delete(url, config).then(function (res) {
+        resolve(res);
+      }).catch(function (err) {
+        reject(err);
+      });
+    });
+  }
+};
+var Service = Object.create(Network);
+
+Service.getArticles = function (config) {
+  return this.fetch(api.getArticles, config);
+};
+
+Service.getArticlesByTagAndYear = function (tag, year, config) {
+  return this.fetch("".concat(api.getArticles, "/").concat(tag, "/").concat(year), config);
+};
+
+Service.getArticlesByYear = function (year, config) {
+  return this.fetch("".concat(api.getArticles, "/").concat(year), config);
+};
+
+Service.upload = function (data, config) {
+  return this.put(api.upload, data, config);
+};
+
+/* harmony default export */ var service = (Service);
+;// CONCATENATED MODULE: external "_"
+var external_namespaceObject = _;
+var external_default = /*#__PURE__*/__webpack_require__.n(external_namespaceObject);
+;// CONCATENATED MODULE: ./templates/archives/model.js
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -23,263 +122,209 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var current_year = parseFloat(external_moment_namespaceObject().format("YYYY"));
-var offset = 0;
-var fetched_count = 0;
-var tag;
-console.log('ddddd');
+var INVALIDTIME = "00:00:00";
+var Model = {
+  modelData: [],
+  initWithYear: function initWithYear(year, config) {
+    return service.getArticlesByYear.apply(service, arguments);
+  },
+  initWithTagAndYear: function initWithTagAndYear(tag, year, config) {
+    return service.getArticlesByTagAndYear.apply(service, arguments);
+  },
+  formatData: function formatData(data) {
+    if (!external_default().isArray(data)) return;
+    data.forEach(function (value, index, arr) {
+      var _data$index$article_t = data[index].article_time.split('T'),
+          _data$index$article_t2 = _slicedToArray(_data$index$article_t, 2),
+          day = _data$index$article_t2[0],
+          time = _data$index$article_t2[1];
 
-function get_data() {
-  var xhr = new XMLHttpRequest();
-  var url;
-
-  if (tag) {
-    url = "api/archives/".concat(tag, "/").concat(current_year, "?offset=").concat(offset, "&fetched_count=").concat(fetched_count);
+      data[index].article_time = time === INVALIDTIME ? day : "".concat(day, " ").concat(time);
+    });
+    return data;
   }
+};
+/* harmony default export */ var model = (Model);
+;// CONCATENATED MODULE: ./templates/archives/view.js
 
-  if (!tag) {
-    url = "api/articles/".concat(current_year, "?offset=").concat(offset, "&fetched_count=").concat(fetched_count);
-  }
 
-  xhr.open("get", url, true);
-
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) {
-      var res = xhr.responseText;
-      render_page(res);
-    }
-  };
-
-  xhr.send();
-}
-
-function init_page() {
-  if (document.documentElement.offsetHeight > window.innerHeight + 50) return;
-  get_data();
-}
-
-function render_page(data) {
-  var data_json = JSON.parse(data);
-
-  if (!data_json.result) {
-    --current_year;
-    offset = 0;
-    if (data_json.end) return;
-    init_page();
-    return;
-  }
-
-  fetched_count += data_json.data.length;
-  var archive_dom = document.getElementById("archive");
-  var year_dom = document.getElementById(data_json.year);
-  var ul;
-  var document_fragment = document.createDocumentFragment();
-
-  function render_list(item) {
-    var li = document.createElement("li");
-    li.setAttribute("class", "item");
-    var p = document.createElement("p");
-    p.setAttribute("class", "ellipsis");
-    li.appendChild(p);
-    var time = document.createElement("time");
-
-    var _item$1$split = item[1].split("T"),
-        _item$1$split2 = _slicedToArray(_item$1$split, 2),
-        day = _item$1$split2[0],
-        datetime = _item$1$split2[1];
-
-    time.innerText = datetime === "00:00:00" ? day : "".concat(day, " ").concat(time);
-    var a = document.createElement("a");
-    a.setAttribute("href", "/article_detail/".concat(item[0]));
-    a.innerText = item[2];
-    p.appendChild(time);
-    p.appendChild(a);
-    document_fragment.appendChild(li);
-  }
-
-  if (year_dom) {
-    ul = year_dom.nextElementSibling;
-  } else {
-    var h3 = document.createElement("h3");
-    h3.setAttribute("id", data_json.year);
-    h3.innerText = data_json.year;
-    ul = document.createElement("ul");
-    ul.setAttribute("class", "post-list");
-    archive_dom.appendChild(h3);
-    archive_dom.appendChild(ul);
-  }
-
-  var _iterator = _createForOfIteratorHelper(data_json.data),
-      _step;
-
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var item = _step.value;
-      render_list(item);
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-
-  ul.appendChild(document_fragment);
-  offset += 10;
-  if (data_json.end) return;
-  init_page();
-}
-
-function event_register() {
-  var tag_dom = document.getElementById("theme-tag");
-  tag_dom.addEventListener("click", function (e) {
-    e.preventDefault();
-    tag = e.target.getAttribute("data-src");
-
-    if (tag) {
-      var archive_dom = document.getElementById("archive");
-      archive_dom.innerHTML = "";
-      current_year = parseFloat(external_moment_namespaceObject().format("YYYY"));
-      offset = 0;
-      fetched_count = 0;
-      init_page();
-    }
+function generateArticleList(data) {
+  if (!external_default().isArray(data)) return;
+  var result = '';
+  data.forEach(function (value, index, arr) {
+    result += "<li class=\"item\"><p class=\"ellipsis\"><time>".concat(value.article_time, "</time><a href=\"/article_detail/").concat(value.article_id, "\">").concat(value.article_title, "</a></p></li>");
   });
+  return result;
 }
 
-init_page();
-event_register();
-/*
-let data_sort = []
-let archives_done = 0
-sessionStorage.setItem("archives_where",where)
-window.onpagehide = function(){
-	var scroll_top = document.documentElement.scrollTop
-	sessionStorage.setItem("archives_scroll_top",scroll_top)
+
+;// CONCATENATED MODULE: ./templates/utils.js
+function getOneViewportHeigh() {
+  return document.documentElement.clientHeight + "px";
 }
 
-window.onload = function () {
-	eventListen()
-	let archives = JSON.parse(sessionStorage.getItem("archives"))
-	console.log(JSON.parse(sessionStorage.getItem("archives")))
-	if(archives && cache_where==where){
-		offset = parseInt(sessionStorage.getItem("archives_offset")) || 0
-		archives_done = parseInt(sessionStorage.getItem("archives_done")) || 0
-		years = Object.keys(archives)
-		if(years.length>0){
-			for(let year_key of years){
-				year = parseInt(year_key)
-				//console.log(archives[year_key])
-				//入栈
-				data_sort.push(archives[year_key])
-				data_sort.push(year)
-			}
-			while(data_sort.length>0){
-				//出栈
-				year = data_sort.pop()
-				render(data_sort.pop())
-			}
-		}
-		let scroll_top = sessionStorage.getItem("archives_scroll_top") || 0
-		document.documentElement.scrollTop = scroll_top
-		window.scrollTo(scroll_top,0)
-		window.scrollTop = scroll_top
-		year = parseInt(sessionStorage.getItem("archives_year"))
-	}else{
-		sessionStorage.clear()
-		sessionStorage.setItem("archives_where",where)
-		getData("articles","article_time, article_title, post_key",where,render)
-	}
-	laflush.eventlistener()
-	laflush.flush = function(){
-		getData("articles","article_time, article_title, post_key",where,render)
-	}
-}
-function getData(table,fields,where,cb){
-	if (year<2019 || archives_done) {
-		//laflush.removelistener()
-		sessionStorage.setItem("archives_done",1)
-		return
-	}
-	let loading_wrapper = document.getElementsByClassName("loading_wrapper")[0]
-	let xhr = new XMLHttpRequest()
-	let myurl = `/articles/year/`
-	loading_wrapper.style.display = "block"
-	xhr.open("get",myurl,true)
-	xhr.onreadystatechange=function(){
-		if (xhr.readyState===4) {
-			var str = xhr.responseText
-			var obj = eval('(' + str + ')')
-			loading_wrapper.style.display = 'none'
-			offset = offset + 10
-			if (obj.length !== 0) {
-				//{"archive":{2020:[],2019:[]}}
-				let archives = sessionStorage.getItem("archives")
-				let data={}
-				console.log("set cache")
-				if(archives){
-					if(year in JSON.parse(archives)){
-						console.log("innnnnnnnn")
-						data = JSON.parse(archives)
-						data[year] = data[year].concat(obj)
-						console.log(data)
-						sessionStorage.setItem("archives",JSON.stringify(data))
-					}else{
-						data = JSON.parse(archives)
-						data[year] = obj
-						sessionStorage.setItem("archives",JSON.stringify(data))
-					}
-				}else{
-					data[year] = obj
-					console.log(data)
-					sessionStorage.setItem("archives",JSON.stringify(data))
-					//console.log(sessionStorage.getItem("archives"))
-				}
-				cb(obj)
-			}
-
-			if (obj.length<10) {
-				year = year - 1
-				offset = 0
-			}
-			console.log(offset,year)
-			sessionStorage.setItem("archives_offset",offset)
-			sessionStorage.setItem("archives_year",year)
-			if (document.documentElement.scrollHeight<=document.documentElement.clientHeight) {
-				getData("articles","article_time, article_title, post_key",where,render)
-			}
-		}
-	}
-	xhr.send()
+function getElementComputedProperty(element, property) {
+  if (window.getComputedStyle) return property ? window.getComputedStyle(element, null)[property] : null;
+  if (element.currentStyle) return element.currentStyle[property];
 }
 
-function render(result){
+function clearInnerhtml(element) {
+  var _this = this;
 
+  if (element instanceof Array) {
+    element.forEach(function (ele) {
+      _this.clearInnerhtml(ele);
+    });
+  }
 
+  element.innerHTML = "";
 }
 
-function eventListen(){
-	//var theme_tag = document.getElementById('theme-tag')
-	// var a = theme_tag.getElementsByTagName('a')
-	// var sizebox = ['12px','16px','22px']
-	// for (i=0;i<a.length;i++) {
-	// 	var index = Math.floor(Math.random()*3)
-	// 	var fontsize = sizebox[index]
-	// 	a[i].style.fontSize = fontsize
-	// }
-	// //事件委托
-	// theme_tag.addEventListener('click',function(e){
-	// 	getData("articles","article_time, article_title, post_key",`article_tag="${e.target.innerText}"`,render)
-	// })
-	var i = document.getElementsByClassName('navicon')[0].getElementsByTagName('i')
-	i[0].addEventListener('click',function() {
-		var nav = document.getElementById('nav')
-		var ul = document.getElementsByTagName('ul')
-		if (ul[0].getAttribute('class')) {
-			ul[0].setAttribute('class','')
-		}else {
-			ul[0].setAttribute('class','responsive')
-		}
-	})
-}*/
+function isExsitDom(selector) {
+  return $(selector).length > 0;
+}
+
+
+;// CONCATENATED MODULE: external "$"
+var external_$_namespaceObject = $;
+var external_$_default = /*#__PURE__*/__webpack_require__.n(external_$_namespaceObject);
+;// CONCATENATED MODULE: ./templates/touchBottomFlush.js
+var touchBottomFlush = {
+  flush: null,
+  scrollEnd: null,
+  eventListener: function eventListener() {
+    var _this = this;
+
+    window.onmousewheel = function () {
+      if (_this.scrollEnd) clearTimeout(_this.scrollEnd);
+      _this.scrollEnd = setTimeout(function () {
+        _this.mouseWheel();
+      }, 100);
+    };
+
+    window.addEventListener("touchmove", function () {
+      _this.mouseWheel();
+    });
+  },
+  removeListener: function removeListener() {
+    window.onmousewheel = null;
+  },
+  mouseWheel: function mouseWheel() {
+    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageXOffset;
+    var contentHeight = document.documentElement.scrollHeight;
+    var viewHeight = document.documentElement.clientHeight;
+    var bottom = Math.ceil(scrollTop + viewHeight);
+
+    if (bottom >= contentHeight) {
+      this.flush();
+    }
+  },
+  setup: function setup(action) {
+    this.flush = action;
+    this.eventListener();
+  }
+};
+
+;// CONCATENATED MODULE: ./templates/archives/archives.js
+
+
+
+
+
+
+
+(function () {
+  var currentYear = parseFloat(external_moment_namespaceObject().format("YYYY"));
+  var archiveDom = document.getElementById("archive");
+  var offset = 0;
+  var limit = 10;
+  var fetched_count = 0;
+  var allEnd = false;
+  var tag;
+  var modelType;
+
+  function renderOneViewPortYPage() {
+    var modelInitor;
+    if (allEnd) return;
+
+    switch (modelType) {
+      case "year":
+        modelInitor = model.initWithYear(currentYear, {
+          params: {
+            offset: offset,
+            limit: limit,
+            fetched_count: fetched_count
+          }
+        });
+        break;
+
+      case "year and tag":
+        modelInitor = model.initWithTagAndYear(tag, currentYear, {
+          params: {
+            offset: offset,
+            limit: limit,
+            fetched_count: fetched_count
+          }
+        });
+        break;
+
+      default:
+        modelInitor = model.initWithYear(currentYear, {
+          params: {
+            offset: offset,
+            limit: limit,
+            fetched_count: fetched_count
+          }
+        });
+        break;
+    }
+
+    modelInitor.then(function (res) {
+      if (res.end) {
+        allEnd = true;
+        return;
+      }
+
+      if (!res.result) {
+        currentYear--, offset = 0;
+        if (!isEnoughOneViewPortY()) renderOneViewPortYPage(modelType);
+        return;
+      }
+
+      model.modelData.concat(model.formatData(res.data));
+      if (isExsitDom("h3[id=".concat(currentYear, "]"))) external_$_default()("#".concat(currentYear)).next().append(generateArticleList(res.data));
+      if (!isExsitDom("h3[id=".concat(currentYear, "]"))) external_$_default()("div[id=archive]").append("<h3 id='".concat(currentYear, "'>").concat(currentYear, "</h3><ul class='post-list'>").concat(generateArticleList(res.data), "</ul>"));
+      offset += 10, fetched_count += res.data.length;
+
+      if (res.data.length < 10) {
+        offset = 0, currentYear--;
+      }
+
+      if (!isEnoughOneViewPortY()) renderOneViewPortYPage(modelType);
+    });
+  }
+
+  function isExsitDom(selector) {
+    return external_$_default()(selector).length > 0;
+  }
+
+  function isEnoughOneViewPortY() {
+    return document.documentElement.offsetHeight >= window.innerHeight + 50;
+  }
+
+  (function init() {
+    touchBottomFlush.setup(renderOneViewPortYPage);
+    external_$_default()("#theme-tag").on("click", function (e) {
+      tag = e.target.getAttribute("tag"), currentYear = parseFloat(external_moment_namespaceObject().format("YYYY")), offset = 0, fetched_count = 0, model.modelData = [];
+      clearInnerhtml(archiveDom);
+      allEnd = false;
+      modelType = "year and tag";
+      renderOneViewPortYPage();
+    });
+    clearInnerhtml(archiveDom);
+    modelType = "year";
+    renderOneViewPortYPage();
+  })();
+})();
 /******/ })()
 ;

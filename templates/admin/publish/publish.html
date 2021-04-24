@@ -2,6 +2,7 @@
 {% block title %}发表您的文章{% endblock %}
 {% block css_link %}
 <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/publish.css')}}">
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/content.css')}}">
 {% endblock %}
 {% block content %}
 <div id="publish">
@@ -14,6 +15,7 @@
 			<input type="text" placeholder="标题" id="title" value="">
 		</div>
 		<div class="tagfield">
+			<label>选择标签：</label>
 			<select id="tags">
 				{% for tag in tags %}
 				<option>{{tag["tag_name"]}}</option>
@@ -45,10 +47,12 @@
 				<i id='link' class="iconfont icon-link"></i>
 			</div>
 			<div class="menu">
-				<label id="picture" class="iconfont icon-picture" for="file"></label>
+				<label id="picture" class="iconfont icon-picture" for="file-pic"></label>
+				<input type="file" name="file-pic" id="file-pic" style="display: none;">
 			</div>
 			<div class="menu">
-				<label id="video" class="iconfont icon-video" for="file"></label>
+				<label id="video" class="iconfont icon-video" for="file-video"></label>
+				<input type="file" name="file-video" id="file-video" style="display: none;">
 			</div>
 			<div class="menu">
 				<i id='rowfront' class="iconfont icon-insert_table_row_front"></i>
@@ -90,7 +94,7 @@
 			<textarea class="linkarea" id="linkname" placeholder="name of href"></textarea>
 			<button id="insertL">插入</button>
 		</div>
-		<div id="editor" contenteditable="true" data-id="">
+		<div id="editor" contenteditable="true" data-id="" class="main-content">
 			{% if article_detail is defined %}
 			{{ article_detail.article_content | safe }}
 			{% endif %}
@@ -110,6 +114,7 @@
 </div>
 {% endblock %}
 {% block javascript_link %}
-<script type="text/javascript" src="{{url_for('static',filename='js/publish.js')}}"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/publish.bundle.js')}}"></script>
 {% endblock %}
 

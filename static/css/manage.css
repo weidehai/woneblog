@@ -33,7 +33,7 @@
             color: black; }
 
 #manage #artilces-manage #page-selector {
-  display: none;
+  display: flex;
   justify-content: center;
   margin-bottom: 1rem;
   -webkit-tap-highlight-color: transparent; }
@@ -58,10 +58,6 @@
     width: auto;
     background-color: transparent;
     cursor: auto; }
-    #manage #artilces-manage #page-selector div[id='pagination'] .active {
-      background-color: gray; }
-    #manage #artilces-manage #page-selector div[id='pagination'] .deactive {
-      background-color: #409eff; }
 
 #manage #tags-manage {
   display: none;

@@ -9,7 +9,7 @@
 <div id="archives">
 	<div id="theme-tag">
 		{% for tag in tags %}
-		<a data-src='{{tag["tag_name"]}}'>{{tag["tag_name"]}}</a>
+		<a tag='{{tag["tag_name"]}}'>{{tag["tag_name"]}}</a>
 		{% endfor %}
 	</div>
 	<section id="post-list">
@@ -19,6 +19,9 @@
 {% include './components/footer/footer.html' ignore missing %}
 {% endblock %}
 {% block javascript_link %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.21/lodash.core.js"></script>
 <script type="text/javascript" src="{{url_for('static',filename='js/archives.bundle.js')}}"></script>
 {% endblock %}
 

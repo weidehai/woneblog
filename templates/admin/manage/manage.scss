@@ -41,7 +41,7 @@
 			}
 		}
 		#page-selector{
-			display: none;
+			display: flex;
 			justify-content: center;
 			margin-bottom:1rem;
 			-webkit-tap-highlight-color:transparent;
@@ -70,12 +70,6 @@
 				width: auto;
 				background-color: transparent;
 				cursor: auto;
-				.active{
-					background-color: gray;
-				}
-				.deactive{
-					background-color:#409eff;
-				}
 			}
 		}
 	}

@@ -79,11 +79,14 @@ html body {
         margin-top: 1rem;
         border-radius: 3px;
         float: right;
+        padding: 0 0.7rem;
         background-color: #f8f8f8; }
         #publish .main .action .backhome:hover {
           background-color: #267efc; }
   #publish .suspension {
     display: none; }
+  #publish .main-content pre {
+    background-color: #bcc5cf; }
 
 @media screen and (max-width: 900px) {
   #publish .title {

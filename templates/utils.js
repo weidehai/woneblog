@@ -1,23 +1,27 @@
-function getOneViewportHeigh():string {
+function getOneViewportHeigh() {
   return document.documentElement.clientHeight + "px";
 }
-function getElementComputedProperty(element:Element, property:string):void {
+function getElementComputedProperty(element, property) {
   if (window.getComputedStyle)
     return property ? window.getComputedStyle(element, null)[property] : null;
-  throw "浏览器不支持getComputedStyle，请升级您的浏览器"
+  if (element.currentStyle)
+    return element.currentStyle[property]
 }
-function clearInnerhtml(element:Element):void {
+function clearInnerhtml(element) {
   if (element instanceof Array) {
     element.forEach((ele)=>{
-      this.clear_innerhtml(ele);
+      this.clearInnerhtml(ele);
     })
   }
   element.innerHTML = "";
 }
-
+function isExsitDom(selector){
+  return $(selector).length>0
+}
 
 export {
   getOneViewportHeigh,
   getElementComputedProperty,
-  clearInnerhtml
+  clearInnerhtml,
+  isExsitDom
 }

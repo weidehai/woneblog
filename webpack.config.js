@@ -6,6 +6,7 @@ module.exports = {
   entry: {
     archives:'./templates/archives/archives.js',
     manage:'./templates/admin/manage/manageArticles.js',
+    publish:'./templates/admin/publish/publish.js',
   },
   output: {
     filename: '[name].bundle.js',
@@ -53,6 +54,8 @@ module.exports = {
   externals:{
     moment:'moment',
     loglevel:'log',
-    axios:'axios'
+    axios:'axios',
+    lodash:"_",
+    jquery:'$'
   }
 };

@@ -1,23 +1,115 @@
 //import {getOneViewportHeigh} from "../../utils"
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
-import model from './model'
+import Model from './model'
+import {articleManage,pagination} from './view'
+import $ from 'jquery'
+import {isExsitDom,clearInnerhtml} from '../../utils'
 
 (() => {
-  function initModel(){
-    model.init().then((res)=>{
-      model.modelData = res.data
+  let offset=0
+  let limit=10
+  let total=0
+  let totalPage = 0
+  let currentPage = 1
+  let lastPage = 1
+  function initArticleModel(){
+    Model.initArticles({params:{offset,limit}}).then((res)=>{
+      if(!res.result) return
+      total = res.total
+      console.log(res)
+      Model.modelData.concat(Model.formatData(res.data))
+      if(isExsitDom('#artilces-manage tbody')){
+        $('#artilces-manage tbody').append(renderTable(res.data))
+      }
+      if(!isExsitDom('#artilces-manage tbody')){
+        $('#manage').append(articleManage.replace('tbodytodo',renderTable(res.data)))
+      }
+      if(!isExsitDom('#page-selector')) offset+=limit
+      if(!isEnoughOneViewPortY() && !isExsitDom('#page-selector')) initArticleModel()
+      if(isEnoughOneViewPortY() && !isExsitDom('#page-selector')){
+        limit=offset,offset=0
+        $('#artilces-manage').append(pagination.replace('todo',renderPagination()))
+        $('#page-selector').on('click',(e)=>{
+          let action = e.target.getAttribute('action')
+          lastPage = currentPage
+          switch (action) {
+            case 'next':
+              if(currentPage>=totalPage) return
+              offset += limit
+              currentPage++
+              clearInnerhtml($('#artilces-manage tbody')[0])
+              initArticleModel()
+              break;
+            case 'previous':
+              if(currentPage<=1) return
+              offset -= limit
+              currentPage--
+              clearInnerhtml($('#artilces-manage tbody')[0])
+              initArticleModel()
+              break;
+            default:
+              if(!action) return
+              if(currentPage==action) return
+              offset = (action-1)*limit
+              currentPage=action
+              clearInnerhtml($('#artilces-manage tbody')[0])
+              initArticleModel()
+              break;
+          }
+          onPageChange()
+        })
+      }
     })
   }
-  function renderTable(data){
-    `<tr>
-      <td>${data.article_title}<td>
-      <td>${data.article_tag}<td>
-      <td>${data.article_time}<td>
-      <td><button onclick="">编辑</button><button onclick="">删除</button><td>
-     <tr>`
+  function onPageChange(){
+    console.log(currentPage,totalPage,currentPage===totalPage)
+    currentPage==totalPage?$('#next-page').removeClass('enable').addClass('disabled'):$('#next-page').removeClass('disabled').addClass('enable')
+    currentPage==1?$('#previous-page').removeClass('enable').addClass('disabled'):$('#previous-page').removeClass('disabled').addClass('enable')
+    $(`div[action=${currentPage}]`).removeClass('enable').addClass('disabled')
+    $(`div[action=${lastPage}]`).removeClass('disabled').addClass('enable')
   }
-  initModel()
+  function renderTable(data){
+    let dom = ''
+    data.forEach((value,index,arr)=>{
+      dom += `<tr><td>${value.article_title}</td><td>${value.article_tag}</td><td>${value.article_time}</td><td><button action="modify" id="${value.article_id}">编辑</button><button action="delete" id="${value.article_id}">删除</button></td></tr>`
+    })
+    return dom
+  }
+  function renderPagination(){
+    let dom = []
+    let page = Math.ceil(total/limit)
+    totalPage = page
+    currentPage = 1
+    while(page){
+      if(page==1){
+        dom.unshift(`<div action="${page}" class='disabled'>${page}</div>`)
+      }else{
+        dom.unshift(`<div action="${page}">${page}</div>`)
+      }
+      page--
+    }
+    return dom.join('')
+  }
+  function isEnoughOneViewPortY(){
+    return document.documentElement.offsetHeight >= window.innerHeight + 50
+  }
+  (function init(){
+    $('#manage').on('click',(e)=>{
+      let action = e.target.getAttribute('action')
+      let id = e.target.getAttribute('id')
+      switch (action) {
+        case 'modify':
+          window.location = `/adminpublish/modify?article_id=${id}`
+          break;
+        case 'modify':
+          //window.location = `/adminpublish/modify?article_id=${id}`
+          break;
+      }
+    })
+    initArticleModel()
+  }())
+
   // const manage_articles: manage_articles = {
 
 

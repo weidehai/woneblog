@@ -1,10 +1,13 @@
-import Service from '../../service'
+import service from '../service'
 import _ from 'lodash'
 const INVALIDTIME = "00:00:00"
 const Model = {
   modelData:[],
-  initArticles(config){
-    return Service.getArticles(...arguments)
+  initWithYear(year,config){
+    return service.getArticlesByYear(...arguments)
+  },
+  initWithTagAndYear(tag,year,config){
+    return service.getArticlesByTagAndYear(...arguments)
   },
   formatData(data){
     if(!_.isArray(data)) return
