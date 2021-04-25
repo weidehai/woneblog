@@ -7,6 +7,7 @@ import Service from "../../../../service";
       let formData = new FormData();
       let csrfToken = $("meta[name=csrf-token]")[0].content;
       formData.append("file", e.target.files[0]);
+      e.target.value=''
       Service.upload(
         formData,
         { headers: { "Content-Type": "application/x-www-form-urlencoded", "X-CSRFToken": csrfToken } }

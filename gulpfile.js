@@ -5,6 +5,14 @@ const sass = require("gulp-sass");
 const autoprefixer = require("gulp-autoprefixer");
 const flatten = require("gulp-flatten");
 sass.compiler = require("node-sass");
+var pxtoviewport = require('postcss-px-to-viewport');
+var postcss = require('gulp-postcss');
+var processors = [
+  pxtoviewport({
+      viewportWidth: 750,
+      viewportUnit: 'vw'
+  })
+];
 
 function sass_complie(cb) {
   return src("./templates/**/*.scss")
@@ -14,6 +22,7 @@ function sass_complie(cb) {
         cascade: false,
       })
     )
+    .pipe(postcss(processors))
     .pipe(flatten())
     .pipe(dest("./static/css"));
 }

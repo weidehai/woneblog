@@ -18,14 +18,17 @@
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^7.0.1",
     "gulp-flatten": "^0.4.0",
+    "gulp-postcss": "^9.0.0",
     "gulp-sass": "^4.1.0",
+    "postcss": "^8.2.12",
+    "postcss-px-to-viewport": "^1.1.1",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^5.35.0",
     "webpack-cli": "^4.6.0"
   },
   "scripts": {
-    "webpack":"webpack --watch",
-    "gulp-sass":"gulp --tasks sass_complie"
+    "webpack": "webpack --watch",
+    "gulp-sass": "gulp --tasks sass_complie"
   },
   "repository": {
     "type": "git",
