@@ -21,7 +21,8 @@ def show_article_detail(article_id):
     return render_template("article_detail/article_detail.html",
                            article_detail=article_detail,
                            previous=previous_article and previous_article.article_id,
-                           next=next_article and next_article.article_id)
+                           next=next_article and next_article.article_id,
+                           title=article_detail.article_title)
 
 @blogguest.route("/archives")
 def archives():

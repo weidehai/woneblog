@@ -1,7 +1,7 @@
 import "./h1";
 import "./h2";
 import "./splitLine";
-import "./fileUpload";
+import "./imgUpload";
 
 (() => {
   const menusComponent = {

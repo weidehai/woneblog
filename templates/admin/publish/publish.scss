@@ -1,8 +1,8 @@
-html body{
-  background-color: rgb(247,248,250) !important;
+html body {
+  background-color: rgb(247, 248, 250) !important;
 }
 
-#publish{
+#publish {
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -13,15 +13,15 @@ html body{
     margin: auto;
     padding: 1.25rem;
   }
-  .main{
-    flex:1;
+  .main {
+    flex: 1;
     display: flex;
     flex-direction: column;
     position: relative;
     width: 70%;
     margin: auto;
     .titlefield {
-      input{
+      input {
         border: 0px;
         width: 100%;
         height: 35px;
@@ -30,10 +30,10 @@ html body{
         box-sizing: border-box;
       }
     }
-    .tagfield{
+    .tagfield {
       border-bottom: 1px solid #e6e6e6;
       select {
-        margin-bottom:1rem;
+        margin-bottom: 1rem;
         height: 1.75rem;
         cursor: pointer;
       }
@@ -44,24 +44,24 @@ html body{
     .menus {
       margin-top: 10px;
       height: 40px;
-      background: rgb(241,241,241);
+      background: rgb(241, 241, 241);
       line-height: 40px;
       border-radius: 5px 5px 0 0;
       overflow: hidden;
       overflow-x: scroll;
       white-space: nowrap;
-      &::-webkit-scrollbar{
+      &::-webkit-scrollbar {
         display: none;
       }
-      .menu{
+      .menu {
         display: inline-block;
         height: 40px;
         margin-left: 10px;
-        .iconfont{
+        .iconfont {
           font-size: 1.2rem;
           color: #999;
           cursor: pointer;
-          &:hover{
+          &:hover {
             color: black;
           }
         }
@@ -69,26 +69,31 @@ html body{
     }
     #editor {
       background: white;
-      padding:10px;
+      padding: 10px;
       border-radius: 0 0 5px 5px;
-      overflow-y:auto;
+      overflow-y: auto;
       flex: 1;
+      outline: none;
+      &:focus{
+        border: 1px solid violet;
+        box-shadow: violet 0 0 5px;
+      }
     }
-    .action{
+    .action {
       padding-bottom: 0.75rem;
-      .submit{
+      .submit {
         border: 1px solid #e6e6e6;
         min-width: 4.375rem;
         height: 2.1875rem;
         margin-top: 1rem;
         border-radius: 3px;
         float: left;
-        background-color: rgb(248,248,248);
+        background-color: rgb(248, 248, 248);
         &:hover {
-          background-color: rgb(38,126,252);
+          background-color: rgb(38, 126, 252);
         }
       }
-      .backhome{
+      .backhome {
         border: 1px solid #e6e6e6;
         min-width: 4.375rem;
         height: 2.1875rem;
@@ -96,23 +101,22 @@ html body{
         border-radius: 3px;
         float: right;
         padding: 0 0.7rem;
-        background-color: rgb(248,248,248);
+        background-color: rgb(248, 248, 248);
         &:hover {
-          background-color: rgb(38,126,252);
+          background-color: rgb(38, 126, 252);
         }
       }
     }
   }
-  .suspension{
+  .suspension {
     display: none;
   }
-  .main-content{
-    pre{
-      background-color:#bcc5cf
+  .main-content {
+    pre {
+      background-color: #bcc5cf;
     }
   }
 }
-
 
 @media screen and (max-width: 900px) {
   #publish {
@@ -126,5 +130,3 @@ html body{
     }
   }
 }
-
-

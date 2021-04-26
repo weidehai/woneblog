@@ -1,146 +1,144 @@
-#main{
-    flex:1;
-    aside{
-        position: fixed;
-        top: 2rem;
-        right: 2rem;
-        color: #2bbc8a;
-        white-space: nowrap;
-        #nav-aside{
-            margin-bottom:2.5rem;
-            font-size: .8rem;
-            li{
-                display: inline-block;
-                border-right: 1px dotted #2bbc8a;
-                line-height: 15px;
-                &:last-child{
-                    border-right: none;
-                    a{
-                        margin-right: 0;
-                        margin-left: 10px;
-                    }
-                }
-                a{
-                    margin-right: 10px;
-                    margin-left: 10px;
-                }
-            }
+#main {
+  flex: 1;
+  aside {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    color: #2bbc8a;
+    white-space: nowrap;
+    #nav-aside {
+      margin-bottom: 2.5rem;
+      font-size: 0.8rem;
+      li {
+        display: inline-block;
+        border-right: 1px dotted #2bbc8a;
+        line-height: 15px;
+        &:last-child {
+          border-right: none;
+          a {
+            margin-right: 0;
+            margin-left: 10px;
+          }
         }
-        #toolbar-aside{
+        a {
+          margin-right: 10px;
+          margin-left: 10px;
+        }
+      }
+    }
+    #toolbar-aside {
+      color: #c9cacc;
+      text-align: right;
+      user-select: none;
+      ul {
+        li {
+          cursor: pointer;
+          display: inline-block;
+          margin-right: 16px;
+          &:last-child {
+            margin-right: 0;
+          }
+          &:hover {
+            color: #2bbc8a;
+          }
+          &:hover:after {
+            display: block;
+            position: absolute;
+            margin-top: 0.2rem;
+            right: 0;
+            content: attr(tips);
             color: #c9cacc;
-            text-align: right;
-            user-select: none;
-            ul{
-                li{
-                    cursor: pointer;
-                    display: inline-block;
-                    margin-right: 16px;
-                    &:last-child{
-                        margin-right: 0;
-                    }
-                    &:hover{
-                        color:#2bbc8a;
-                    }
-                    &:hover:after{
-                        display: block;
-                        position: absolute;
-                        margin-top: 0.2rem;
-                        right: 0;
-                        content: attr(tips);
-                        color:#c9cacc;
-                    }
-                }
-            }
-         
+          }
         }
-        #shortcut{
-            position: fixed;
-            right: 2rem;
-            bottom: 2rem;
-            div {
-                height: 30px;
-                width: 30px;
-                line-height: 30px;
-                text-align: center;
-                color: #c9cacc;
-                background: gray;
-                margin-bottom: 3px;
-            }
-            a{
-                div {
-                    margin-bottom: 0;
-                }
-            }
-        }
+      }
     }
+    #shortcut {
+      position: fixed;
+      right: 2rem;
+      bottom: 2rem;
+      div {
+        height: 30px;
+        width: 30px;
+        line-height: 30px;
+        text-align: center;
+        color: #c9cacc;
+        background: gray;
+        margin-bottom: 3px;
+      }
+      a {
+        div {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
 
-    article{
-        .title{
-            margin-bottom:0.67rem;
-            h1{
-                font-size:1.5rem;
-                margin:0;
-            }
-        }
-        .attribute{
-            margin-bottom: 1.5rem;
-            .iconfont{
-                font-size:0.95rem;
-            }
-            & > div{
-                &:not(:last-child){
-                    border-right:0.1rem solid #c9cacc;
-                    padding-right:1.5rem;
-                }
-                &:not(:last-child):not(:first-child){
-                    padding-left:1.5rem;
-                    span{
-                        margin-left:0.5rem;
-                    }
-                }
-            }
-            .update{
-                color:green;
-                margin-top:0.35rem;
-            }
-            .lable{
-                &:hover{
-                    color:green;
-                }
-            }
-        }
+  article {
+    .title {
+      margin-bottom: 0.67rem;
+      h1 {
+        font-size: 1.5rem;
+        margin: 0;
+      }
     }
+    .attribute {
+      margin-bottom: 1.5rem;
+      .iconfont {
+        font-size: 0.95rem;
+      }
+      & > div {
+        &:not(:last-child) {
+          border-right: 0.1rem solid #c9cacc;
+          padding-right: 1.5rem;
+        }
+        &:not(:last-child):not(:first-child) {
+          padding-left: 1.5rem;
+          span {
+            margin-left: 0.5rem;
+          }
+        }
+      }
+      .update {
+        color: green;
+        margin-top: 0.35rem;
+      }
+      .lable {
+        &:hover {
+          color: green;
+        }
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 1320px) {
-    #nav-aside {
-        display: none !important;
-    }
-    .shortcut_home{
-        display: block !important;
-    }
+  #nav-aside {
+    display: none !important;
+  }
+  .shortcut_home {
+    display: block !important;
+  }
 }
 @media screen and (max-width: 1190px) {
-    #toc{
-        display: none;
+  #toc {
+    display: none;
+  }
+  #toolbar-aside {
+    ul {
+      display: none;
     }
-    #toolbar-aside{
-        ul{
-            display: none;
-        }
-    }
-    #shortcut_top{
-        display: block !important;
-    }
+  }
+  #shortcut_top {
+    display: block !important;
+  }
 }
 @media screen and (max-width: 900px) {
-    aside {
-        display: none;
-    }
+  aside {
+    display: none;
+  }
 }
 @media screen and (min-width: 480px) {
-    .detail p {
-        text-align: justify;
-    }
+  .detail p {
+    text-align: justify;
+  }
 }
-
