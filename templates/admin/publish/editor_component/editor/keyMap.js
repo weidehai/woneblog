@@ -1,7 +1,7 @@
 export const KEYMAP = {
   BACKSPACE: "Backspace",
   TAB: 9,
-  ENTER: 13,
+  ENTER: 'Enter',
   ESCAPE: 27,
   SPACE: 32,
   DELETE: 46,

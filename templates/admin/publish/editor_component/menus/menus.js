@@ -2,6 +2,12 @@ import "./h1";
 import "./h2";
 import "./splitLine";
 import "./imgUpload";
+import "./videoUpload";
+import "./justify";
+import "./code";
+import './quote'
+import './list'
+import './link'
 
 (() => {
   const menusComponent = {

@@ -1,9 +1,10 @@
-from flask import Blueprint, send_from_directory,request, jsonify,current_app
-from model import WoneArticles,Admin
+from flask import Blueprint, send_from_directory,request, jsonify,current_app,json
+from model import WoneArticles,Admin,wWoneArticles
 from utils.utils import convert_tuple_to_dict
 from flask_extension.extension import db
 import logging
 import os
+from flask_login import login_required,current_user
 
 blogapi = Blueprint('blogapi', __name__)
 
@@ -60,7 +61,28 @@ def api_get_articles_by_year_and_tag(tag,year):
                                   order_by(WoneArticles.article_time.desc()).offset(offset).limit(10).all()
     return jsonify({'result':bool(articles),'data':convert_tuple_to_dict(['article_id','article_time','article_title'],articles),'year':year,'end':end})
 
-@blogapi.route("/api/upload",methods=['PUT'])
+@blogapi.route("/api/saveArticles",methods=['POST'])
+@login_required
+def saveArticles():
+    request_data = json.loads(request.get_data())
+    print(request_data)
+    new_article = wWoneArticles(author=current_user.admin_name,
+                                post_key=request_data['post_key'],
+                                article_title=request_data['article_title'],
+                                article_time=request_data['article_time'],
+                                update_time=request_data['update_time'],
+                                article_read='0',
+                                article_tag=request_data['article_tag'],
+                                article_content=request_data['article_content'],
+                                text_for_search=request_data['text_for_search'])
+    db.session.add(new_article)
+    db.session.flush()
+    db.session.commit()
+    return jsonify({'result':200})
+
+
+@blogapi.route("/api/upload",methods=['POST'])
+@login_required
 def upload():
     file = request.files['file']
     filename = file.filename

@@ -35,7 +35,7 @@ def trip_nonsense_time(time):
     day,time = str(time).split(" ")
     if time == '00:00:00':
         return day
-    return time
+    return day + " " + time
 
 def convert_model_to_dict(model):
     class NotModelException(Exception):

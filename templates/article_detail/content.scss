@@ -10,6 +10,13 @@
 
 .main-content img{
   max-width: 100%;
+  min-width: 100%;
+}
+
+.main-content video{
+  min-width: 100%;
+  max-width: 100%;
+  height: 500px;
 }
 
 .main-content h1 {
@@ -29,6 +36,14 @@
   color: #2bbc8a;
   font-size: 1.2rem;
 }
+
+.main-content ol{
+  li{
+    list-style: decimal-leading-zero;
+    list-style-position: inside;
+  }
+}
+
 .main-content pre {
   padding:10px 15px;
   background-color: #232527;

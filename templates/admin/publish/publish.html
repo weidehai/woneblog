@@ -42,9 +42,21 @@
 			</div>
 			<div class="menu">
 				<i id='list' class="iconfont icon-list"></i>
+				<div id="list-type-selector" data-mark="hover-menus">
+					<ul>
+						<li id="order-list">有序列表</li>
+						<li id="unorder-list">无序列表</li>
+					</ul>
+				</div>
 			</div>
 			<div class="menu">
 				<i id='link' class="iconfont icon-link"></i>
+				<div id="link-editor" data-mark='hover-menus'>
+					<div>插入链接</div>
+					<input name="linkhref" id="linkhref" placeholder="please enter href"></input>
+					<input name="linkname" id="linkname" placeholder="name of href"></input>
+					<button id="insert">插入</button>
+				</div>
 			</div>
 			<div class="menu">
 				<label id="picture" class="iconfont icon-picture" for="file-pic"></label>
@@ -84,15 +96,6 @@
 			<div class="menu">
 				<i id='cutline' class="iconfont icon-cutline"></i>
 			</div>
-			<div class="menu code_status">
-				<i id='codeing' class="iconfont icon-code"></i>
-			</div>
-		</div>
-		<div id="linkedit" data-show='false' class="suspended" style="display: none">
-			<div class="desc">插入链接</div>
-			<textarea id="linkhref" class="linkarea" placeholder="please enter href"></textarea>
-			<textarea class="linkarea" id="linkname" placeholder="name of href"></textarea>
-			<button id="insertL">插入</button>
 		</div>
 		<div id="editor" contenteditable="true" data-id="" class="main-content">
 			{% if article_detail is defined %}

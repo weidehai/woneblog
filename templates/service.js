@@ -2,7 +2,8 @@ import axios from "axios";
 
 const api = {
   getArticles: "/api/articles",
-  upload:"/api/upload"
+  upload: "/api/upload",
+  saveArticles: "/api/saveArticles",
 };
 
 const Network = {
@@ -18,10 +19,10 @@ const Network = {
         });
     });
   },
-  put(url, data,config) {
+  put(url, data, config) {
     return new Promise((resolve, reject) => {
       axios
-        .put(url, data,config)
+        .put(url, data, config)
         .then((res) => {
           resolve(res.data);
         })
@@ -30,10 +31,10 @@ const Network = {
         });
     });
   },
-  post(url, config) {
+  post(url, data, config) {
     return new Promise((resolve, reject) => {
       axios
-        .get(url, config)
+        .post(url, data, config)
         .then((res) => {
           resolve(res);
         })
@@ -53,25 +54,29 @@ const Network = {
           reject(err);
         });
     });
-  }
-}
+  },
+};
 
-const Service = Object.create(Network)
+const Service = Object.create(Network);
 
-Service.getArticles = function(config) {
-  return this.fetch(api.getArticles,config)
-}
+Service.getArticles = function (config) {
+  return this.fetch(api.getArticles, config);
+};
 
-Service.getArticlesByTagAndYear = function(tag,year,config){
-  return this.fetch(`${api.getArticles}/${tag}/${year}`,config)
-}
+Service.getArticlesByTagAndYear = function (tag, year, config) {
+  return this.fetch(`${api.getArticles}/${tag}/${year}`, config);
+};
 
-Service.getArticlesByYear = function(year,config){
-  return this.fetch(`${api.getArticles}/${year}`,config)
-}
+Service.getArticlesByYear = function (year, config) {
+  return this.fetch(`${api.getArticles}/${year}`, config);
+};
 
-Service.upload = function(data,config){
-  return this.put(api.upload,data,config)
-}
+Service.saveArticles = function (data, config) {
+  return this.post(api.saveArticles, data, config);
+};
+
+Service.upload = function (data, config) {
+  return this.post(api.upload, data, config);
+};
 
 export default Service;

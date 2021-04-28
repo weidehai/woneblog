@@ -4,13 +4,13 @@ from form.loginform import LoginForm
 from flask_login import login_user, login_required, current_user
 from flask import flash,request
 from utils.utils import redirect_back
-from flask_extension.extension import db
 
 blogadmin = Blueprint('blogadmin', __name__)
 
 
 @blogadmin.route("/adminlogin",methods=['GET','POST'])
 def login():
+    print(current_user.admin_name)
     if current_user.is_authenticated:
         return redirect(url_for('blogguest.index'))
     loginform = LoginForm()
@@ -33,11 +33,11 @@ def login():
 @login_required
 def manage():
     tags = ArticleTags.query.all()
-
     return render_template("admin/manage/manage.html")
 
 
 @blogadmin.route("/adminpublish/<string:behavior>")
+@login_required
 def publish(behavior):
     tags = ArticleTags.query.all()
     if behavior=='new':

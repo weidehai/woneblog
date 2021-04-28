@@ -29,6 +29,11 @@ html body {
         padding: 0 9px;
         box-sizing: border-box;
       }
+      .alert{
+        &::-webkit-input-placeholder{
+          color: red;
+        }
+      }
     }
     .tagfield {
       border-bottom: 1px solid #e6e6e6;
@@ -65,11 +70,51 @@ html body {
             color: black;
           }
         }
+        #link-editor{
+          display: none;
+          background-color: #e6e9ef;
+          padding: 0.5rem 1rem;
+          position: absolute;
+          transform: translateX(-36%);
+          input{
+            padding: 0.5rem 0.3rem;
+            display: block;
+            &:not(:last-child){
+              margin-bottom: 1rem;
+            }
+          }
+          button{
+            background-color: #00f3ff;
+            width: 5rem;
+            padding: 5px;
+            border-radius: 3px;
+            box-shadow: #30ced6 0 0 5px;
+          }
+        }
+        #list-type-selector{
+          display: none;
+          position: absolute;
+          background-color: #e6e9ef;
+          transform: translateX(-36%);
+          ul{
+            box-shadow: #c5bebe 0 0 3px;
+            li{
+              cursor: pointer;
+              padding: 0 1rem;
+              &:not(:last-child){
+                border-bottom: 1px solid #d7deea;
+              }
+              &:hover{
+                background-color: #aabee6;
+              }
+            }
+          }
+        }
       }
     }
     #editor {
       background: white;
-      padding: 10px;
+      padding: 0 10px;
       border-radius: 0 0 5px 5px;
       overflow-y: auto;
       flex: 1;
@@ -114,9 +159,25 @@ html body {
   .main-content {
     pre {
       background-color: #bcc5cf;
+      line-height: 1rem;
+      min-height: 1rem;
+    }
+    h2{
+      color: #2bbc8a;
+    }
+    blockquote {
+      margin-top: 1rem;
+    }
+    ol{
+      li{
+        list-style: decimal-leading-zero;
+        list-style-position: inside;
+      }
     }
   }
 }
+
+
 
 @media screen and (max-width: 900px) {
   #publish {
