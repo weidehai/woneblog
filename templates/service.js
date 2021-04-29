@@ -36,7 +36,7 @@ const Network = {
       axios
         .post(url, data, config)
         .then((res) => {
-          resolve(res);
+          resolve(res.data);
         })
         .catch((err) => {
           reject(err);
@@ -48,7 +48,7 @@ const Network = {
       axios
         .delete(url, config)
         .then((res) => {
-          resolve(res);
+          resolve(res.data);
         })
         .catch((err) => {
           reject(err);

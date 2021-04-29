@@ -29,11 +29,6 @@ html body {
         padding: 0 9px;
         box-sizing: border-box;
       }
-      .alert{
-        &::-webkit-input-placeholder{
-          color: red;
-        }
-      }
     }
     .tagfield {
       border-bottom: 1px solid #e6e6e6;
@@ -79,7 +74,7 @@ html body {
           input{
             padding: 0.5rem 0.3rem;
             display: block;
-            &:not(:last-child){
+            &:not(:last-of-type){
               margin-bottom: 1rem;
             }
           }
@@ -177,6 +172,12 @@ html body {
   }
 }
 
+
+.alert{
+  &::-webkit-input-placeholder{
+    color: red;
+  }
+}
 
 
 @media screen and (max-width: 900px) {

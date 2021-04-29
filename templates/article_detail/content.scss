@@ -13,10 +13,12 @@
   min-width: 100%;
 }
 
-.main-content video{
+.main-content #video-frame{
   min-width: 100%;
   max-width: 100%;
   height: 500px;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
 }
 
 .main-content h1 {

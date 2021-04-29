@@ -10,13 +10,14 @@ import range from "./range";
   const editor = {
     dom: document.getElementById("editor"),
     submitBtn: document.getElementById("submit"),
-    insertLFIfNeed(before,after){
-      if(range.isRangeEqual(before,after)) return document.execCommand("inserthtml", false, "\n");
-      if(before.so==after.so && before.eo==after.eo) return document.execCommand("inserthtml", false, "\n");
+    insertLFIfNeed(before, after) {
+      if (range.isRangeEqual(before, after)) return document.execCommand("inserthtml", false, "\n");
+      if (before.so == after.so && before.eo == after.eo)
+        return document.execCommand("inserthtml", false, "\n");
     },
     watchKeyEvent() {
       this.dom.addEventListener("keydown", (e) => {
-        this.onEditorStateChange('active')
+        this.onEditorStateChange("active");
         e.stopPropagation();
         switch (e.key) {
           case KEYMAP.ENTER:
@@ -26,7 +27,7 @@ import range from "./range";
               document.execCommand("inserthtml", false, "\n");
               let afterInsertRange = range.getCurrentRange();
               console.log(beforeInsertRange, afterInsertRange);
-              this.insertLFIfNeed(beforeInsertRange,afterInsertRange)
+              this.insertLFIfNeed(beforeInsertRange, afterInsertRange);
             }
             break;
           case KEYMAP.BACKSPACE:
@@ -40,25 +41,23 @@ import range from "./range";
     },
     watchMouseEvent() {
       this.dom.addEventListener("mousedown", (e) => {
-        this.onEditorStateChange('active')
+        this.onEditorStateChange("active");
       });
-      this.dom.addEventListener("mouseup", (e) => {
-
-      });
+      this.dom.addEventListener("mouseup", (e) => {});
     },
-    onEditorStateChange(state){
-      switch (state){
-        case 'active':
-          this.hideAllHoverMenu()
-          break
+    onEditorStateChange(state) {
+      switch (state) {
+        case "active":
+          this.hideAllHoverMenu();
+          break;
       }
     },
-    hideAllHoverMenu(){
-      $("div[data-mark='hover-menus']").hide()
+    hideAllHoverMenu() {
+      $("div[data-mark='hover-menus']").hide();
     },
     watchFocus() {
       this.dom.addEventListener("focus", (e) => {
-        this.onEditorStateChange('active')
+        this.onEditorStateChange("active");
       });
     },
     watchBlur() {
@@ -80,8 +79,8 @@ import range from "./range";
       };
       if (!params.article_title) {
         $("#title").prop("placeholder", "请输入标题"),
-          $("#title").addClass("alert"),
-          $("#title").trigger("focus");
+        $("#title").addClass("alert"),
+        $("#title").trigger("focus");
         return;
       }
       Service.saveArticles(params, { headers: { "X-CSRFToken": csrfToken } });
@@ -98,7 +97,7 @@ import range from "./range";
       this.watchKeyEvent();
       this.watchFocus();
       this.watchBlur();
-      this.watchMouseEvent()
+      this.watchMouseEvent();
     },
   };
   editor.init();

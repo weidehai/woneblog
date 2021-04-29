@@ -8,6 +8,11 @@ module.exports = {
     manage:'./templates/admin/manage/manageArticles.js',
     publish:'./templates/admin/publish/publish.js',
   },
+  resolve: {
+    alias: {
+        '@': path.resolve(__dirname,'templates')
+    }
+  },
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'static/js')
